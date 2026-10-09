@@ -1,0 +1,123 @@
+{%- assign menu = linklists[section.settings.menu] -%}
+<header class="header" data-section-id="{{ section.id }}">
+  <div class="container header__bar">
+    <div class="header__left">
+      <button class="icon-btn header__burger" data-drawer-open="menu-drawer" aria-expanded="false" aria-controls="menu-drawer" aria-label="Open menu">{% render 'icon', name: 'menu' %}</button>
+      <a class="header__logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}{{ section.settings.logo | image_url: width: 300 | image_tag: height: 48, alt: shop.name }}{%- else -%}{{ shop.name }}{%- endif -%}
+      </a>
+    </div>
+    <nav class="nav" aria-label="Primary">
+      <ul class="nav__list">
+        {%- for link in menu.links -%}
+          {%- assign mega = false -%}
+          {%- for b in section.blocks -%}{%- if b.type == 'mega' and b.settings.link_title == link.title -%}{%- assign mega = b -%}{%- endif -%}{%- endfor -%}
+          <li class="nav__item">
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}{% if link.links.size > 0 %} {% render 'icon', name: 'chevron' %}{% endif %}</a>
+            {%- if link.links.size > 0 -%}
+              <div class="nav__panel{% if mega %} nav__panel--mega{% endif %}" {% if mega %}{{ mega.shopify_attributes }}{% endif %}>
+                {%- if mega -%}<div class="nav__mega">{%- endif -%}
+                <div class="{% if mega %}nav__cols{% endif %}">
+                  {%- for child in link.links -%}
+                    <div><a class="nav__h" href="{{ child.url }}">{{ child.title }}</a>
+                    {%- for g in child.links -%}<a href="{{ g.url }}">{{ g.title }}</a>{%- endfor -%}</div>
+                  {%- endfor -%}
+                </div>
+                {%- if mega -%}
+                  <a class="nav__card" href="{{ mega.settings.image_link | default: link.url }}" style="text-decoration:none">
+                    {%- if mega.settings.image != blank -%}{{ mega.settings.image | image_url: width: 480 | image_tag: loading: 'lazy', alt: mega.settings.image_heading }}{%- endif -%}
+                    <div><strong>{{ mega.settings.image_heading }}</strong><br><span class="muted">{{ mega.settings.image_text }}</span></div>
+                  </a>
+                  <div class="nav__promo">
+                    {%- if mega.settings.featured_product != blank -%}
+                      {%- assign fp = mega.settings.featured_product -%}
+                      <p><strong>Featured</strong></p><a href="{{ fp.url }}">{{ fp.title }} – {{ fp.price | money }}</a>
+                    {%- endif -%}
+                    <p style="margin-top:16px">{{ mega.settings.promo_text }}</p>
+                    {%- if mega.settings.promo_link != blank -%}<a href="{{ mega.settings.promo_link }}">{{ mega.settings.promo_cta | default: 'Shop now' }}</a>{%- endif -%}
+                  </div></div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="icon-btn" data-search-open aria-label="Search">{% render 'icon', name: 'search' %}</button>
+      {%- if shop.customer_accounts_enabled -%}<a class="icon-btn header__account" href="{{ routes.account_url }}" aria-label="Account">{% render 'icon', name: 'user' %}</a>{%- endif -%}
+      {%- if section.settings.show_wishlist and section.settings.wishlist_url != blank -%}<a class="icon-btn header__account" href="{{ section.settings.wishlist_url }}" aria-label="Wishlist">{% render 'icon', name: 'heart' %}</a>{%- endif -%}
+      {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+        <button type="button" class="icon-btn" data-drawer-open="cart-drawer" aria-expanded="false" aria-controls="cart-drawer" aria-label="Cart">{% render 'icon', name: 'cart' %}<b class="cart-count" data-cart-count data-count="{{ cart.item_count }}">{{ cart.item_count }}</b></button>
+      {%- else -%}
+        <a class="icon-btn" href="{{ routes.cart_url }}" aria-label="Cart">{% render 'icon', name: 'cart' %}<b class="cart-count" data-cart-count data-count="{{ cart.item_count }}">{{ cart.item_count }}</b></a>
+      {%- endif -%}
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="menu-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Menu">
+  <div class="drawer__scrim" data-drawer-close></div>
+  <div class="drawer__panel">
+    <div class="drawer__head"><strong class="header__logo">{{ shop.name }}</strong><button class="icon-btn" data-drawer-close aria-label="Close menu">{% render 'icon', name: 'close' %}</button></div>
+    <div class="drawer__body">
+      <ul class="mnav-list">
+        {%- for link in menu.links -%}
+          <li>
+            {%- if link.links.size > 0 -%}
+              <details><summary>{{ link.title }} {% render 'icon', name: 'chevron' %}</summary>
+                <a href="{{ link.url }}"><strong>All {{ link.title }}</strong></a>
+                {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- for g in child.links -%}<a href="{{ g.url }}" style="padding-left:32px;opacity:.8">{{ g.title }}</a>{%- endfor -%}{%- endfor -%}
+              </details>
+            {%- else -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endif -%}
+          </li>
+        {%- endfor -%}
+        {%- if shop.customer_accounts_enabled -%}<li><a href="{{ routes.account_url }}">Account</a></li>{%- endif -%}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="search" id="search" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Search">
+  <div class="search__inner">
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <div class="search__bar">
+        {% render 'icon', name: 'search' %}
+        <label class="visually-hidden" for="search-input">Search</label>
+        <input id="search-input" type="search" name="q" placeholder="Search spices, recipes, articles" autocomplete="off">
+        <button type="button" class="icon-btn" data-search-close aria-label="Close search">{% render 'icon', name: 'close' %}</button>
+      </div>
+    </form>
+    <div data-recent-wrap hidden><h3 style="margin-top:24px">Recent searches</h3><div class="chips" data-recent></div></div>
+    {%- if settings.popular_searches != blank -%}
+      <h3 style="margin-top:24px">Popular searches</h3>
+      <div class="chips">{%- assign pops = settings.popular_searches | split: ',' -%}{%- for p in pops -%}<a class="chip" href="{{ routes.search_url }}?q={{ p | strip | url_encode }}">{{ p | strip }}</a>{%- endfor -%}</div>
+    {%- endif -%}
+    <div data-psearch></div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name":"Header",
+  "settings":[
+    {"type":"image_picker","id":"logo","label":"Logo"},
+    {"type":"link_list","id":"menu","label":"Main menu","default":"main-menu"},
+    {"type":"checkbox","id":"show_wishlist","label":"Show wishlist icon","default":false},
+    {"type":"url","id":"wishlist_url","label":"Wishlist page URL","info":"Use with a wishlist app"}
+  ],
+  "blocks":[
+    {"type":"mega","name":"Mega menu panel","limit":6,"settings":[
+      {"type":"text","id":"link_title","label":"Top-level menu item title","info":"Must match the menu item exactly"},
+      {"type":"image_picker","id":"image","label":"Category image"},
+      {"type":"text","id":"image_heading","label":"Category title"},
+      {"type":"text","id":"image_text","label":"Short description"},
+      {"type":"url","id":"image_link","label":"Category link"},
+      {"type":"product","id":"featured_product","label":"Featured product"},
+      {"type":"text","id":"promo_text","label":"Promo text"},
+      {"type":"text","id":"promo_cta","label":"Promo button text","default":"Shop now"},
+      {"type":"url","id":"promo_link","label":"Promo link"}
+    ]}
+  ]
+}
+{% endschema %}

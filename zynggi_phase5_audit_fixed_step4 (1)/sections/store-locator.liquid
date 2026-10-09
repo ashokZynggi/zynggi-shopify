@@ -1,0 +1,20 @@
+<section class="section bg-{{ section.settings.bg }}"><div class="container" style="max-width:960px" data-locator>
+  <h2>{{ section.settings.heading }}</h2>
+  <label class="visually-hidden" for="loc-q">Search by city, state or pincode</label>
+  <input id="loc-q" class="input" type="search" placeholder="Search by city, state or pincode" style="margin-bottom:24px">
+  <div class="grid grid--2">
+    {%- for b in section.blocks -%}
+      <div class="benefit" data-store="{{ b.settings.city | downcase }} {{ b.settings.state | downcase }} {{ b.settings.pincode }}" {{ b.shopify_attributes }}>
+        <h3>{{ b.settings.name }}</h3><p>{{ b.settings.address }}<br>{{ b.settings.city }}, {{ b.settings.state }} {{ b.settings.pincode }}</p>
+        {%- if b.settings.phone != blank -%}<p><a href="tel:{{ b.settings.phone }}">{{ b.settings.phone }}</a></p>{%- endif -%}
+        {%- if b.settings.maps_url != blank -%}<a class="btn btn--outline btn--sm" href="{{ b.settings.maps_url }}" rel="noopener" target="_blank">Open in Google Maps</a>{%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  <p class="muted" data-empty hidden>No stores match your search yet.</p>
+  {%- if section.settings.app_note != blank -%}<p class="muted">{{ section.settings.app_note }}</p>{%- endif -%}
+  <script>(function(){var r=document.currentScript.parentElement,q=r.querySelector('input'),e=r.querySelector('[data-empty]');q.addEventListener('input',function(){var v=q.value.trim().toLowerCase(),n=0;r.querySelectorAll('[data-store]').forEach(function(s){var m=!v||s.dataset.store.indexOf(v)>-1;s.hidden=!m;if(m)n++});e.hidden=n>0})})();</script>
+</div></section>
+{% schema %}
+{"name":"Store locator","settings":[{"type":"text","id":"heading","label":"Heading","default":"Find us near you"},{"type":"text","id":"app_note","label":"Note (e.g. for a locator app)"},{"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],"blocks":[{"type":"store","name":"Store","settings":[{"type":"text","id":"name","label":"Store name"},{"type":"textarea","id":"address","label":"Address"},{"type":"text","id":"city","label":"City"},{"type":"text","id":"state","label":"State"},{"type":"text","id":"pincode","label":"Pincode"},{"type":"text","id":"phone","label":"Phone"},{"type":"url","id":"maps_url","label":"Google Maps link"}]}],"presets":[{"name":"Store locator"}]}
+{% endschema %}

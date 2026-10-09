@@ -1,0 +1,400 @@
+<section class="zynggi-wholesale-form">
+  <div class="zynggi-wholesale-form__container">
+
+    <div class="zynggi-wholesale-form__heading">
+      <span>ZYNGGI WHOLESALE</span>
+
+      <h2>Let's Work Together</h2>
+
+      <p>
+        Tell us about your business and wholesale requirements.
+        Our team will get in touch with you shortly.
+      </p>
+    </div>
+
+    {% form 'contact', id: 'ZynggiWholesaleForm' %}
+
+      {% if form.posted_successfully? %}
+        <div class="zynggi-wholesale-form__success">
+          Thank you! Your wholesale enquiry has been received.
+          Our team will contact you shortly.
+        </div>
+      {% endif %}
+
+      {% if form.errors %}
+        <div class="zynggi-wholesale-form__error">
+          Please check the information entered and try again.
+        </div>
+      {% endif %}
+
+      <input
+        type="hidden"
+        name="contact[Subject]"
+        value="Zynggi Wholesale Enquiry"
+      >
+
+      <div class="zynggi-wholesale-form__row">
+
+        <div class="zynggi-wholesale-form__field">
+          <label for="WholesaleName">
+            Name *
+          </label>
+
+          <input
+            type="text"
+            id="WholesaleName"
+            name="contact[name]"
+            placeholder="Your name"
+            required
+          >
+        </div>
+
+        <div class="zynggi-wholesale-form__field">
+          <label for="WholesaleBusiness">
+            Business Name *
+          </label>
+
+          <input
+            type="text"
+            id="WholesaleBusiness"
+            name="contact[Business Name]"
+            placeholder="Your business name"
+            required
+          >
+        </div>
+
+      </div>
+
+      <div class="zynggi-wholesale-form__row">
+
+        <div class="zynggi-wholesale-form__field">
+          <label for="WholesalePhone">
+            Phone *
+          </label>
+
+          <input
+            type="tel"
+            id="WholesalePhone"
+            name="contact[phone]"
+            placeholder="+91 XXXXX XXXXX"
+            required
+          >
+        </div>
+
+        <div class="zynggi-wholesale-form__field">
+          <label for="WholesaleEmail">
+            Email
+          </label>
+
+          <input
+            type="email"
+            id="WholesaleEmail"
+            name="contact[email]"
+            placeholder="you@example.com"
+          >
+        </div>
+
+      </div>
+
+      <div class="zynggi-wholesale-form__row">
+
+        <div class="zynggi-wholesale-form__field">
+          <label for="WholesaleCity">
+            City
+          </label>
+
+          <input
+            type="text"
+            id="WholesaleCity"
+            name="contact[City]"
+            placeholder="Your city"
+          >
+        </div>
+
+        <div class="zynggi-wholesale-form__field">
+          <label for="WholesaleBusinessType">
+            Business Type
+          </label>
+
+          <select
+            id="WholesaleBusinessType"
+            name="contact[Business Type]"
+          >
+            <option value="">
+              Select business type
+            </option>
+
+            <option value="Retailer">
+              Retailer
+            </option>
+
+            <option value="Grocery Store">
+              Grocery Store
+            </option>
+
+            <option value="Restaurant">
+              Restaurant
+            </option>
+
+            <option value="Hotel">
+              Hotel
+            </option>
+
+            <option value="Cloud Kitchen">
+              Cloud Kitchen
+            </option>
+
+            <option value="Distributor">
+              Distributor
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="zynggi-wholesale-form__field">
+        <label for="WholesaleQuantity">
+          Approximate Requirement
+        </label>
+
+        <input
+          type="text"
+          id="WholesaleQuantity"
+          name="contact[Approximate Requirement]"
+          placeholder="Example: 50 kg / 100 kg / Monthly requirement"
+        >
+      </div>
+
+      <div class="zynggi-wholesale-form__field">
+        <label for="WholesaleMessage">
+          Tell Us About Your Requirement
+        </label>
+
+        <textarea
+          id="WholesaleMessage"
+          name="contact[body]"
+          rows="5"
+          placeholder="Tell us which products you need, quantity, packaging requirements, or anything else..."
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="zynggi-wholesale-form__submit"
+      >
+        Send Wholesale Enquiry
+      </button>
+
+    {% endform %}
+
+  </div>
+</section>
+
+
+<style>
+  .zynggi-wholesale-form {
+    background: #f8f1e7;
+    color: #302018;
+    padding: 90px 20px;
+  }
+
+  .zynggi-wholesale-form__container {
+    width: min(900px, 100%);
+    margin: 0 auto;
+  }
+
+  .zynggi-wholesale-form__heading {
+    max-width: 700px;
+    margin: 0 auto 45px;
+    text-align: center;
+  }
+
+  .zynggi-wholesale-form__heading span {
+    display: block;
+    margin-bottom: 12px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    color: #c48a28;
+  }
+
+  .zynggi-wholesale-form__heading h2 {
+    margin: 0 0 16px;
+
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.1;
+
+    color: #302018;
+  }
+
+  .zynggi-wholesale-form__heading p {
+    max-width: 620px;
+    margin: 0 auto;
+
+    font-size: 16px;
+    line-height: 1.7;
+
+    color: #67554a;
+  }
+
+  .zynggi-wholesale-form form {
+    padding: 42px;
+
+    background: #ffffff;
+    border: 1px solid rgba(48, 32, 24, 0.08);
+    border-radius: 22px;
+
+    box-shadow: 0 15px 40px rgba(48, 32, 24, 0.07);
+  }
+
+  .zynggi-wholesale-form__row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .zynggi-wholesale-form__field {
+    margin-bottom: 20px;
+  }
+
+  .zynggi-wholesale-form__field label {
+    display: block;
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #302018;
+  }
+
+  .zynggi-wholesale-form__field input,
+  .zynggi-wholesale-form__field select,
+  .zynggi-wholesale-form__field textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 14px 16px;
+
+    border: 1px solid #ded6cc;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #302018;
+
+    font: inherit;
+
+    outline: none;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .zynggi-wholesale-form__field input,
+  .zynggi-wholesale-form__field select {
+    min-height: 52px;
+  }
+
+  .zynggi-wholesale-form__field textarea {
+    resize: vertical;
+    min-height: 130px;
+  }
+
+  .zynggi-wholesale-form__field input:focus,
+  .zynggi-wholesale-form__field select:focus,
+  .zynggi-wholesale-form__field textarea:focus {
+    border-color: #c48a28;
+    box-shadow: 0 0 0 3px rgba(196, 138, 40, 0.12);
+  }
+
+  .zynggi-wholesale-form__submit {
+    width: 100%;
+    min-height: 54px;
+
+    margin-top: 5px;
+
+    border: 0;
+    border-radius: 999px;
+
+    background: #c48a28;
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .zynggi-wholesale-form__submit:hover {
+    background: #a96f16;
+    transform: translateY(-1px);
+  }
+
+  .zynggi-wholesale-form__success,
+  .zynggi-wholesale-form__error {
+    margin-bottom: 22px;
+    padding: 15px 18px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+  }
+
+  .zynggi-wholesale-form__success {
+    background: #edf7ed;
+    color: #245c2a;
+  }
+
+  .zynggi-wholesale-form__error {
+    background: #fff0ee;
+    color: #8a2d22;
+  }
+
+  @media screen and (max-width: 749px) {
+    .zynggi-wholesale-form {
+      padding: 60px 16px;
+    }
+
+    .zynggi-wholesale-form__heading {
+      margin-bottom: 30px;
+    }
+
+    .zynggi-wholesale-form form {
+      padding: 25px 18px;
+      border-radius: 16px;
+    }
+
+    .zynggi-wholesale-form__row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .zynggi-wholesale-form__heading h2 {
+      font-size: 38px;
+    }
+  }
+</style>
+
+
+{% schema %}
+{
+  "name": "Zynggi Wholesale Form",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Zynggi Wholesale Form"
+    }
+  ]
+}
+{% endschema %}

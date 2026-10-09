@@ -1,0 +1,19 @@
+<section class="section usp-section bg-{{ section.settings.bg }}" style="padding:{{ section.settings.padding }}px 0">
+  <div class="container"><div class="usp" style="--n:{{ section.blocks.size | at_most: 6 }}">
+    {%- for block in section.blocks -%}
+      <div class="usp__item" {{ block.shopify_attributes }}>
+        <div class="usp__ic">{%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 80 | image_tag: loading: 'lazy', width: 36, height: 36, alt: '' }}{%- else -%}{% render 'icon', name: block.settings.icon %}{%- endif -%}</div>
+        <h3>{{ block.settings.heading }}</h3><p>{{ block.settings.text }}</p>
+      </div>
+    {%- endfor -%}
+  </div></div>
+</section>
+{% schema %}
+{"name":"Trust / USP bar","max_blocks":6,"settings":[{"type":"range","id":"padding","label":"Vertical padding","min":16,"max":96,"step":8,"unit":"px","default":48},{"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],
+"blocks":[{"type":"usp","name":"Benefit","settings":[
+ {"type":"select","id":"icon","label":"Icon","options":[{"value":"leaf","label":"Leaf"},{"value":"shield","label":"Shield"},{"value":"flame","label":"Flame"},{"value":"box","label":"Box"},{"value":"sparkle","label":"Sparkle"},{"value":"truck","label":"Truck"},{"value":"check","label":"Check"}],"default":"leaf"},
+ {"type":"image_picker","id":"image","label":"Custom icon image"},
+ {"type":"text","id":"heading","label":"Heading","default":"100% pure"},
+ {"type":"text","id":"text","label":"Description","default":"No unnecessary additives"}]}],
+"presets":[{"name":"Trust / USP bar","blocks":[{"type":"usp","settings":{"icon":"leaf","heading":"100% pure","text":"No unnecessary additives"}},{"type":"usp","settings":{"icon":"flame","heading":"Authentic flavour","text":"Made for real Indian cooking"}},{"type":"usp","settings":{"icon":"box","heading":"Hygienically packed","text":"Packed with care"}},{"type":"usp","settings":{"icon":"sparkle","heading":"Quality sourcing","text":"Carefully selected ingredients"}},{"type":"usp","settings":{"icon":"truck","heading":"Fast delivery","text":"To your doorstep"}}]}]}
+{% endschema %}

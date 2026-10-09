@@ -1,0 +1,697 @@
+
+/* ============================================================
+   ZYNGGI NON-HOMEPAGE RESPONSIVE SYSTEM
+   Home page intentionally excluded.
+   ============================================================ */
+
+body:not(.template-index) {
+  overflow-x: clip;
+}
+
+body:not(.template-index) #main {
+  min-width: 0;
+}
+
+body:not(.template-index) .container {
+  width: min(1200px, calc(100% - 40px));
+}
+
+/* ---------------------------
+   Global responsive type/space
+   --------------------------- */
+
+body:not(.template-index) .section {
+  padding-top: clamp(42px, 6vw, 76px);
+  padding-bottom: clamp(42px, 6vw, 76px);
+}
+
+body:not(.template-index) h1 {
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  line-height: 1.08;
+}
+
+body:not(.template-index) h2 {
+  font-size: clamp(1.55rem, 3vw, 2.45rem);
+  line-height: 1.12;
+}
+
+body:not(.template-index) h3 {
+  line-height: 1.2;
+}
+
+body:not(.template-index) img,
+body:not(.template-index) video,
+body:not(.template-index) iframe {
+  max-width: 100%;
+}
+
+/* ---------------------------
+   Page hero / breadcrumbs
+   --------------------------- */
+
+body:not(.template-index) .page-hero,
+body:not(.template-index) .chead {
+  overflow: hidden;
+}
+
+body:not(.template-index) .page-hero .container,
+body:not(.template-index) .chead .container {
+  padding-top: clamp(30px, 5vw, 64px);
+  padding-bottom: clamp(30px, 5vw, 64px);
+}
+
+body:not(.template-index) .crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: .82rem;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   B2B SERVICES LANDING
+   ============================================================ */
+
+body:not(.template-index) .b2b-services {
+  padding: clamp(42px, 5vw, 68px) 20px;
+}
+
+body:not(.template-index) .b2b-services__header {
+  max-width: 720px;
+  margin-bottom: clamp(28px, 4vw, 40px);
+}
+
+body:not(.template-index) .b2b-services__header h2 {
+  font-size: clamp(30px, 4vw, 42px);
+}
+
+body:not(.template-index) .b2b-services__grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+body:not(.template-index) .b2b-service-card {
+  min-height: 0;
+  padding: 24px 22px;
+  border-radius: 16px;
+}
+
+body:not(.template-index) .b2b-service-card__icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+}
+
+body:not(.template-index) .b2b-service-card__icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+body:not(.template-index) .b2b-service-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+body:not(.template-index) .b2b-service-card p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+body:not(.template-index) .b2b-service-card__link {
+  padding-top: 18px;
+}
+
+/* ============================================================
+   WHOLESALE / BULK FORMS
+   ============================================================ */
+
+body:not(.template-index) .zynggi-wholesale-form,
+body:not(.template-index) .zynggi-bulk-section,
+body:not(.template-index) .zynggi-bulk-order {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+body:not(.template-index) .zynggi-wholesale-form__container,
+body:not(.template-index) .zynggi-bulk-container {
+  width: min(1080px, 100%);
+}
+
+body:not(.template-index) .zynggi-wholesale-form form {
+  padding: clamp(22px, 4vw, 40px);
+}
+
+body:not(.template-index) .zynggi-bulk-card,
+body:not(.template-index) .zynggi-distributor__card {
+  border-radius: 18px;
+}
+
+/* Bulk item rows: keep the desktop row compact */
+body:not(.template-index) .zynggi-item-row {
+  display: grid;
+  grid-template-columns: minmax(210px, 1.4fr) minmax(130px, .8fr) minmax(110px, .65fr) minmax(90px, .5fr);
+  gap: 10px;
+  align-items: center;
+}
+
+body:not(.template-index) .zynggi-item-row label {
+  min-width: 0;
+}
+
+body:not(.template-index) .zynggi-item-row input,
+body:not(.template-index) .zynggi-item-row select {
+  min-width: 0;
+}
+
+/* ============================================================
+   DISTRIBUTOR PAGE
+   ============================================================ */
+
+body:not(.template-index) .zynggi-distributor {
+  overflow: hidden;
+}
+
+body:not(.template-index) .zynggi-distributor__container {
+  width: min(1120px, calc(100% - 40px));
+}
+
+body:not(.template-index) .zynggi-distributor__hero {
+  min-height: clamp(360px, 42vw, 560px);
+}
+
+body:not(.template-index) .zynggi-distributor__section {
+  padding-top: clamp(42px, 5vw, 70px);
+  padding-bottom: clamp(42px, 5vw, 70px);
+}
+
+body:not(.template-index) .zynggi-distributor__capability-grid,
+body:not(.template-index) .zynggi-distributor__audience-grid {
+  gap: 14px;
+}
+
+body:not(.template-index) .zynggi-distributor__product-grid {
+  gap: 14px;
+}
+
+body:not(.template-index) .zynggi-distributor__step {
+  min-width: 0;
+}
+
+body:not(.template-index) .zynggi-distributor__application {
+  margin-top: 12px;
+}
+
+body:not(.template-index) .zynggi-distributor__grid {
+  gap: 14px;
+}
+
+body:not(.template-index) .zynggi-distributor__field input,
+body:not(.template-index) .zynggi-distributor__field select,
+body:not(.template-index) .zynggi-distributor__field textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   BUSINESS PORTAL / LOGIN
+   ============================================================ */
+
+body:not(.template-index) .zynggi-business-portal {
+  min-height: auto;
+}
+
+body:not(.template-index) .zynggi-business-portal__container {
+  width: min(560px, calc(100% - 32px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body:not(.template-index) .zynggi-business-portal__card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body:not(.template-index) .zynggi-login-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   PRODUCT PAGE
+   ============================================================ */
+
+body:not(.template-index) .pdp {
+  min-width: 0;
+}
+
+body:not(.template-index) .gallery,
+body:not(.template-index) .pdp__info {
+  min-width: 0;
+}
+
+body:not(.template-index) .gallery__main {
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: var(--radius);
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+body:not(.template-index) .gallery__main::-webkit-scrollbar {
+  display: none;
+}
+
+body:not(.template-index) .gallery__item {
+  flex: 0 0 100%;
+  min-width: 100%;
+  scroll-snap-align: start;
+}
+
+body:not(.template-index) .gallery__main img,
+body:not(.template-index) .gallery__main video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+body:not(.template-index) .pdp__buy {
+  position: static;
+  z-index: auto;
+}
+
+/* ============================================================
+   COLLECTION / SEARCH / LIST COLLECTIONS
+   ============================================================ */
+
+body:not(.template-index) .ctools {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+body:not(.template-index) .clayout {
+  min-width: 0;
+}
+
+body:not(.template-index) .filters {
+  min-width: 0;
+}
+
+body:not(.template-index) .grid {
+  min-width: 0;
+}
+
+body:not(.template-index) .ccard,
+body:not(.template-index) .rcard,
+body:not(.template-index) .pcard {
+  min-width: 0;
+}
+
+body:not(.template-index) .rcard img,
+body:not(.template-index) .ccard img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ============================================================
+   CART
+   ============================================================ */
+
+body:not(.template-index) .cartpage {
+  min-width: 0;
+}
+
+body:not(.template-index) .cartpage__sum {
+  min-width: 0;
+}
+
+body:not(.template-index) .cartpage__sum .textarea,
+body:not(.template-index) .cartpage__sum textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   BLOG / ARTICLE
+   ============================================================ */
+
+body:not(.template-index) .split {
+  min-width: 0;
+}
+
+body:not(.template-index) .split__media {
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+body:not(.template-index) .split__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ============================================================
+   TOUCH / STRUCTURAL SAFETY
+   ============================================================ */
+
+body:not(.template-index) button,
+body:not(.template-index) .btn,
+body:not(.template-index) input,
+body:not(.template-index) select,
+body:not(.template-index) textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+body:not(.template-index) button,
+body:not(.template-index) .btn {
+  min-height: 44px;
+}
+
+body:not(.template-index) .qv__close {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  touch-action: manipulation;
+}
+
+body:not(.template-index) .gallery__thumbs button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+body:not(.template-index) .split__media {
+  aspect-ratio: 16 / 10;
+}
+
+body:not(.template-index) .split__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 1440px) {
+  body:not(.template-index) .container {
+    width: min(1280px, calc(100% - 80px));
+  }
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media screen and (max-width: 989px) {
+
+  body:not(.template-index) .container {
+    width: min(100% - 32px, 900px);
+  }
+
+  body:not(.template-index) .b2b-services__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body:not(.template-index) .zynggi-item-row {
+    grid-template-columns: minmax(180px, 1.3fr) repeat(3, minmax(90px, .7fr));
+  }
+
+  body:not(.template-index) .zynggi-distributor__capability-grid,
+  body:not(.template-index) .zynggi-distributor__audience-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+/* ============================================================
+   PHONE
+   ============================================================ */
+
+@media screen and (max-width: 749px) {
+
+  body:not(.template-index) .container {
+    width: calc(100% - 28px);
+  }
+
+  body:not(.template-index) .section {
+    padding-top: 42px;
+    padding-bottom: 42px;
+  }
+
+  body:not(.template-index) .page-hero .container,
+  body:not(.template-index) .chead .container {
+    padding-top: 26px;
+    padding-bottom: 26px;
+  }
+
+  body:not(.template-index) .crumbs {
+    font-size: 12px;
+    margin-bottom: 9px;
+  }
+
+  /* B2B services: compact horizontal cards instead of a tall stack */
+  body:not(.template-index) .b2b-services {
+    padding: 42px 14px;
+  }
+
+  body:not(.template-index) .b2b-services__header {
+    text-align: left;
+    margin-bottom: 22px;
+  }
+
+  body:not(.template-index) .b2b-services__header h2 {
+    font-size: 30px;
+  }
+
+  body:not(.template-index) .b2b-services__header p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  body:not(.template-index) .b2b-services__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(245px, 78vw);
+    grid-template-columns: none;
+    grid-template-rows: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding: 2px 2px 12px;
+    scrollbar-width: thin;
+  }
+
+  body:not(.template-index) .b2b-service-card {
+    scroll-snap-align: start;
+    padding: 20px;
+    min-height: 0;
+  }
+
+  body:not(.template-index) .b2b-service-card__icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 14px;
+  }
+
+  body:not(.template-index) .b2b-service-card h3 {
+    font-size: 19px;
+  }
+
+  body:not(.template-index) .b2b-service-card p {
+    font-size: 13px;
+  }
+
+  /* Forms */
+  body:not(.template-index) .zynggi-wholesale-form,
+  body:not(.template-index) .zynggi-bulk-section {
+    padding-top: 42px;
+    padding-bottom: 42px;
+  }
+
+  body:not(.template-index) .zynggi-wholesale-form__heading,
+  body:not(.template-index) .zynggi-bulk-header {
+    margin-bottom: 24px;
+  }
+
+  body:not(.template-index) .zynggi-wholesale-form__heading h2,
+  body:not(.template-index) .zynggi-bulk-header h2 {
+    font-size: 32px;
+  }
+
+  body:not(.template-index) .zynggi-wholesale-form__heading p,
+  body:not(.template-index) .zynggi-bulk-header p {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  body:not(.template-index) .zynggi-wholesale-form form,
+  body:not(.template-index) .zynggi-bulk-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  body:not(.template-index) .zynggi-wholesale-form__row,
+  body:not(.template-index) .zynggi-bulk-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Bulk order item rows become a compact mini-form */
+  body:not(.template-index) .zynggi-item-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(48, 32, 24, .08);
+  }
+
+  body:not(.template-index) .zynggi-item-row label {
+    grid-column: 1 / -1;
+    min-height: 34px;
+    font-size: 13px;
+  }
+
+  body:not(.template-index) .zynggi-item-row select,
+  body:not(.template-index) .zynggi-item-row input {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  body:not(.template-index) .zynggi-bulk-spices,
+  body:not(.template-index) .zynggi-bulk-options {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Distributor */
+  body:not(.template-index) .zynggi-distributor__container {
+    width: calc(100% - 28px);
+  }
+
+  body:not(.template-index) .zynggi-distributor__hero {
+    min-height: 410px;
+  }
+
+  body:not(.template-index) .zynggi-distributor__section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  body:not(.template-index) .zynggi-distributor__section-heading {
+    gap: 12px;
+  }
+
+  body:not(.template-index) .zynggi-distributor__capability-grid,
+  body:not(.template-index) .zynggi-distributor__audience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body:not(.template-index) .zynggi-distributor__steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  body:not(.template-index) .zynggi-distributor__step {
+    padding: 16px;
+  }
+
+  body:not(.template-index) .zynggi-distributor__grid {
+    grid-template-columns: 1fr;
+  }
+
+  body:not(.template-index) .zynggi-distributor__field--full {
+    grid-column: auto;
+  }
+
+  /* Product */
+  body:not(.template-index) .pdp__buy {
+    position: static;
+  }
+
+  body:not(.template-index) .gallery__thumbs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  body:not(.template-index) .gallery__thumbs button {
+    flex: 0 0 62px;
+  }
+
+  /* Search */
+  body:not(.template-index) .container.section > form[role="search"] {
+    display: grid !important;
+    grid-template-columns: 1fr auto;
+    width: 100%;
+    max-width: none !important;
+  }
+
+  /* Cart */
+  body:not(.template-index) .cartpage__sum {
+    position: static;
+  }
+
+  /* Blog */
+  body:not(.template-index) .split {
+    display: grid;
+    gap: 18px;
+  }
+
+  /* Tables should scroll rather than break the page */
+  body:not(.template-index) table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+}
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media screen and (max-width: 390px) {
+
+  body:not(.template-index) .container {
+    width: calc(100% - 24px);
+  }
+
+  body:not(.template-index) .b2b-services__grid {
+    grid-auto-columns: 82vw;
+  }
+
+  body:not(.template-index) .zynggi-bulk-spices,
+  body:not(.template-index) .zynggi-bulk-options {
+    grid-template-columns: 1fr;
+  }
+
+  body:not(.template-index) .zynggi-distributor__steps {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media screen and (min-width: 1440px) {
+
+  body:not(.template-index) .b2b-services__grid {
+    gap: 20px;
+  }
+
+}

@@ -1,0 +1,26 @@
+{%- paginate search.results by 24 -%}
+<div class="container section">
+  <h1>{% if search.performed %}Results for “{{ search.terms | escape }}”{% else %}Search{% endif %}</h1>
+  <form action="{{ routes.search_url }}" method="get" role="search" style="display:flex;gap:8px;max-width:640px;margin:16px 0 32px"><label class="visually-hidden" for="sp">Search</label><input id="sp" class="input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search"><button class="btn btn--primary" type="submit">Search</button></form>
+  {%- if search.performed -%}
+    {%- if search.results_count == 0 -%}<p>No results found. Try a different word, or browse <a class="link" href="{{ routes.collections_url }}">all collections</a>.</p>{%- endif -%}
+    {%- assign groups = 'product,collection,article,page' | split: ',' -%}
+    {%- for g in groups -%}
+      {%- assign n = 0 -%}{%- for r in search.results -%}{%- if r.object_type == g -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if n > 0 -%}
+        <h2 style="margin-top:32px;font-size:1.8rem">{%- case g -%}{%- when 'product' -%}Products{%- when 'collection' -%}Collections{%- when 'article' -%}Recipes and articles{%- else -%}Pages{%- endcase -%}</h2>
+        <div class="grid grid--4">
+          {%- for r in search.results -%}{%- if r.object_type == g -%}
+            {%- if g == 'product' -%}{% render 'product-card', product: r, style: 'premium' %}
+            {%- else -%}<a class="rcard" href="{{ r.url }}">{%- assign im = r.image | default: r.featured_image -%}{%- if im -%}{{ im | image_url: width: 480 | image_tag: loading: 'lazy', alt: r.title }}{%- endif -%}<div class="rcard__body"><h3>{{ r.title }}</h3></div></a>{%- endif -%}
+          {%- endif -%}{%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="Pagination">{%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}{%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}</nav>{%- endif -%}
+  {%- endif -%}
+</div>
+{%- endpaginate -%}
+{% schema %}
+{"name":"Search results"}
+{% endschema %}

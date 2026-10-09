@@ -1,0 +1,351 @@
+<section class="b2b-services">
+  <div class="b2b-services__container">
+
+    <div class="b2b-services__header">
+      {% if section.settings.heading != blank %}
+        <h2>{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.text != blank %}
+        <p>{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+
+    <div class="b2b-services__grid">
+      {% for block in section.blocks %}
+        <a
+          href="{{ block.settings.link }}"
+          class="b2b-service-card"
+          {{ block.shopify_attributes }}
+        >
+
+          <div class="b2b-service-card__icon">
+            {% case block.settings.icon %}
+
+              {% when 'wholesale' %}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 9.5 12 4l9 5.5" />
+                  <path d="M5 10v9h14v-9" />
+                  <path d="M9 19v-5h6v5" />
+                  <path d="M7 10h10" />
+                </svg>
+
+              {% when 'bulk' %}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16v13H4z" />
+                  <path d="M8 7V5h8v2" />
+                  <path d="M8 12h8" />
+                  <path d="M8 16h5" />
+                </svg>
+
+              {% when 'distributor' %}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="5" r="2.5" />
+                  <circle cx="5" cy="18" r="2.5" />
+                  <circle cx="19" cy="18" r="2.5" />
+                  <path d="M12 7.5v4" />
+                  <path d="M12 11.5 5 15.5" />
+                  <path d="M12 11.5 19 15.5" />
+                </svg>
+
+              {% when 'private' %}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 20h16" />
+                  <path d="M6 20V8h12v12" />
+                  <path d="M9 8V5h6v3" />
+                  <path d="M9 12h6" />
+                  <path d="M9 16h6" />
+                </svg>
+
+            {% endcase %}
+          </div>
+
+          <div class="b2b-service-card__content">
+            <h3>{{ block.settings.title }}</h3>
+
+            {% if block.settings.text != blank %}
+              <p>{{ block.settings.text }}</p>
+            {% endif %}
+
+            <span class="b2b-service-card__link">
+              Explore
+              <span>→</span>
+            </span>
+          </div>
+
+        </a>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .b2b-services {
+    padding: 80px 20px;
+    background: #f6ead9;
+  }
+
+  .b2b-services__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .b2b-services__header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 45px;
+  }
+
+  .b2b-services__header h2 {
+    margin: 0 0 12px;
+    font-size: 42px;
+    line-height: 1.15;
+    color: #302018;
+  }
+
+  .b2b-services__header p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #5c493d;
+  }
+
+  .b2b-services__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .b2b-service-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    padding: 30px 26px;
+    background: #ffffff;
+    border: 1px solid rgba(48, 32, 24, 0.08);
+    border-radius: 18px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 8px 25px rgba(48, 32, 24, 0.06);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .b2b-service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(48, 32, 24, 0.12);
+  }
+
+  .b2b-service-card__icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    border-radius: 50%;
+    background: #efa914;
+  }
+
+  .b2b-service-card__icon svg {
+    width: 31px;
+    height: 31px;
+    fill: none;
+    stroke: #302018;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .b2b-service-card__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .b2b-service-card h3 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    line-height: 1.2;
+    color: #302018;
+  }
+
+  .b2b-service-card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #665449;
+  }
+
+  .b2b-service-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #b47700;
+  }
+
+  .b2b-service-card__link span {
+    font-size: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .b2b-service-card:hover .b2b-service-card__link span {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 989px) {
+    .b2b-services__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .b2b-services {
+      padding: 55px 16px;
+    }
+
+    .b2b-services__header {
+      margin-bottom: 30px;
+    }
+
+    .b2b-services__header h2 {
+      font-size: 32px;
+    }
+
+    .b2b-services__header p {
+      font-size: 15px;
+    }
+
+    .b2b-services__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .b2b-service-card {
+      min-height: 0;
+      padding: 25px 22px;
+    }
+
+    .b2b-service-card h3 {
+      font-size: 22px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "B2B Services",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "How Can We Help Your Business?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description",
+      "default": "Choose the B2B solution that fits your business."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "B2B Service",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "wholesale",
+              "label": "Wholesale"
+            },
+            {
+              "value": "bulk",
+              "label": "Bulk Orders"
+            },
+            {
+              "value": "distributor",
+              "label": "Distributor"
+            },
+            {
+              "value": "private",
+              "label": "Private Label"
+            }
+          ],
+          "default": "wholesale"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Wholesale Supply"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Reliable spice supply for retailers and food businesses."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2B Services",
+      "blocks": [
+        {
+          "type": "service",
+          "settings": {
+            "icon": "wholesale",
+            "title": "Wholesale Supply",
+            "text": "Reliable spice supply for retailers and food businesses.",
+            "link": "/pages/wholesale-supply"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "icon": "bulk",
+            "title": "Bulk Orders",
+            "text": "Bulk spice solutions for restaurants, hotels and food businesses.",
+            "link": "/pages/bulk-orders"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "icon": "distributor",
+            "title": "Distributor Partnership",
+            "text": "Partner with Zynggi and grow your spice distribution business.",
+            "link": "/pages/distributor-partnership"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "icon": "private",
+            "title": "Private Label",
+            "text": "Custom spice products and packaging for your own brand.",
+            "link": "/pages/private-label"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

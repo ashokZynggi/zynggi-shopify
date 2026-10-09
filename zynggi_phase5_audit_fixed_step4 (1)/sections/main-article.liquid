@@ -1,0 +1,50 @@
+{%- liquid
+  assign mf = article.metafields.custom
+  assign is_recipe = false
+  if mf.prep_time != blank or mf.ingredients != blank
+    assign is_recipe = true
+  endif
+  assign words = article.content | strip_html | split: ' ' | size
+  assign mins = words | divided_by: 200 | at_least: 1
+-%}
+<article>
+  <header class="page-hero" style="padding-bottom:32px"><div class="container">
+    <nav class="crumbs" style="justify-content:center" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span><a href="{{ blog.url }}">{{ blog.title }}</a></nav>
+    <h1>{{ article.title }}</h1>
+    <p class="muted">{{ article.author }} · {{ article.published_at | date: '%d %b %Y' }} · {{ mins }} min read</p>
+  </div></header>
+  <div class="container" style="max-width:960px">{%- if article.image -%}{{ article.image | image_url: width: 1400 | image_tag: loading: 'eager', widths: '700, 1000, 1400', sizes: '(min-width: 990px) 900px, 100vw', alt: article.title, style: 'border-radius:16px;width:100%;margin-top:-8px' }}{%- endif -%}</div>
+  <div class="container section" data-article>
+    <div class="prose">
+      {%- if is_recipe -%}
+        <div class="facts">
+          {%- if mf.prep_time != blank -%}<div><b>{{ mf.prep_time }}</b>Prep</div>{%- endif -%}
+          {%- if mf.cook_time != blank -%}<div><b>{{ mf.cook_time }}</b>Cook</div>{%- endif -%}
+          {%- if mf.servings != blank -%}<div><b>{{ mf.servings }}</b>Servings</div>{%- endif -%}
+          {%- if mf.difficulty != blank -%}<div><b>{{ mf.difficulty }}</b>Difficulty</div>{%- endif -%}
+        </div>
+        {%- if mf.ingredients != blank -%}<h2>Ingredients</h2>{{ mf.ingredients | metafield_tag }}{%- endif -%}
+      {%- else -%}
+        <div class="toc" data-toc hidden><strong>In this article</strong><ol></ol></div>
+      {%- endif -%}
+      {{ article.content }}
+      {%- if mf.tips != blank -%}<h2>Cooking tips</h2>{{ mf.tips | metafield_tag }}{%- endif -%}
+    </div>
+    {%- assign rp = mf.related_products.value -%}
+    {%- if rp != blank -%}
+      <div style="margin-top:56px"><div class="section__head"><h2>{% if is_recipe %}Spices used in this recipe{% else %}Related products{% endif %}</h2>{%- if is_recipe -%}<a class="btn btn--primary" href="{{ rp.first.url }}">Shop ingredients</a>{%- endif -%}</div>
+        <div class="grid grid--4">{%- for pr in rp -%}{% render 'product-card', product: pr, style: 'recipe' %}{%- endfor -%}</div></div>
+    {%- endif -%}
+    {%- assign rr = mf.related_recipes.value -%}
+    {%- if rr != blank -%}<h2 style="margin-top:56px">Related recipes</h2><div class="grid grid--3">{%- for a in rr -%}<a class="rcard" href="{{ a.url }}">{%- if a.image -%}{{ a.image | image_url: width: 480 | image_tag: loading: 'lazy', alt: a.title }}{%- endif -%}<div class="rcard__body"><h3>{{ a.title }}</h3></div></a>{%- endfor -%}</div>{%- endif -%}
+    <div style="margin-top:56px"><h2>Keep reading</h2><div class="grid grid--3">
+      {%- assign shown = 0 -%}{%- for a in blog.articles -%}{%- if a.id != article.id and shown < 3 -%}{%- assign shown = shown | plus: 1 -%}<a class="rcard" href="{{ a.url }}">{%- if a.image -%}{{ a.image | image_url: width: 480 | image_tag: loading: 'lazy', alt: a.title }}{%- endif -%}<div class="rcard__body"><h3>{{ a.title }}</h3></div></a>{%- endif -%}{%- endfor -%}
+    </div></div>
+  </div>
+  {%- if is_recipe -%}
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Recipe","name":{{ article.title | json }},"author":{"@type":"Person","name":{{ article.author | json }}},"datePublished":{{ article.published_at | date: '%Y-%m-%d' | json }}{% if article.image %},"image":"https:{{ article.image | image_url: width: 1200 }}"{% endif %}{% if mf.servings != blank %},"recipeYield":{{ mf.servings | json }}{% endif %}{% if mf.ingredients != blank %},"recipeIngredient":{{ mf.ingredients.value | newline_to_br | strip_newlines | split: '<br />' | json }}{% endif %}{% if mf.prep_time != blank %},"prepTime":{{ mf.prep_time | json }}{% endif %}{% if mf.cook_time != blank %},"cookTime":{{ mf.cook_time | json }}{% endif %}{% if mf.nutrition != blank %},"nutrition":{"@type":"NutritionInformation","description":{{ mf.nutrition | strip_html | json }}}{% endif %}{% if article.content != blank %},"recipeInstructions":{{ article.content | strip_html | json }}{% endif %}</script>
+  {%- endif -%}
+</article>
+{% schema %}
+{"name":"Article / recipe"}
+{% endschema %}

@@ -1,0 +1,67 @@
+{%- comment -%}
+  Product card. Params: product, style (minimal | premium | bestseller | combo | recipe), rank, show_qty
+  combo style reads metafield custom.bundle_contents (multi-line text)
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  assign cs = style | default: 'premium'
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+    assign pct = p.compare_at_price | minus: p.price | times: 100.0 | divided_by: p.compare_at_price | round
+  endif
+  assign rating = p.metafields.reviews.rating.value
+  assign rcount = p.metafields.reviews.rating_count
+  assign highlight = p.metafields.custom.highlights.value
+  assign image_loading = 'lazy'
+  if template.name == 'collection' and forloop.index <= 4
+    assign image_loading = 'eager'
+  endif
+-%}
+<article class="pcard pcard--{{ cs }}">
+  <div class="pcard__media">
+    <a href="{{ p.url }}" aria-label="{{ p.title | escape }}" tabindex="-1">
+      {%- if p.featured_image -%}
+        {{ p.featured_image | image_url: width: 640 | image_tag: loading: image_loading, widths: '320, 480, 640', sizes: '(min-width: 1440px) 22vw, (min-width: 990px) 25vw, (min-width: 750px) 30vw, calc(50vw - 24px)', class: 'pcard__img', alt: p.title }}
+        {%- if p.images.size > 1 -%}{{ p.images[1] | image_url: width: 640 | image_tag: loading: 'lazy', widths: '320, 480, 640', sizes: '(min-width: 1440px) 22vw, (min-width: 990px) 25vw, (min-width: 750px) 30vw, calc(50vw - 24px)', class: 'pcard__img pcard__img--hover', alt: '' }}{%- endif -%}
+      {%- else -%}<div class="pcard__ph"></div>{%- endif -%}
+    </a>
+    <div class="pcard__badges">
+      {%- unless p.available -%}<span class="badge badge--dark">Sold out</span>
+      {%- elsif on_sale -%}<span class="badge badge--red">{{ pct }}% off</span>{%- endunless -%}
+      {%- if cs == 'bestseller' and rank -%}<span class="badge badge--gold">#{{ rank }} bestseller</span>{%- endif -%}
+    </div>
+    {%- if cs != 'minimal' -%}<button type="button" class="pcard__qv" data-quick-view="{{ p.url }}">Quick view</button>{%- endif -%}
+  </div>
+  <div class="pcard__info">
+    {%- if rating != blank and cs != 'minimal' -%}
+      <p class="pcard__rating">{% render 'icon', name: 'star' %}<span>{{ rating.rating | default: rating }}</span>{% if rcount != blank %}<span class="muted">({{ rcount }})</span>{% endif %}</p>
+    {%- endif -%}
+    <h3 class="pcard__title"><a href="{{ p.url }}">{{ p.title }}</a></h3>
+    {%- if cs == 'premium' or cs == 'bestseller' -%}
+      {%- if highlight != blank -%}<p class="pcard__benefit">{{ highlight | first | default: highlight }}</p>{%- endif -%}
+    {%- endif -%}
+    {%- if cs == 'combo' -%}
+      {%- assign bundle = p.metafields.custom.bundle_contents.value -%}
+      {%- if bundle != blank -%}<ul class="pcard__bundle">{%- assign lines = bundle | newline_to_br | strip_newlines | split: '<br />' -%}{%- for l in lines -%}<li>{{ l | strip }}</li>{%- endfor -%}</ul>{%- endif -%}
+    {%- endif -%}
+    {%- if cs == 'recipe' -%}<p class="pcard__benefit">Used in this recipe</p>{%- endif -%}
+    {% render 'price', product: p, variant: v %}
+    {%- if cs == 'combo' and on_sale -%}<p class="pcard__saving">You save {{ p.compare_at_price | minus: p.price | money }}</p>{%- endif -%}
+    {%- if p.available -%}
+      <form class="pcard__form" action="{{ routes.cart_add_url }}" method="post" data-ajax-cart>
+        {%- if p.variants.size > 1 and p.has_only_default_variant == false -%}
+          <label class="visually-hidden" for="v-{{ p.id }}-{{ section.id }}">Size</label>
+          <select id="v-{{ p.id }}-{{ section.id }}" name="id" class="select select--sm">
+            {%- for variant in p.variants -%}<option value="{{ variant.id }}"{% unless variant.available %} disabled{% endunless %}>{{ variant.title }} – {{ variant.price | money }}</option>{%- endfor -%}
+          </select>
+        {%- else -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
+        <div class="pcard__row">
+          {%- if show_qty -%}<input class="qty-input" type="number" name="quantity" value="1" min="1" aria-label="Quantity">{%- else -%}<input type="hidden" name="quantity" value="1">{%- endif -%}
+          <button type="submit" class="btn btn--primary btn--sm">{% if cs == 'combo' %}Add bundle{% else %}Add to cart{% endif %}</button>
+        </div>
+      </form>
+    {%- else -%}<a href="{{ p.url }}" class="btn btn--outline btn--sm">View product</a>{%- endif -%}
+  </div>
+</article>

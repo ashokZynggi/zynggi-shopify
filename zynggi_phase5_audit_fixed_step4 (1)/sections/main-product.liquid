@@ -1,0 +1,97 @@
+{%- liquid
+  assign p = product
+  assign cv = p.selected_or_first_available_variant
+  assign mf = p.metafields.custom
+  assign rating = p.metafields.reviews.rating.value
+  assign rcount = p.metafields.reviews.rating_count
+-%}
+<div class="container">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span>{%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a><span>/</span>{%- endif -%}<span aria-current="page">{{ p.title }}</span></nav>
+  <div class="pdp">
+    <div class="gallery" data-gallery>
+      <div class="gallery__main" tabindex="0" aria-label="Product images">
+        {%- for m in p.media -%}
+          <div class="gallery__item" data-media-id="{{ m.id }}">
+            {%- case m.media_type -%}
+              {%- when 'image' -%}{%- assign lz = 'lazy' -%}{%- if forloop.first -%}{%- assign lz = 'eager' -%}{%- endif -%}{{ m | image_url: width: 1200 | image_tag: loading: lz, widths: '600, 900, 1200', sizes: '(min-width: 990px) 55vw, 100vw', alt: m.alt | default: p.title }}
+              {%- when 'video' -%}{{ m | video_tag: controls: true, loop: false, image_size: '1200x' }}
+              {%- when 'external_video' -%}{{ m | external_video_tag }}
+              {%- else -%}{{ m | media_tag }}
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if p.media.size > 1 -%}
+        <div class="gallery__thumbs">{%- for m in p.media -%}<button type="button" aria-label="Show media {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">{{ m.preview_image | image_url: width: 144, height: 144 | image_tag: loading: 'lazy', alt: m.alt | default: p.title }}</button>{%- endfor -%}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="pdp__info">
+      <h1 class="pdp__title">{{ p.title }}</h1>
+      {%- if rating != blank -%}<p class="pcard__rating" style="font-size:1rem">{% render 'icon', name: 'star' %}<span>{{ rating.rating }}</span><span class="muted">({{ rcount }} reviews)</span></p>{%- endif -%}
+      {%- if mf.highlights.value != blank -%}<p>{{ mf.highlights.value | first | default: mf.highlights.value }}</p>{%- endif -%}
+      <div class="price" style="margin:8px 0"><span class="price__now" data-price-now>{{ cv.price | money }}</span><s class="price__was" data-price-was{% unless cv.compare_at_price > cv.price %} hidden{% endunless %}>{% if cv.compare_at_price > cv.price %}{{ cv.compare_at_price | money }}{% endif %}</s><span class="price__save" data-price-save{% unless cv.compare_at_price > cv.price %} hidden{% endunless %}>{% if cv.compare_at_price > cv.price %}Save {{ cv.compare_at_price | minus: cv.price | times: 100.0 | divided_by: cv.compare_at_price | round }}%{% endif %}</span>{% if cv.unit_price_measurement %}<span class="muted" data-unit-price>{{ cv.unit_price | money }} / {{ cv.unit_price_measurement.reference_value }}{{ cv.unit_price_measurement.reference_unit }}</span>{% endif %}</div>
+      <p class="muted" style="font-size:.85rem;margin:0">{%- if cart.taxes_included -%}Inclusive of all taxes.{%- else -%}Taxes calculated at checkout.{%- endif -%}</p>
+
+      {%- form 'product', p, id: 'product-form' -%}
+        {%- unless p.has_only_default_variant -%}
+          {%- for option in p.options_with_values -%}
+            <fieldset style="border:0;padding:0;margin:16px 0 0"><legend style="font-weight:800">{{ option.name }}</legend>
+              <div class="variants">
+                {%- for value in option.values -%}
+                  <input type="radio" id="o{{ option.position }}-{{ forloop.index }}" name="o{{ option.position }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                  <label for="o{{ option.position }}-{{ forloop.index }}">{{ value }}</label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        {%- endunless -%}
+        <div class="pdp__buy">
+          <div class="qty"><button type="button" data-step="-1" aria-label="Decrease quantity">–</button><input type="number" name="quantity" value="1" min="1" aria-label="Quantity"><button type="button" data-step="1" aria-label="Increase quantity">+</button></div>
+          <button type="submit" class="btn btn--primary" data-atc {% unless cv.available %}disabled{% endunless %}>{% if cv.available %}Add to cart{% else %}Sold out{% endif %}</button>
+          {%- if cv.available -%}<button type="submit" name="checkout" class="btn btn--accent buy-now">Buy now</button>{%- endif -%}
+          {%- if section.settings.show_dynamic_checkout -%}{{ form | payment_button }}{%- endif -%}
+        </div>
+      {%- endform -%}
+      <script type="application/json" data-variants-json>[{%- for v in p.variants -%}{"id":{{ v.id }},"price":{{ v.price }},"compare_at_price":{{ v.compare_at_price | default: 0 }},"unit_price":{{ v.unit_price | default: 0 }},"unit_price_measurement":{{ v.unit_price_measurement | json }} ,"available":{{ v.available }},"featured_media_id":{{ v.featured_media.id | default: 0 }},"options":{{ v.options | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]</script>
+
+      {%- if settings.whatsapp_number != blank -%}<p style="margin-top:16px"><a class="btn btn--outline" href="https://wa.me/{{ settings.whatsapp_number }}?text={{ 'Hi Zynggi, I have a question about ' | append: p.title | url_encode }}" target="_blank" rel="noopener">Ask about this product on WhatsApp</a></p>{%- endif -%}
+
+      <ul class="trust">
+        {%- for b in section.blocks -%}{%- if b.type == 'trust' -%}<li {{ b.shopify_attributes }}>{% render 'icon', name: 'check' %}{{ b.settings.text }}</li>{%- endif -%}{%- endfor -%}
+      </ul>
+
+      {%- for b in section.blocks -%}{%- if b.type == 'pincode' -%}
+        <div class="pin" data-pincode data-serviceable="{{ settings.serviceable_pincodes | strip | escape }}" data-min="{{ settings.delivery_days_min }}" data-max="{{ settings.delivery_days_max }}" {{ b.shopify_attributes }}>
+          <strong>Check delivery</strong>
+          <form><label class="visually-hidden" for="pin-in">Pincode</label><input id="pin-in" class="input" inputmode="numeric" maxlength="6" placeholder="Enter pincode"><button class="btn btn--outline btn--sm" type="submit">Check</button></form>
+          <p class="pin__msg" role="status"></p>
+        </div>
+      {%- endif -%}{%- endfor -%}
+
+      <div class="acc">
+        {%- assign desc = p.description -%}
+        {%- if desc != blank -%}<details open><summary>About this product</summary><div class="acc__body">{{ desc }}</div></details>{%- endif -%}
+        {%- assign fields = 'how_to_use|How to use,best_for|Best dishes for it,ingredients|Ingredients,storage|Storage instructions,shelf_life|Shelf life,origin|Country of origin,spice_level|Spice level,nutritional_info|Nutritional information,allergens|Allergen information,fssai|FSSAI licence' | split: ',' -%}
+        {%- for f in fields -%}
+          {%- assign parts = f | split: '|' -%}
+          {%- assign val = mf[parts[0]] -%}
+          {%- if val != blank -%}<details><summary>{{ parts[1] }}</summary><div class="acc__body">{{ val | metafield_tag }}</div></details>{%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if cv.available -%}
+<div class="sticky-atc" data-sticky-atc>
+  <div style="flex:1;min-width:0"><strong style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.title }}</strong><span data-price-now>{{ cv.price | money }}</span></div>
+  <button type="button" class="btn btn--primary btn--sm">Add to cart</button>
+</div>
+{%- endif -%}
+{% schema %}
+{"name":"Product information","settings":[{"type":"checkbox","id":"show_dynamic_checkout","label":"Show dynamic checkout button","default":false}],"blocks":[
+ {"type":"trust","name":"Trust point","settings":[{"type":"text","id":"text","label":"Text","default":"Authentic ingredients"}]},
+ {"type":"pincode","name":"Pincode delivery check","limit":1,"settings":[]}],
+"presets":[{"name":"Product information","blocks":[{"type":"trust","settings":{"text":"Authentic ingredients"}},{"type":"trust","settings":{"text":"Hygienically packed"}},{"type":"trust","settings":{"text":"Secure checkout"}},{"type":"trust","settings":{"text":"Fast shipping"}},{"type":"pincode"}]}]}
+{% endschema %}

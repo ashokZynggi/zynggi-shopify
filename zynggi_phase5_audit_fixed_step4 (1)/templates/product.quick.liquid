@@ -1,0 +1,15 @@
+{% layout none %}
+{%- assign p = product -%}{%- assign v = p.selected_or_first_available_variant -%}
+<div class="grid grid--2" style="align-items:start">
+  <div>{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 700 | image_tag: alt: p.title, style: 'border-radius:16px' }}{%- endif -%}</div>
+  <div>
+    <h2 style="font-size:2rem">{{ p.title }}</h2>
+    {% render 'price', product: p, variant: v %}
+    <p>{{ p.description | strip_html | truncate: 200 }}</p>
+    <form action="{{ routes.cart_add_url }}" method="post" data-ajax-cart>
+      {%- unless p.has_only_default_variant -%}<select name="id" class="select" style="margin-bottom:12px">{%- for x in p.variants -%}<option value="{{ x.id }}" {% unless x.available %}disabled{% endunless %}>{{ x.title }} – {{ x.price | money }}</option>{%- endfor -%}</select>{%- else -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endunless -%}
+      <div class="pcard__row"><input class="qty-input" type="number" name="quantity" value="1" min="1" aria-label="Quantity"><button class="btn btn--primary" type="submit" {% unless v.available %}disabled{% endunless %}>Add to cart</button></div>
+    </form>
+    <p><a class="link" href="{{ p.url }}">View full details</a></p>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="drawer drawer--right" id="cart-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Cart">
+  <div class="drawer__scrim" data-drawer-close></div>
+  <div class="drawer__panel" data-cart-section="{{ section.id }}">
+    <div class="drawer__head"><h2>Your cart ({{ cart.item_count }})</h2><button class="icon-btn" data-drawer-close aria-label="Close cart">{% render 'icon', name: 'close' %}</button></div>
+    <div class="drawer__body">
+      {% render 'cart-ship-bar' %}
+      {%- if cart.item_count == 0 -%}
+        <p>Your cart is empty.</p>
+        <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">Start shopping</a>
+        {%- assign empty_shown = 0 -%}
+        {%- for p in collections.all.products limit: 12 -%}
+          {%- if empty_shown < 3 and p.available -%}
+            {%- assign empty_shown = empty_shown | plus: 1 -%}
+            <div class="cart-empty-product" style="margin-top:20px">
+              {%- if p.featured_image -%}{{ p.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: p.title }}{%- endif -%}
+              <a href="{{ p.url }}"><strong>{{ p.title }}</strong></a>
+              <div>{{ p.price | money }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {% render 'cart-lines' %}
+        {%- assign uc = section.settings.upsell_collection | default: settings.cart_upsell_collection -%}
+        {%- if uc != blank -%}
+          <h3 style="margin-top:24px">You may also like</h3>
+          {%- assign shown = 0 -%}
+          {%- assign cart_product_ids = cart.items | map: 'product_id' -%}
+          {%- for p in uc.products limit: 12 -%}
+            {%- if shown < 3 and p.available -%}
+              {%- assign in_cart = false -%}
+              {%- if cart_product_ids contains p.id -%}{%- assign in_cart = true -%}{%- endif -%}
+              {%- unless in_cart -%}{%- assign shown = shown | plus: 1 -%}
+                <form class="upsell" action="{{ routes.cart_add_url }}" method="post" data-ajax-cart>
+                  {%- if p.featured_image -%}{{ p.featured_image | image_url: width: 112, height: 112 | image_tag: loading: 'lazy', alt: p.title }}{%- endif -%}
+                  <div><a href="{{ p.url }}"><strong>{{ p.title }}</strong></a><br>{{ p.price | money }}</div>
+                  <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}"><button class="btn btn--outline btn--sm" type="submit">Add</button>
+                </form>
+              {%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+    {%- if cart.item_count > 0 -%}
+    <div class="drawer__foot">
+      <div class="row"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
+      {%- if cart.cart_level_discount_applications.size > 0 -%}{%- for d in cart.cart_level_discount_applications -%}<div class="row"><span>{{ d.title }}</span><span>–{{ d.total_allocated_amount | money }}</span></div>{%- endfor -%}{%- endif -%}
+      <p class="muted" style="font-size:.85rem">Taxes and shipping calculated at checkout.</p>
+      <form action="{{ routes.cart_url }}" method="post"><button class="btn btn--primary btn--block" name="checkout" type="submit">Checkout</button></form>
+      <p style="text-align:center;margin:12px 0 0"><a class="link" href="{{ routes.cart_url }}">View full cart</a></p>
+    </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{"name":"Cart drawer","settings":[{"type":"collection","id":"upsell_collection","label":"Upsell collection","info":"Overrides the theme-wide setting"}]}
+{% endschema %}

@@ -1,0 +1,6 @@
+<div class="container section" style="text-align:center;max-width:640px"><h1>This page could not be found</h1><p>The link may be broken, or the page may have moved. Try searching, or head back to the shop.</p>
+<form action="{{ routes.search_url }}" role="search" style="display:flex;gap:8px;margin:24px 0"><label class="visually-hidden" for="s404">Search</label><input id="s404" class="input" type="search" name="q" placeholder="Search"><button class="btn btn--primary">Search</button></form>
+<a class="btn btn--outline" href="{{ routes.all_products_collection_url }}">Shop all products</a></div>
+{% schema %}
+{"name":"404"}
+{% endschema %}

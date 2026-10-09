@@ -1,0 +1,252 @@
+<section class="section bg-{{ section.settings.bg }}">
+  <div class="container" data-carousel style="--mpv:{{ section.settings.mobile_per_view | default: '2' }}">
+    <div class="section__head">
+      <div><h2>{{ section.settings.heading }}</h2>{%- if section.settings.subheading != blank -%}<p>{{ section.settings.subheading }}</p>{%- endif -%}</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        {%- if section.settings.collection != blank -%}<a class="link" href="{{ section.settings.collection.url }}">View all</a>{%- endif -%}
+        <button class="icon-btn" data-scroll-prev aria-label="Previous products" style="transform:rotate(90deg)">{% render 'icon', name: 'chevron' %}</button>
+        <button class="icon-btn" data-scroll-next aria-label="Next products" style="transform:rotate(-90deg)">{% render 'icon', name: 'chevron' %}</button>
+      </div>
+    </div>
+    {%- assign bestseller_collection = section.settings.collection -%}
+    {%- if bestseller_collection == blank -%}
+      {%- assign bestseller_collection = collections.all -%}
+    {%- endif -%}
+    {%- if bestseller_collection != blank -%}
+    <div class="scroll-inner zynggi-bestseller-grid">
+      {%- for product in bestseller_collection.products limit: section.settings.limit -%}<div>{% render 'product-card', product: product, style: section.settings.card_style, rank: forloop.index, show_qty: false %}</div>{%- endfor -%}
+    </div>
+    {%- else -%}<p class="muted">Products will appear here soon.</p>{%- endif -%}
+  </div>
+</section>
+
+<style>
+
+/* =========================================================
+   ZYNGGI PRODUCT CAROUSEL
+   Desktop: 4 products
+   Tablet: 3 products
+   Mobile: 1 product + next-card preview
+   ========================================================= */
+
+
+/* =========================
+   DESKTOP
+   ========================= */
+
+@media screen and (min-width: 990px) {
+
+  .zynggi-bestseller-grid {
+    display: grid !important;
+
+    grid-auto-flow: column !important;
+
+    grid-template-rows: 1fr !important;
+
+    grid-template-columns: none !important;
+
+    grid-auto-columns: calc((100% - 72px) / 4) !important;
+
+    gap: 24px !important;
+
+    overflow-x: auto !important;
+  }
+
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+
+  .zynggi-bestseller-grid {
+    display: grid !important;
+
+    grid-auto-flow: column !important;
+
+    grid-template-rows: 1fr !important;
+
+    grid-template-columns: none !important;
+
+    grid-auto-columns: calc((100% - 48px) / 3) !important;
+
+    gap: 20px !important;
+
+    overflow-x: auto !important;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media screen and (max-width: 749px) {
+
+  .zynggi-bestseller-grid {
+    display: grid !important;
+
+    grid-auto-flow: column !important;
+
+    grid-template-rows: 1fr !important;
+
+    grid-template-columns: none !important;
+
+    grid-auto-columns: calc((100% - (12px * (var(--mpv, 2) - 1))) / var(--mpv, 2)) !important;
+
+    gap: 12px !important;
+
+    overflow-x: auto !important;
+  }
+
+}
+/* swipe feel, shared by every breakpoint */
+.zynggi-bestseller-grid { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; }
+.zynggi-bestseller-grid::-webkit-scrollbar { display: none; }
+.zynggi-bestseller-grid > * { scroll-snap-align: start; min-width: 0; }
+
+/* =========================================================
+   ZYNGGI PRODUCT CARD
+   DEEP GREEN BACKGROUND FIX
+   ========================================================= */
+
+/* Product card information area */
+.zynggi-bestseller-grid .pcard__info {
+  color: #17110b !important;
+  background: #ffffff !important;
+}
+
+/* Product title */
+.zynggi-bestseller-grid .pcard__title,
+.zynggi-bestseller-grid .pcard__title a {
+  color: #17110b !important;
+}
+
+/* Product price */
+.zynggi-bestseller-grid .pcard__info .price,
+.zynggi-bestseller-grid .pcard__info .price *,
+.zynggi-bestseller-grid .pcard__info .price-item,
+.zynggi-bestseller-grid .pcard__info .price-item * {
+  color: #17110b !important;
+}
+
+/* Any supporting product text */
+.zynggi-bestseller-grid .pcard__benefit,
+.zynggi-bestseller-grid .pcard__rating,
+.zynggi-bestseller-grid .pcard__bundle,
+.zynggi-bestseller-grid .pcard__saving {
+  color: #17110b !important;
+}
+
+/* Keep Add to Cart button red with WHITE text */
+.zynggi-bestseller-grid .pcard__form .btn--primary {
+  color: #ffffff !important;
+}
+
+/* Keep View Product button readable */
+.zynggi-bestseller-grid .pcard__info .btn--outline {
+  color: #17110b !important;
+} 
+
+</style>
+
+<script>
+(function () {
+
+  function initZynggiCarousel() {
+
+    document.querySelectorAll('[data-carousel]').forEach(function (carousel) {
+
+      const slider = carousel.querySelector('.zynggi-bestseller-grid');
+      const nextButton = carousel.querySelector('[data-scroll-next]');
+      const prevButton = carousel.querySelector('[data-scroll-prev]');
+
+      if (!slider || !nextButton || !prevButton) return;
+
+      if (slider.dataset.zynggiInitialized === 'true') return;
+      slider.dataset.zynggiInitialized = 'true';
+
+      function getScrollAmount() {
+
+        const card = slider.firstElementChild;
+
+        if (!card) {
+          return slider.clientWidth;
+        }
+
+        const gap = parseFloat(
+          window.getComputedStyle(slider).columnGap
+        ) || 0;
+
+        const cardWidth = card.getBoundingClientRect().width;
+
+        var visible = Math.max(1, Math.floor(slider.clientWidth / (cardWidth + gap)));
+        return (cardWidth + gap) * visible;
+      }
+
+
+      nextButton.addEventListener('click', function (event) {
+
+        event.preventDefault();
+
+        slider.scrollBy({
+          left: getScrollAmount(),
+          behavior: 'smooth'
+        });
+
+      });
+
+
+      prevButton.addEventListener('click', function (event) {
+
+        event.preventDefault();
+
+        slider.scrollBy({
+          left: -getScrollAmount(),
+          behavior: 'smooth'
+        });
+
+      });
+
+    });
+
+  }
+
+
+  if (document.readyState === 'loading') {
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      initZynggiCarousel
+    );
+
+  } else {
+
+    initZynggiCarousel();
+
+  }
+
+
+  document.addEventListener(
+    'shopify:section:load',
+    initZynggiCarousel
+  );
+
+})();
+</script>
+
+{% schema %}
+{"name":"Product carousel","settings":[
+ {"type":"text","id":"heading","label":"Heading","default":"Shop our bestsellers"},
+ {"type":"text","id":"subheading","label":"Subheading"},
+ {"type":"collection","id":"collection","label":"Collection"},
+ {"type":"range","id":"limit","label":"Products to show","min":4,"max":16,"default":8},
+ {"type":"range","id":"per_row","label":"Products per row (desktop)","min":3,"max":5,"default":4},
+ {"type":"select","id":"mobile_per_view","label":"Products visible at once on phones","options":[{"value":"1.5","label":"1.5"},{"value":"2","label":"2"},{"value":"2.5","label":"2.5"},{"value":"3","label":"3"}],"default":"2"},
+ {"type":"select","id":"card_style","label":"Card style","options":[{"value":"minimal","label":"Minimal"},{"value":"premium","label":"Premium"},{"value":"bestseller","label":"Bestseller"},{"value":"combo","label":"Combo / bundle"},{"value":"recipe","label":"Recipe-linked"}],"default":"bestseller"},
+ {"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],
+"presets":[{"name":"Product carousel"}]}
+{% endschema %}

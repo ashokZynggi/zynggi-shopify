@@ -1,0 +1,35 @@
+{
+ "sections": {
+  "hero": {
+   "type": "page-hero",
+   "settings": {
+    "heading": "People behind the flavour"
+   }
+  },
+  "team": {
+   "type": "team-grid",
+   "blocks": {
+    "m1": {
+     "type": "member",
+     "settings": {}
+    },
+    "m2": {
+     "type": "member",
+     "settings": {}
+    }
+   },
+   "block_order": [
+    "m1",
+    "m2"
+   ],
+   "settings": {
+    "heading": "Founders and team",
+    "bg": "white"
+   }
+  }
+ },
+ "order": [
+  "hero",
+  "team"
+ ]
+}

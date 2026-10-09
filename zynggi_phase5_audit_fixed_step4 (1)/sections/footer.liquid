@@ -1,0 +1,727 @@
+<footer class="footer">
+  <div class="container">
+
+    <div class="footer__grid">
+
+      <div>
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 240 | image_tag: loading: 'lazy', alt: shop.name }}
+        {%- else -%}
+          <p class="header__logo" style="color:#fff">
+            {{ shop.name }}
+          </p>
+        {%- endif -%}
+
+        <p style="margin-top:12px;max-width:34ch">
+          {{ section.settings.about | default: '[BRAND STORY – short description]' }}
+        </p>
+
+        <p style="display:flex;gap:16px;flex-wrap:wrap">
+          {%- assign networks = 'instagram,facebook,youtube,pinterest' | split: ',' -%}
+
+          {%- for s in networks -%}
+            {%- assign key = 'social_' | append: s -%}
+            {%- assign u = settings[key] -%}
+
+            {%- if u != blank -%}
+              <a
+                href="{{ u }}"
+                rel="noopener"
+                target="_blank"
+              >
+                {{ s | capitalize }}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </p>
+      </div>
+
+
+      {%- for block in section.blocks -%}
+
+        {%- case block.type -%}
+
+          {%- when 'links' -%}
+
+            <div {{ block.shopify_attributes }}>
+              <h3>{{ block.settings.heading }}</h3>
+
+              <ul>
+                {%- for l in linklists[block.settings.menu].links -%}
+                  <li>
+                    <a href="{{ l.url }}">
+                      {{ l.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+
+
+          {%- when 'contact' -%}
+
+            <div {{ block.shopify_attributes }}>
+              <h3>{{ block.settings.heading }}</h3>
+
+              <ul>
+                <li>
+                  {{ block.settings.phone | default: '[PHONE]' }}
+                </li>
+
+                <li>
+                  <a href="mailto:{{ block.settings.email | default: shop.email }}">
+                    {{ block.settings.email | default: '[EMAIL]' }}
+                  </a>
+                </li>
+
+                <li>
+                  {{ block.settings.address | default: '[FACTORY ADDRESS]' }}
+                </li>
+
+                <li>
+                  {{ block.settings.hours | default: '[BUSINESS HOURS]' }}
+                </li>
+
+                {%- if settings.whatsapp_number != blank -%}
+                  <li>
+                    <a href="https://wa.me/{{ settings.whatsapp_number }}">
+                      WhatsApp
+                    </a>
+                  </li>
+                {%- endif -%}
+              </ul>
+            </div>
+
+        {%- endcase -%}
+
+      {%- endfor -%}
+
+    </div>
+
+
+    <div class="footer__base">
+
+      <span>
+        © {{ 'now' | date: '%Y' }}
+        {{ shop.name }}.
+        {{ section.settings.fssai }}
+      </span>
+
+      <div
+        class="pay"
+        aria-label="Payment methods"
+      >
+        {%- assign pl = settings.payment_labels | split: ',' -%}
+
+        {%- for p in pl -%}
+          <span>
+            {{ p | strip }}
+          </span>
+        {%- endfor -%}
+      </div>
+
+    </div>
+
+
+    <!-- Zynggi Policy & Feedback Links -->
+
+    <div class="zynggi-footer-links">
+
+      <a href="{{ routes.refund_policy_url }}">
+        Refund Policy
+      </a>
+
+      <a href="{{ routes.privacy_policy_url }}">
+        Privacy Policy
+      </a>
+
+      <a href="{{ routes.terms_of_service_url }}">
+        Terms of Service
+      </a>
+
+      <a href="{{ routes.contact_url }}">
+        Feedback
+      </a>
+
+    </div>
+
+  </div>
+</footer>
+
+
+<style>
+  /* =========================================================
+     ZYNGGI FOOTER — BASE
+     ========================================================= */
+
+  .footer {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  .footer *,
+  .footer *::before,
+  .footer *::after {
+    box-sizing: border-box;
+  }
+
+  .footer .container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+
+  /* =========================================================
+     FOOTER GRID
+     ========================================================= */
+
+  .footer__grid {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .footer__grid > div {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+
+  /* =========================================================
+     FOOTER BASE
+     ========================================================= */
+
+  .footer__base {
+    width: 100%;
+    max-width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+  }
+
+  .footer__base > span {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+
+  /* =========================================================
+     PAYMENT METHODS
+     ========================================================= */
+
+  .pay {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .pay span {
+    white-space: nowrap;
+  }
+
+
+  /* =========================================================
+     POLICY BAR — DESKTOP
+     ========================================================= */
+
+  .zynggi-footer-links {
+    width: 100%;
+    max-width: 100%;
+
+    margin-top: 18px;
+
+    padding: 10px 20px;
+
+    background: #9f2608;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 28px;
+
+    box-sizing: border-box;
+
+    /*
+      Never allow this element to create
+      horizontal page scrolling.
+    */
+    overflow: hidden;
+
+    /*
+      Desktop stays on one row.
+    */
+    flex-wrap: nowrap;
+
+    min-width: 0;
+
+    /*
+      Separate the red policy bar
+      visually from the dark footer.
+    */
+    border-radius: 0;
+  }
+
+
+  .zynggi-footer-links a {
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 15px;
+    line-height: 1.3;
+
+    /*
+      Keep every policy link on one line.
+    */
+    white-space: nowrap;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 36px;
+
+    padding: 4px 0;
+
+    flex: 0 0 auto;
+
+    max-width: none;
+  }
+
+  .zynggi-footer-links a:hover {
+    text-decoration: underline;
+  }
+
+
+  /* =========================================================
+     TABLET
+     ========================================================= */
+
+  @media screen and (max-width: 989px) {
+
+    .footer__base {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .pay {
+      justify-content: flex-start;
+    }
+
+    .zynggi-footer-links {
+      gap: 20px;
+      padding: 10px 16px;
+    }
+
+    .zynggi-footer-links a {
+      font-size: 14px;
+    }
+
+  }
+
+
+  /* =========================================================
+     MOBILE
+     ========================================================= */
+
+  @media screen and (max-width: 749px) {
+
+    /*
+      IMPORTANT:
+
+      The mobile navigation is fixed at the bottom of
+      the screen. Instead of allowing it to overlap
+      the footer, create physical space AFTER the footer.
+
+      This is a margin, not padding, so the dark footer
+      background ends naturally before the navigation area.
+    */
+
+    .footer {
+      width: 100%;
+      max-width: 100%;
+
+      margin-bottom: calc(
+        76px + env(safe-area-inset-bottom, 0px)
+      );
+
+      overflow: visible;
+    }
+
+
+    .footer .container {
+      width: 100%;
+      max-width: 100%;
+
+      min-width: 0;
+    }
+
+
+    /* ---------------------------------------------------------
+       FOOTER BASE
+       --------------------------------------------------------- */
+
+    .footer__base {
+      width: 100%;
+      max-width: 100%;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      gap: 12px;
+
+      min-width: 0;
+    }
+
+
+    .footer__base > span {
+      width: 100%;
+      max-width: 100%;
+
+      line-height: 1.45;
+
+      overflow-wrap: anywhere;
+    }
+
+
+    /* ---------------------------------------------------------
+       PAYMENT METHODS
+       --------------------------------------------------------- */
+
+    .pay {
+      width: 100%;
+      max-width: 100%;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: flex-start;
+
+      flex-wrap: nowrap;
+
+      gap: 7px;
+
+      min-width: 0;
+
+      overflow: hidden;
+    }
+
+
+    .pay span {
+      white-space: nowrap;
+
+      flex: 0 0 auto;
+
+      min-height: 32px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 5px 9px;
+    }
+
+
+    /* ---------------------------------------------------------
+       RED POLICY BAR
+       --------------------------------------------------------- */
+
+    .zynggi-footer-links {
+      width: calc(100% - 20px);
+      max-width: calc(100% - 20px);
+
+      /*
+        Keep the red bar visually separated
+        from the dark green footer.
+      */
+      margin-top: 18px;
+      margin-left: 10px;
+      margin-right: 10px;
+
+      padding: 8px 7px;
+
+      background: #9f2608;
+
+      /*
+        ONE SINGLE ROW.
+      */
+      display: flex;
+      flex-direction: row;
+
+      align-items: center;
+      justify-content: center;
+
+      flex-wrap: nowrap;
+
+      /*
+        No horizontal scrolling.
+      */
+      overflow: hidden;
+
+      gap: 0;
+
+      min-width: 0;
+
+      /*
+        Small separation from the dark footer.
+      */
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+
+    .zynggi-footer-links a {
+      /*
+        Small enough to keep all four links
+        on one line on normal phones.
+      */
+      font-size: 11px;
+
+      line-height: 1.2;
+
+      white-space: nowrap;
+
+      min-height: 34px;
+
+      padding: 5px 5px;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      flex: 0 0 auto;
+
+      max-width: none;
+
+      text-align: center;
+    }
+
+
+    /*
+      Separators between links.
+    */
+
+    .zynggi-footer-links a:not(:last-child)::after {
+      content: "•";
+
+      display: inline-block;
+
+      margin-left: 8px;
+
+      opacity: 0.75;
+    }
+
+  }
+
+
+  /* =========================================================
+     SMALL PHONES
+     ========================================================= */
+
+  @media screen and (max-width: 390px) {
+
+    .footer {
+      /*
+        Slightly more room for the fixed
+        mobile navigation.
+      */
+      margin-bottom: calc(
+        74px + env(safe-area-inset-bottom, 0px)
+      );
+    }
+
+
+    .pay {
+      gap: 5px;
+    }
+
+
+    .pay span {
+      padding: 4px 7px;
+      font-size: 12px;
+    }
+
+
+    .zynggi-footer-links {
+      width: calc(100% - 12px);
+      max-width: calc(100% - 12px);
+
+      margin-left: 6px;
+      margin-right: 6px;
+
+      padding: 7px 3px;
+    }
+
+
+    .zynggi-footer-links a {
+      font-size: 10px;
+
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+
+
+    .zynggi-footer-links a:not(:last-child)::after {
+      margin-left: 5px;
+    }
+
+  }
+
+
+  /* =========================================================
+     VERY SMALL PHONES
+     ========================================================= */
+
+  @media screen and (max-width: 340px) {
+
+    .footer {
+      margin-bottom: calc(
+        72px + env(safe-area-inset-bottom, 0px)
+      );
+    }
+
+
+    .zynggi-footer-links {
+      width: 100%;
+      max-width: 100%;
+
+      margin-left: 0;
+      margin-right: 0;
+
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+
+
+    .zynggi-footer-links a {
+      font-size: 9px;
+
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+
+
+    .zynggi-footer-links a:not(:last-child)::after {
+      margin-left: 4px;
+    }
+
+  }
+
+
+  /* =========================================================
+     REDUCED MOTION
+     ========================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .footer *,
+    .footer *::before,
+    .footer *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+  }
+</style>
+
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "about",
+      "label": "Brand description"
+    },
+    {
+      "type": "text",
+      "id": "fssai",
+      "label": "FSSAI line",
+      "default": "FSSAI Lic. No. [FSSAI NUMBER]"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "links",
+      "name": "Link column",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contact column",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Contact"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address"
+        },
+        {
+          "type": "text",
+          "id": "hours",
+          "label": "Business hours"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

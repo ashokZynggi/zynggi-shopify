@@ -1,0 +1,15 @@
+{%- for item in cart.items -%}
+  <div class="cline">
+    {%- if item.image -%}<a href="{{ item.url }}">{{ item.image | image_url: width: 160, height: 160 | image_tag: loading: 'lazy', alt: item.product.title }}</a>{%- else -%}<span></span>{%- endif -%}
+    <div>
+      <a class="cline__title" href="{{ item.url }}">{{ item.product.title }}</a>
+      {%- unless item.product.has_only_default_variant -%}<div class="muted" style="font-size:.9rem">{{ item.variant.title }}</div>{%- endunless -%}
+      {%- for d in item.line_level_discount_allocations -%}<div style="color:var(--c-green);font-size:.85rem;font-weight:700">{{ d.discount_application.title }} (–{{ d.amount | money }})</div>{%- endfor -%}
+      <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
+        <div class="qty"><button type="button" data-qty="{{ item.quantity | minus: 1 }}" data-line="{{ forloop.index }}" aria-label="Decrease quantity">–</button><input type="text" readonly value="{{ item.quantity }}" aria-label="Quantity"><button type="button" data-qty="{{ item.quantity | plus: 1 }}" data-line="{{ forloop.index }}" aria-label="Increase quantity">+</button></div>
+        <button type="button" class="cline__rm" data-remove="{{ forloop.index }}">Remove</button>
+      </div>
+    </div>
+    <div style="text-align:right;font-weight:800">{{ item.final_line_price | money }}{%- if item.original_line_price > item.final_line_price -%}<br><s class="muted" style="font-weight:400">{{ item.original_line_price | money }}</s>{%- endif -%}</div>
+  </div>
+{%- endfor -%}

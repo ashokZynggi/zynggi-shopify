@@ -1,0 +1,476 @@
+<section class="zynggi-admin-dashboard">
+  <div class="zynggi-admin-container">
+    <header class="zynggi-admin-header">
+      <div>
+        <div class="zynggi-admin-brand">ZYNGGI</div>
+        <h1>Admin Dashboard</h1>
+        <p id="adminWelcome">Checking admin access...</p>
+      </div>
+      <button type="button" id="adminLogout" class="zynggi-admin-button zynggi-admin-outline">Logout</button>
+    </header>
+
+    <div id="adminLoading" class="zynggi-admin-loading">Loading admin dashboard...</div>
+
+    <div id="adminApp" style="display:none;">
+      <div class="zynggi-admin-stats">
+        <div class="zynggi-admin-stat"><span>Total Orders</span><strong id="adminTotalOrders">0</strong></div>
+        <div class="zynggi-admin-stat"><span>Today's Orders</span><strong id="adminTodayOrders">0</strong></div>
+        <div class="zynggi-admin-stat"><span>Pending Orders</span><strong id="adminPendingOrders">0</strong></div>
+        <div class="zynggi-admin-stat"><span>Completed</span><strong id="adminCompletedOrders">0</strong></div>
+        <div class="zynggi-admin-stat"><span>Total Shops</span><strong id="adminTotalShops">0</strong></div>
+        <div class="zynggi-admin-stat"><span>Salesmen</span><strong id="adminTotalSalesmen">0</strong></div>
+      </div>
+
+      <div class="zynggi-admin-payment-stats">
+        <div class="zynggi-admin-money-card"><span>Total Billed</span><strong id="adminTotalBilled">₹0.00</strong></div>
+        <div class="zynggi-admin-money-card"><span>Total Received</span><strong id="adminTotalReceived">₹0.00</strong></div>
+        <div class="zynggi-admin-money-card"><span>Total Pending</span><strong id="adminTotalPending">₹0.00</strong></div>
+        <div class="zynggi-admin-money-card"><span>Today's Collection</span><strong id="adminTodayCollection">₹0.00</strong></div>
+      </div>
+
+      <section class="zynggi-admin-panel" id="adminInventorySection">
+        <div class="zynggi-admin-panel-head">
+          <div><span>INVENTORY MANAGEMENT</span><h2>Inventory</h2><p class="zynggi-admin-muted">Manage stock, stock-in, damage and manual adjustments.</p></div>
+          <button type="button" id="adminInventoryRefresh" class="zynggi-admin-button zynggi-admin-outline">Refresh</button>
+        </div>
+        <div class="zynggi-admin-inventory-stats">
+          <div class="zynggi-admin-inventory-stat"><span>Total Units</span><strong id="adminInventoryTotalUnits">0</strong></div>
+          <div class="zynggi-admin-inventory-stat"><span>Low Stock</span><strong id="adminInventoryLowStock">0</strong></div>
+          <div class="zynggi-admin-inventory-stat"><span>Out of Stock</span><strong id="adminInventoryOutStock">0</strong></div>
+        </div>
+        <div class="zynggi-admin-inventory-toolbar"><input type="search" id="adminInventorySearch" placeholder="Search product..."><button type="button" id="adminInventoryAddStock" class="zynggi-admin-button zynggi-admin-primary">+ Add Stock</button></div>
+        <div id="adminInventoryMessage" class="zynggi-admin-message"></div>
+        <div id="adminInventoryList" class="zynggi-admin-inventory-list">Loading inventory...</div>
+      </section>
+      <section class="zynggi-admin-panel" id="adminInventoryHistorySection">
+        <div class="zynggi-admin-panel-head"><div><span>STOCK MOVEMENTS</span><h2>Inventory History</h2></div></div>
+        <div id="adminInventoryHistory" class="zynggi-admin-inventory-history">Loading history...</div>
+      </section>
+
+      <section class="zynggi-admin-panel">
+        <div class="zynggi-admin-panel-head">
+          <div><span>SALES MANAGEMENT</span><h2>All Orders</h2></div>
+          <button type="button" id="adminRefresh" class="zynggi-admin-button zynggi-admin-outline">Refresh</button>
+        </div>
+
+        <div class="zynggi-admin-filters">
+          <input type="search" id="adminSearch" placeholder="Search order, shop or salesman...">
+          <select id="adminStatusFilter">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="processing">Processing</option>
+            <option value="delivered">Delivered</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <select id="adminSalesmanFilter"><option value="">All Salesmen</option></select>
+        </div>
+
+        <div id="adminOrdersList" class="zynggi-admin-orders">Loading orders...</div>
+      </section>
+
+      <section id="adminOrderDetails" class="zynggi-admin-panel zynggi-admin-details" style="display:none;">
+        <div class="zynggi-admin-panel-head">
+          <div><span>ORDER DETAILS</span><h2 id="adminDetailTitle">Order</h2></div>
+          <div class="zynggi-admin-head-actions">
+            <button type="button" id="adminPrintBillTop" class="zynggi-admin-button zynggi-admin-primary">Print Bill</button>
+            <button type="button" id="adminCloseDetails" class="zynggi-admin-button zynggi-admin-outline">Close</button>
+          </div>
+        </div>
+        <div id="adminDetailContent"></div>
+      </section>
+    </div>
+  </div>
+  <div id="adminStockModalBackdrop" class="zynggi-admin-stock-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="adminStockModalTitle">
+    <div class="zynggi-admin-stock-modal">
+      <h3 id="adminStockModalTitle">Add Stock</h3>
+      <div class="zynggi-admin-stock-field"><label for="adminStockProduct">Product</label><select id="adminStockProduct"></select></div>
+      <div class="zynggi-admin-stock-field"><label for="adminStockQuantity">Quantity</label><input id="adminStockQuantity" type="number" min="1" step="1" value="1"></div>
+      <div class="zynggi-admin-stock-field"><label for="adminStockReason">Reason</label><input id="adminStockReason" type="text" placeholder="Purchase / damage / adjustment"></div>
+      <div class="zynggi-admin-stock-modal-actions"><button type="button" id="adminStockCancel" class="zynggi-admin-button zynggi-admin-outline">Cancel</button><button type="button" id="adminStockSave" class="zynggi-admin-button zynggi-admin-primary">Save</button></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .zynggi-admin-dashboard{min-height:100vh;padding:42px 20px 90px;background:#f7f3ed}
+  .zynggi-admin-container{max-width:1250px;margin:0 auto}
+  .zynggi-admin-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:32px}
+  .zynggi-admin-brand{margin-bottom:7px;color:#9a6a3a;font-size:17px;font-weight:800;letter-spacing:4px}
+  .zynggi-admin-header h1{margin:0 0 7px;color:#24170e;font-size:36px}
+  .zynggi-admin-header p{margin:0;color:#75685e}
+  .zynggi-admin-button{min-height:42px;padding:10px 17px;border-radius:9px;border:1px solid #cdbda9;cursor:pointer;font-weight:700}
+  .zynggi-admin-button:disabled{opacity:.55;cursor:not-allowed}
+  .zynggi-admin-outline{background:#fffdfa;color:#6f4726}
+  .zynggi-admin-primary{background:#6f4726;color:#fff;border-color:#6f4726}
+  .zynggi-admin-loading{padding:35px;border:1px solid #e2d7ca;border-radius:14px;background:#fffdfa;color:#6f6258;text-align:center}
+  .zynggi-admin-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:14px}
+  .zynggi-admin-stat,.zynggi-admin-money-card{padding:19px;border:1px solid #e2d7ca;border-radius:13px;background:#fffdfa}
+  .zynggi-admin-stat span,.zynggi-admin-money-card span{display:block;margin-bottom:9px;color:#81746a;font-size:12px;font-weight:700}
+  .zynggi-admin-stat strong{color:#2d1c11;font-size:28px}
+  .zynggi-admin-payment-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+  .zynggi-admin-money-card strong{color:#6f4726;font-size:22px}
+  .zynggi-admin-panel{margin-top:22px;padding:24px;border:1px solid #e2d7ca;border-radius:15px;background:#fffdfa}
+  .zynggi-admin-panel-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+  .zynggi-admin-panel-head span{color:#9a6a3a;font-size:11px;font-weight:800;letter-spacing:2px}
+  .zynggi-admin-panel-head h2{margin:5px 0 0;color:#2d1c11;font-size:25px}
+  .zynggi-admin-head-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .zynggi-admin-filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:20px}
+  .zynggi-admin-filters input,.zynggi-admin-filters select,.zynggi-admin-payment-form input,.zynggi-admin-payment-form select,.zynggi-admin-payment-form textarea{width:100%;min-height:46px;padding:0 13px;border:1px solid #d9ccbd;border-radius:9px;background:#fff;color:#2d1c11;box-sizing:border-box}
+  .zynggi-admin-payment-form textarea{padding-top:12px;min-height:70px;resize:vertical}
+  .zynggi-admin-orders{display:grid;gap:12px}
+  .zynggi-admin-order-card{padding:17px;border:1px solid #e6dbcf;border-radius:11px;background:#fff}
+  .zynggi-admin-order-top{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+  .zynggi-admin-order-card strong{color:#2d1c11}
+  .zynggi-admin-order-card p{margin:5px 0;color:#766a61;font-size:13px}
+  .zynggi-admin-order-meta{display:flex;flex-wrap:wrap;gap:7px 15px;margin-top:10px;color:#665a51;font-size:12px}
+  .zynggi-admin-status{display:inline-flex;align-items:center;min-height:27px;padding:0 10px;border-radius:20px;background:#eee4d7;color:#6f4726;font-size:11px;font-weight:800;text-transform:capitalize}
+  .zynggi-admin-order-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+  .zynggi-admin-order-actions select{min-height:39px;padding:0 9px;border:1px solid #d9ccbd;border-radius:8px;background:#fffdfa}
+  .zynggi-admin-payment-mini{margin-top:12px;padding-top:10px;border-top:1px solid #eee5dc;display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#665a51}
+  .zynggi-admin-empty{padding:35px 20px;border:1px dashed #d8cabb;border-radius:11px;color:#81746a;text-align:center}
+  .zynggi-admin-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+  .zynggi-admin-detail-box{padding:16px;border:1px solid #e5dacf;border-radius:10px;background:#fff}
+  .zynggi-admin-detail-box h3{margin:0 0 10px;color:#6f4726;font-size:14px}
+  .zynggi-admin-detail-box p{margin:5px 0;color:#5f544c;font-size:13px}
+  .zynggi-admin-product-table{width:100%;border-collapse:collapse}
+  .zynggi-admin-product-table th,.zynggi-admin-product-table td{padding:11px 9px;border-bottom:1px solid #eee5dc;text-align:left;font-size:13px}
+  .zynggi-admin-product-table th{color:#6f4726;font-size:11px;text-transform:uppercase}
+  .zynggi-admin-total{display:flex;justify-content:flex-end;gap:35px;margin-top:18px;color:#2d1c11;font-weight:800}
+  .zynggi-admin-bill-summary{margin-top:18px;margin-left:auto;max-width:390px;border-top:1px solid #e5dacf;padding-top:12px}
+  .zynggi-admin-bill-row{display:flex;justify-content:space-between;gap:20px;padding:5px 0;color:#5f544c;font-size:13px}
+  .zynggi-admin-bill-row.grand{font-size:16px;font-weight:800;color:#2d1c11;border-top:1px solid #e5dacf;margin-top:7px;padding-top:10px}
+  .zynggi-admin-payment-box{margin-top:22px}
+  .zynggi-admin-payment-form{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+  .zynggi-admin-payment-form .full{grid-column:1/-1}
+  .zynggi-admin-payment-form button{width:max-content}
+  .zynggi-admin-payment-table{width:100%;border-collapse:collapse;margin-top:15px}
+  .zynggi-admin-payment-table th,.zynggi-admin-payment-table td{padding:9px;border-bottom:1px solid #eee5dc;text-align:left;font-size:12px}
+  .zynggi-admin-payment-table th{font-size:10px;color:#6f4726;text-transform:uppercase}
+  .zynggi-admin-due{display:flex;justify-content:flex-end;gap:25px;margin-top:12px;font-weight:800}
+  .zynggi-admin-note{font-size:12px;color:#81746a;margin-top:8px}
+  .zynggi-admin-photo{max-width:160px;border-radius:10px;border:1px solid #e5dacf;margin-top:10px}.zynggi-admin-invoice-brand{display:flex;align-items:center;gap:16px;margin-bottom:12px}.zynggi-admin-invoice-brand img{width:120px;height:70px;object-fit:contain}.zynggi-admin-invoice-brand h3{margin:0 0 8px}
+  @media screen and (max-width:1000px){.zynggi-admin-stats{grid-template-columns:repeat(3,1fr)}.zynggi-admin-payment-stats{grid-template-columns:repeat(2,1fr)}.zynggi-admin-filters{grid-template-columns:1fr 1fr}.zynggi-admin-filters input{grid-column:1/-1}.zynggi-admin-payment-form{grid-template-columns:1fr 1fr}}
+  @media screen and (max-width:650px){.zynggi-admin-dashboard{padding:25px 14px 60px}.zynggi-admin-header{align-items:flex-start;flex-direction:column}.zynggi-admin-header h1{font-size:29px}.zynggi-admin-stats,.zynggi-admin-payment-stats{grid-template-columns:1fr 1fr}.zynggi-admin-panel{padding:16px}.zynggi-admin-filters,.zynggi-admin-payment-form{grid-template-columns:1fr}.zynggi-admin-filters input,.zynggi-admin-payment-form .full{grid-column:auto}.zynggi-admin-detail-grid{grid-template-columns:1fr}.zynggi-admin-order-top,.zynggi-admin-order-actions{align-items:flex-start;flex-direction:column}.zynggi-admin-product-table,.zynggi-admin-payment-table{display:block;overflow-x:auto}.zynggi-admin-total,.zynggi-admin-due{justify-content:space-between;gap:10px;flex-wrap:wrap}.zynggi-admin-head-actions{width:100%}.zynggi-admin-head-actions button{flex:1}}
+  .zynggi-admin-muted{margin:5px 0 0;color:#75685e;font-size:13px}
+  .zynggi-admin-inventory-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 18px}
+  .zynggi-admin-inventory-stat{padding:15px;border:1px solid #e4d9ce;border-radius:10px;background:#fffdfa}
+  .zynggi-admin-inventory-stat span{display:block;color:#75685e;font-size:12px}.zynggi-admin-inventory-stat strong{display:block;margin-top:4px;color:#24170e;font-size:22px}
+  .zynggi-admin-inventory-toolbar{display:flex;gap:10px;margin-bottom:15px}.zynggi-admin-inventory-toolbar input{flex:1;min-height:42px;padding:10px 12px;border:1px solid #d8c9ba;border-radius:8px;background:#fff}
+  .zynggi-admin-inventory-list{display:grid;gap:10px}.zynggi-admin-inventory-card{display:grid;grid-template-columns:minmax(180px,1.5fr) repeat(4,minmax(85px,.7fr)) minmax(150px,auto);align-items:center;gap:10px;padding:14px;border:1px solid #e4d9ce;border-radius:10px;background:#fff}
+  .zynggi-admin-inventory-meta{color:#75685e;font-size:11px}.zynggi-admin-inventory-number{text-align:center}.zynggi-admin-inventory-number span{display:block;color:#75685e;font-size:10px}.zynggi-admin-inventory-number strong{display:block;margin-top:2px;font-size:15px}
+  .zynggi-admin-inventory-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}.zynggi-admin-inventory-actions button{padding:7px 9px;border:1px solid #d8c8b8;border-radius:7px;background:#fff;color:#6f4726;cursor:pointer;font-size:11px;font-weight:700}
+  .zynggi-admin-inventory-history{display:grid;gap:8px}.zynggi-admin-history-row{display:grid;grid-template-columns:150px 1fr 90px 1fr;gap:10px;padding:11px 12px;border-bottom:1px solid #eee5dc;font-size:12px}
+  .zynggi-admin-stock-modal-backdrop{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(25,17,11,.48)}.zynggi-admin-stock-modal{width:min(460px,100%);padding:24px;border-radius:14px;background:#fffdfa;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .zynggi-admin-stock-modal h3{margin:0 0 16px;color:#24170e}.zynggi-admin-stock-field{margin-bottom:12px}.zynggi-admin-stock-field label{display:block;margin-bottom:5px;color:#6f6258;font-size:12px;font-weight:700}.zynggi-admin-stock-field input,.zynggi-admin-stock-field select{width:100%;box-sizing:border-box;padding:10px;border:1px solid #d8c9ba;border-radius:8px;background:#fff}.zynggi-admin-stock-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+  @media screen and (max-width:900px){.zynggi-admin-inventory-card{grid-template-columns:1fr 1fr 1fr}.zynggi-admin-inventory-actions{grid-column:1/-1;justify-content:flex-start}.zynggi-admin-history-row{grid-template-columns:1fr 1fr}}
+  @media screen and (max-width:650px){.zynggi-admin-inventory-stats{grid-template-columns:1fr}.zynggi-admin-inventory-toolbar{flex-direction:column}.zynggi-admin-inventory-card{grid-template-columns:1fr 1fr}.zynggi-admin-inventory-actions{grid-column:1/-1}.zynggi-admin-history-row{grid-template-columns:1fr}}
+</style>
+
+<script>
+(function(){
+  const SUPABASE_URL = "https://txiwtrmlbgticffnickx.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_GICrvn3syGJ6eOcOqeVbzg_p8cx5Jmq";
+  const GST_RATE = 0.05;
+  const GSTIN = "06CRUPT1408C1ZP";
+  const COMPANY_NAME = "Zynggi Food And Spices";
+  const COMPANY_ADDRESS = "101 Lakkad Mandi Old Hamida, Yamunanagar, Haryana - 135001";
+  const COMPANY_PHONE = "+91 9728326350";
+  const COMPANY_EMAIL = "Contact.zynggi@gmail.com";
+  const COMPANY_LOGO = "https://cdn.shopify.com/s/files/1/1003/3148/7521/files/Zynggi_Chef_Mascot_Logo.png?v=1791166251";
+  const accessToken = sessionStorage.getItem("zynggi_salesman_access_token") || localStorage.getItem("zynggi_salesman_access_token");
+  let sessionExpiryTimer = null;
+
+  function clearBusinessSession() {
+    try {
+      sessionStorage.removeItem("zynggi_salesman_access_token"); localStorage.removeItem("zynggi_salesman_access_token");
+      localStorage.removeItem("zynggi_salesman_refresh_token");
+      localStorage.removeItem("zynggi_salesman");
+      localStorage.removeItem("zynggi_salesman_user_id");
+    } catch (error) {
+      console.warn("Unable to clear Zynggi session storage.", error);
+    }
+  }
+
+  function getJwtExpiry(token) {
+    try {
+      const payload = JSON.parse(
+        atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+      );
+      return Number(payload.exp || 0) * 1000;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  function scheduleSessionExpiry(token) {
+    const expiresAt = getJwtExpiry(token);
+    if (!expiresAt) return true;
+
+    const remaining = expiresAt - Date.now();
+    if (remaining <= 0) return false;
+
+    sessionExpiryTimer = window.setTimeout(function () {
+      clearBusinessSession();
+      window.location.replace("/pages/zynggi-business-portal");
+    }, remaining + 500);
+
+    return true;
+  }
+
+  const loading = document.getElementById("adminLoading");
+  const app = document.getElementById("adminApp");
+  const welcome = document.getElementById("adminWelcome");
+  let currentUser = null;
+  let adminUser = null;
+  let allOrders = [];
+  let allItems = [];
+  let allShops = [];
+  let allSalesmen = [];
+  let allProducts = [];
+  let allPayments = [];
+  let selectedOrderId = null;
+
+  function escapeHtml(value){return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+  function formatMoney(value){return "₹"+Number(value||0).toFixed(2);}
+  function formatDate(value){if(!value)return "-";return new Date(value).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"});}
+  function todayISO(){return new Date().toISOString().slice(0,10);}
+  function normalize(v){return String(v??"").toLowerCase().replace(/[^a-z0-9]+/g,"");}
+
+  async function supabaseFetch(endpoint, options={}){
+    const headers={apikey:SUPABASE_KEY,Authorization:"Bearer "+accessToken,"Content-Type":"application/json",...(options.headers||{})};
+    const response = await fetch(SUPABASE_URL+endpoint,{...options,headers});
+    if (response.status === 401) {
+      clearBusinessSession();
+      if (sessionExpiryTimer) window.clearTimeout(sessionExpiryTimer);
+      window.location.replace("/pages/zynggi-business-portal");
+      throw new Error("Your session has expired. Please sign in again.");
+    }
+    return response;
+  }
+  async function readResponse(response){
+    const text=await response.text(); let data=[];
+    try{data=text?JSON.parse(text):[];}catch(e){data=[];}
+    if(!response.ok) throw new Error(data.message||data.error_description||text||"Supabase request failed.");
+    return data;
+  }
+  async function getJson(endpoint){return readResponse(await supabaseFetch(endpoint));}
+
+  async function checkAdmin(){
+    if(!accessToken || !scheduleSessionExpiry(accessToken)){clearBusinessSession();window.location.replace("/pages/zynggi-business-portal");return false;}
+    const userResponse=await supabaseFetch("/auth/v1/user");
+    if(!userResponse.ok){clearBusinessSession();window.location.replace("/pages/zynggi-business-portal");return false;}
+    currentUser=await userResponse.json();
+    const rows=await getJson("/rest/v1/salesmen?select=id,user_id,salesman_code,name,mobile,area,role,status&user_id=eq."+encodeURIComponent(currentUser.id)+"&limit=1");
+    if(!rows.length){loading.innerHTML="<strong>Access denied</strong><p>Your account is not connected to a Zynggi business profile.</p>";return false;}
+    const profile=rows[0];
+    const role=String(profile.role||"").trim().toLowerCase();
+    const status=String(profile.status||"").trim().toLowerCase();
+    if(role==="salesman"){window.location.href="/pages/salesman-dashboard";return false;}
+    if(role!=="admin"){loading.innerHTML="<strong>Access denied</strong><p>Your Zynggi account does not have administrator access.</p>";return false;}
+    if(status!=="active"){loading.innerHTML="<strong>Account inactive</strong><p>Your Zynggi administrator account is inactive.</p>";return false;}
+    adminUser=profile;
+    welcome.textContent="Welcome, "+(adminUser.name||"Admin")+" • "+(adminUser.salesman_code||"ADMIN");
+    return true;
+  }
+
+  async function loadData(){
+    const results=await Promise.all([
+      getJson("/rest/v1/orders?select=id,salesman_id,shop_id,created_at,status,total_items,notes&order=created_at.desc"),
+      getJson("/rest/v1/order_items?select=id,order_id,product_id,product_name,quantity,price,created_at&order=id.asc"),
+      getJson("/rest/v1/shops?select=id,salesman_id,created_at,shop_name,owner_name,mobile,address,pincode,city,latitude,longitude,shop_photo&order=shop_name.asc"),
+      getJson("/rest/v1/salesmen?select=id,user_id,salesman_code,name,mobile,area,role,status&order=name.asc"),
+      getJson("/rest/v1/products?select=id,name,mrp,retailer_rate,distributor_rate,net_weight,packaging&order=name.asc"),
+      getJson("/rest/v1/payments?select=id,order_id,payment_date,amount,payment_mode,reference_no,notes,created_at,created_by&order=payment_date.desc")
+    ]);
+    allOrders=Array.isArray(results[0])?results[0]:[];
+    allItems=Array.isArray(results[1])?results[1]:[];
+    allShops=Array.isArray(results[2])?results[2]:[];
+    allSalesmen=Array.isArray(results[3])?results[3]:[];
+    allProducts=Array.isArray(results[4])?results[4]:[];
+    allPayments=Array.isArray(results[5])?results[5]:[];
+    renderSalesmanFilter();renderStats();renderOrders();renderPaymentStats();
+    if(selectedOrderId) showOrderDetails(selectedOrderId,false);
+  }
+
+  function getShop(shopId){return allShops.find(x=>String(x.id)===String(shopId));}
+  function getSalesman(salesmanId){return allSalesmen.find(x=>String(x.id)===String(salesmanId)||String(x.user_id)===String(salesmanId)||String(x.salesman_code)===String(salesmanId));}
+  function getOrderItems(orderId){return allItems.filter(x=>String(x.order_id)===String(orderId));}
+  function getProduct(item){
+    let p=allProducts.find(x=>String(x.id)===String(item.product_id));
+    if(!p && item.product_name)p=allProducts.find(x=>normalize(x.name)===normalize(item.product_name));
+    if(!p && item.product_name)p=allProducts.find(x=>normalize(item.product_name).includes(normalize(x.name))||normalize(x.name).includes(normalize(item.product_name)));
+    return p;
+  }
+  function resolvedRate(item){
+    const stored=Number(item.price||0);
+    if(stored>0)return stored;
+    const product=getProduct(item);
+    return Number(product?.retailer_rate||0);
+  }
+  function itemTotal(item){return resolvedRate(item)*Number(item.quantity||0);}
+  function orderSubtotal(order){return getOrderItems(order.id).reduce((sum,item)=>sum+itemTotal(item),0);}
+  function orderTax(order){return orderSubtotal(order)*GST_RATE;}
+  function orderGrandTotal(order){return orderSubtotal(order)+orderTax(order);}
+  function paymentsForOrder(orderId){return allPayments.filter(p=>String(p.order_id)===String(orderId));}
+  function paidTotal(orderId){return paymentsForOrder(orderId).reduce((s,p)=>s+Number(p.amount||0),0);}
+  function dueTotal(order){return Math.max(0,orderGrandTotal(order)-paidTotal(order.id));}
+  function paymentStatus(order){const grand=orderGrandTotal(order),paid=paidTotal(order.id);if(paid<=0)return "Pending";if(paid+0.01>=grand)return "Paid";return "Partially Paid";}
+
+  function renderStats(){
+    const today=todayISO();
+    const todayOrders=allOrders.filter(o=>String(o.created_at||"").slice(0,10)===today);
+    const pending=allOrders.filter(o=>String(o.status||"").toLowerCase()==="pending");
+    const completed=allOrders.filter(o=>["completed","delivered"].includes(String(o.status||"").toLowerCase()));
+    document.getElementById("adminTotalOrders").textContent=allOrders.length;
+    document.getElementById("adminTodayOrders").textContent=todayOrders.length;
+    document.getElementById("adminPendingOrders").textContent=pending.length;
+    document.getElementById("adminCompletedOrders").textContent=completed.length;
+    document.getElementById("adminTotalShops").textContent=allShops.length;
+    document.getElementById("adminTotalSalesmen").textContent=allSalesmen.filter(s=>s.role!=="admin").length;
+  }
+  function renderPaymentStats(){
+    const billed=allOrders.filter(o=>String(o.status||"").toLowerCase()!=="cancelled").reduce((s,o)=>s+orderGrandTotal(o),0);
+    const received=allPayments.reduce((s,p)=>s+Number(p.amount||0),0);
+    const pending=allOrders.filter(o=>String(o.status||"").toLowerCase()!=="cancelled").reduce((s,o)=>s+dueTotal(o),0);
+    const today=allPayments.filter(p=>String(p.payment_date||p.created_at||"").slice(0,10)===todayISO()).reduce((s,p)=>s+Number(p.amount||0),0);
+    document.getElementById("adminTotalBilled").textContent=formatMoney(billed);
+    document.getElementById("adminTotalReceived").textContent=formatMoney(received);
+    document.getElementById("adminTotalPending").textContent=formatMoney(pending);
+    document.getElementById("adminTodayCollection").textContent=formatMoney(today);
+  }
+  function renderSalesmanFilter(){
+    const select=document.getElementById("adminSalesmanFilter");select.innerHTML='<option value="">All Salesmen</option>';
+    allSalesmen.filter(s=>s.role!=="admin").forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=(s.name||"Unnamed")+" • "+(s.salesman_code||"");select.appendChild(o);});
+  }
+  function filteredOrders(){
+    const search=document.getElementById("adminSearch").value.trim().toLowerCase();
+    const status=document.getElementById("adminStatusFilter").value;
+    const salesmanId=document.getElementById("adminSalesmanFilter").value;
+    return allOrders.filter(order=>{
+      const shop=getShop(order.shop_id),salesman=getSalesman(order.salesman_id);
+      const searchable=[order.id,shop?.shop_name,shop?.owner_name,salesman?.name,salesman?.salesman_code,order.status,paymentStatus(order)].join(" ").toLowerCase();
+      return (!search||searchable.includes(search))&&(!status||String(order.status||"").toLowerCase()===status)&&(!salesmanId||String(order.salesman_id)===String(salesmanId)||String(order.salesman_id)===String(getSalesman(salesmanId)?.user_id));
+    });
+  }
+  function statusOptions(current){return ["pending","confirmed","processing","delivered","completed","cancelled"].map(s=>`<option value="${s}" ${String(current||"").toLowerCase()===s?"selected":""}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join("");}
+  function renderOrders(){
+    const container=document.getElementById("adminOrdersList"),orders=filteredOrders();
+    if(!orders.length){container.innerHTML='<div class="zynggi-admin-empty">No orders found.</div>';return;}
+    container.innerHTML=orders.map(order=>{
+      const shop=getShop(order.shop_id),salesman=getSalesman(order.salesman_id),subtotal=orderSubtotal(order),grand=orderGrandTotal(order),paid=paidTotal(order.id),due=Math.max(0,grand-paid);
+      return `<article class="zynggi-admin-order-card"><div class="zynggi-admin-order-top"><div><strong>Order #${escapeHtml(order.id)}</strong><p>${escapeHtml(shop?.shop_name||"Unknown Shop")}</p><p>Salesman: ${escapeHtml(salesman?.name||"Unknown")}${salesman?.salesman_code?" • "+escapeHtml(salesman.salesman_code):""}</p></div><span class="zynggi-admin-status">${escapeHtml(order.status||"pending")}</span></div><div class="zynggi-admin-order-meta"><span>${escapeHtml(formatDate(order.created_at))}</span><span>${escapeHtml(order.total_items||0)} Items</span><span>${formatMoney(grand)} incl. 5% GST</span></div><div class="zynggi-admin-payment-mini"><span>Payment: <b>${escapeHtml(paymentStatus(order))}</b></span><span>Received: <b>${formatMoney(paid)}</b></span><span>Pending: <b>${formatMoney(due)}</b></span></div><div class="zynggi-admin-order-actions"><button type="button" class="zynggi-admin-button zynggi-admin-primary admin-view-order" data-order-id="${escapeHtml(order.id)}">View Order</button><select class="admin-status-change" data-order-id="${escapeHtml(order.id)}">${statusOptions(order.status)}</select></div></article>`;
+    }).join("");
+  }
+
+  function invoiceNumber(order){return "ZYN-"+new Date(order.created_at||Date.now()).getFullYear()+"-"+String(order.id).padStart(5,"0");}
+  function showOrderDetails(orderId,scroll=true){
+    const order=allOrders.find(x=>String(x.id)===String(orderId));if(!order)return;selectedOrderId=order.id;
+    const shop=getShop(order.shop_id),salesman=getSalesman(order.salesman_id),items=getOrderItems(order.id),subtotal=orderSubtotal(order),gst=orderTax(order),grand=orderGrandTotal(order),payments=paymentsForOrder(order.id),paid=paidTotal(order.id),due=Math.max(0,grand-paid);
+    const details=document.getElementById("adminOrderDetails"),content=document.getElementById("adminDetailContent");
+    document.getElementById("adminDetailTitle").textContent="Order #"+order.id;
+    content.innerHTML=`
+      <div class="zynggi-admin-detail-grid">
+        <div class="zynggi-admin-detail-box"><h3>Shop Details</h3><p><strong>Shop:</strong> ${escapeHtml(shop?.shop_name||"-")}</p><p><strong>Owner:</strong> ${escapeHtml(shop?.owner_name||"-")}</p><p><strong>Mobile:</strong> ${escapeHtml(shop?.mobile||"-")}</p><p><strong>Address:</strong> ${escapeHtml(shop?.address||"-")}</p><p><strong>City:</strong> ${escapeHtml(shop?.city||"-")}</p><p><strong>Pincode:</strong> ${escapeHtml(shop?.pincode||"-")}</p></div>
+        <div class="zynggi-admin-detail-box"><h3>Salesman Details</h3><p><strong>Name:</strong> ${escapeHtml(salesman?.name||"-")}</p><p><strong>Code:</strong> ${escapeHtml(salesman?.salesman_code||"-")}</p><p><strong>Mobile:</strong> ${escapeHtml(salesman?.mobile||"-")}</p><p><strong>Area:</strong> ${escapeHtml(salesman?.area||"-")}</p><p><strong>Order Date:</strong> ${escapeHtml(formatDate(order.created_at))}</p><p><strong>Status:</strong> ${escapeHtml(order.status||"-")}</p></div>
+      </div>
+      <div class="zynggi-admin-detail-box"><div class="zynggi-admin-invoice-brand"><img src="${COMPANY_LOGO}" alt="Zynggi logo"><div><h3>Tax Invoice</h3><p><strong>Trade Name:</strong> ${escapeHtml(COMPANY_NAME)}</p><p><strong>Invoice No:</strong> ${escapeHtml(invoiceNumber(order))}</p><p><strong>GST:</strong> 5% (CGST 2.5% + SGST 2.5%)</p><p><strong>GSTIN:</strong> ${escapeHtml(GSTIN||"Not added yet")}</p></div></div><table class="zynggi-admin-product-table"><thead><tr><th>Product</th><th>Qty</th><th>Rate</th><th>Taxable Total</th></tr></thead><tbody>${items.length?items.map(item=>`<tr><td>${escapeHtml(item.product_name)}</td><td>${escapeHtml(item.quantity)}</td><td>${formatMoney(resolvedRate(item))}</td><td>${formatMoney(itemTotal(item))}</td></tr>`).join(""):`<tr><td colspan="4">No products found.</td></tr>`}</tbody></table><div class="zynggi-admin-bill-summary"><div class="zynggi-admin-bill-row"><span>Taxable Value</span><span>${formatMoney(subtotal)}</span></div><div class="zynggi-admin-bill-row"><span>CGST 2.5%</span><span>${formatMoney(gst/2)}</span></div><div class="zynggi-admin-bill-row"><span>SGST 2.5%</span><span>${formatMoney(gst/2)}</span></div><div class="zynggi-admin-bill-row grand"><span>Grand Total</span><span>${formatMoney(grand)}</span></div></div><div class="zynggi-admin-total"><span>Total Items: ${escapeHtml(order.total_items||items.reduce((s,i)=>s+Number(i.quantity||0),0))}</span><span>Payment: ${escapeHtml(paymentStatus(order))}</span></div>${order.notes?`<p style="margin-top:18px"><strong>Notes:</strong> ${escapeHtml(order.notes)}</p>`:""}</div>
+      <div class="zynggi-admin-detail-box zynggi-admin-payment-box"><h3>Payment Record</h3><p><strong>Bill:</strong> ${formatMoney(grand)} &nbsp; <strong>Received:</strong> ${formatMoney(paid)} &nbsp; <strong>Pending:</strong> ${formatMoney(due)}</p>
+        <form id="adminPaymentForm" class="zynggi-admin-payment-form"><input id="paymentAmount" type="number" min="0.01" step="0.01" max="${due.toFixed(2)}" placeholder="Payment amount" required><select id="paymentMode"><option value="cash">Cash</option><option value="upi">UPI</option><option value="bank_transfer">Bank Transfer</option><option value="cheque">Cheque</option><option value="other">Other</option></select><input id="paymentDate" type="datetime-local" value="${new Date().toISOString().slice(0,16)}" required><input id="paymentReference" placeholder="Reference / UTR / Cheque No."><textarea id="paymentNotes" class="full" placeholder="Payment notes (optional)"></textarea><button type="submit" class="zynggi-admin-button zynggi-admin-primary" ${due<=0?"disabled":""}>${due<=0?"Fully Paid":"Add Payment"}</button></form>
+        ${payments.length?`<table class="zynggi-admin-payment-table"><thead><tr><th>Date</th><th>Amount</th><th>Mode</th><th>Reference</th><th>Notes</th></tr></thead><tbody>${payments.map(p=>`<tr><td>${escapeHtml(formatDate(p.payment_date||p.created_at))}</td><td>${formatMoney(p.amount)}</td><td>${escapeHtml(p.payment_mode||"-")}</td><td>${escapeHtml(p.reference_no||"-")}</td><td>${escapeHtml(p.notes||"-")}</td></tr>`).join("")}</tbody></table>`:`<p class="zynggi-admin-note">No payment recorded for this order yet.</p>`}
+        <div class="zynggi-admin-due"><span>Received: ${formatMoney(paid)}</span><span>Pending: ${formatMoney(due)}</span></div>
+      </div>`;
+    details.style.display="block";
+    document.getElementById("adminPaymentForm").addEventListener("submit",e=>addPayment(e,order));
+    if(scroll)details.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+  async function addPayment(event,order){
+    event.preventDefault();
+    const button=event.target.querySelector("button"),amount=Number(document.getElementById("paymentAmount").value||0),due=dueTotal(order);
+    if(amount<=0||amount>due+0.01){window.zynggiNotify("Payment amount cannot be more than the pending amount: "+formatMoney(due));return;}
+    button.disabled=true;button.textContent="Saving...";
+    try{
+      const payload={order_id:order.id,payment_date:new Date(document.getElementById("paymentDate").value).toISOString(),amount,payment_mode:document.getElementById("paymentMode").value,reference_no:document.getElementById("paymentReference").value.trim()||null,notes:document.getElementById("paymentNotes").value.trim()||null,created_by:currentUser?.id||null};
+      const response=await supabaseFetch("/rest/v1/payments",{method:"POST",headers:{Prefer:"return=representation"},body:JSON.stringify(payload)});
+      await readResponse(response);await loadData();showOrderDetails(order.id,false);window.zynggiNotify("Payment recorded successfully.");
+    }catch(error){window.zynggiNotify(error.message||"Unable to save payment.");button.disabled=false;button.textContent="Add Payment";}
+  }
+
+  async function updateOrderStatus(orderId,status){
+    const response=await supabaseFetch("/rest/v1/orders?id=eq."+encodeURIComponent(orderId),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({status})});
+    await readResponse(response);const order=allOrders.find(x=>String(x.id)===String(orderId));if(order)order.status=status;renderStats();renderOrders();renderPaymentStats();if(selectedOrderId)showOrderDetails(selectedOrderId,false);
+  }
+
+  function printBill(orderId){
+    const order=allOrders.find(x=>String(x.id)===String(orderId));if(!order)return;
+    const shop=getShop(order.shop_id),salesman=getSalesman(order.salesman_id),items=getOrderItems(order.id),subtotal=orderSubtotal(order),gst=orderTax(order),grand=orderGrandTotal(order),paid=paidTotal(order.id),due=Math.max(0,grand-paid);
+    const rows=items.map(i=>`<tr><td>${escapeHtml(i.product_name)}</td><td>${escapeHtml(i.quantity)}</td><td>${formatMoney(resolvedRate(i))}</td><td>${formatMoney(itemTotal(i))}</td></tr>`).join("");
+    const w=window.open("","_blank","width=900,height=800");if(!w){window.zynggiNotify("Please allow pop-ups to print the bill.");return;}
+    w.document.write(`<!doctype html><html><head><title>${escapeHtml(invoiceNumber(order))}</title><style>body{font-family:Arial,sans-serif;color:#222;margin:0;padding:30px}h1{margin:0 0 5px}p{margin:5px 0;font-size:13px}.head{display:grid;grid-template-columns:150px 1fr auto;gap:22px;align-items:start;border-bottom:2px solid #222;padding-bottom:18px;margin-bottom:18px}.logo-space{width:130px;height:85px;display:flex;align-items:center;justify-content:center;background:#fff}.logo-space img{max-width:125px;max-height:80px;object-fit:contain}.box{border:1px solid #ccc;padding:12px;margin-bottom:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:9px;text-align:left;font-size:13px}th{background:#f4f4f4}.summary{width:360px;margin-left:auto;margin-top:16px}.row{display:flex;justify-content:space-between;padding:5px 0}.grand{font-size:17px;font-weight:700;border-top:2px solid #222;margin-top:6px;padding-top:10px}.paid{margin-top:15px;padding:10px;background:#f4f4f4;font-weight:700}@media print{body{padding:10px}.no-print{display:none}}@media(max-width:650px){.head{grid-template-columns:1fr}.logo-space{display:none}}</style></head><body><div class="head"><div class="logo-space"><img src="${COMPANY_LOGO}" alt="Zynggi logo"></div><div><h1>${escapeHtml(COMPANY_NAME)}</h1><p>${escapeHtml(COMPANY_ADDRESS)}</p><p>Phone: ${escapeHtml(COMPANY_PHONE)} | Email: ${escapeHtml(COMPANY_EMAIL)}</p><p>GSTIN: <b>${escapeHtml(GSTIN)}</b></p></div><div><h2>TAX INVOICE</h2><p>Invoice No: <b>${escapeHtml(invoiceNumber(order))}</b></p><p>Date: ${escapeHtml(formatDate(order.created_at))}</p></div></div><div class="grid"><div class="box"><b>Bill To</b><p>${escapeHtml(shop?.shop_name||"-")}</p><p>Owner: ${escapeHtml(shop?.owner_name||"-")}</p><p>Mobile: ${escapeHtml(shop?.mobile||"-")}</p><p>${escapeHtml(shop?.address||"")}, ${escapeHtml(shop?.city||"")} - ${escapeHtml(shop?.pincode||"")}</p></div><div class="box"><b>Salesman</b><p>${escapeHtml(salesman?.name||"-")}</p><p>Code: ${escapeHtml(salesman?.salesman_code||"-")}</p><p>Mobile: ${escapeHtml(salesman?.mobile||"-")}</p></div></div><div class="box"><table><thead><tr><th>Product</th><th>Qty</th><th>Rate</th><th>Taxable Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="summary"><div class="row"><span>Taxable Value</span><b>${formatMoney(subtotal)}</b></div><div class="row"><span>CGST 2.5%</span><b>${formatMoney(gst/2)}</b></div><div class="row"><span>SGST 2.5%</span><b>${formatMoney(gst/2)}</b></div><div class="row grand"><span>Grand Total</span><b>${formatMoney(grand)}</b></div></div><div class="paid">Payment Received: ${formatMoney(paid)} &nbsp; | &nbsp; Balance Pending: ${formatMoney(due)} &nbsp; | &nbsp; Status: ${escapeHtml(paymentStatus(order))}</div></div><p>Thank you for your business.</p><button class="no-print" onclick="window.print()">Print Bill</button></body></html>`);
+    w.document.close();w.focus();setTimeout(()=>w.print(),300);
+  }
+
+  document.getElementById("adminSearch").addEventListener("input",renderOrders);
+  document.getElementById("adminStatusFilter").addEventListener("change",renderOrders);
+  document.getElementById("adminSalesmanFilter").addEventListener("change",renderOrders);
+  document.getElementById("adminRefresh").addEventListener("click",async function(){try{this.disabled=true;this.textContent="Refreshing...";await loadData();}catch(e){window.zynggiNotify(e.message||"Unable to refresh.");}finally{this.disabled=false;this.textContent="Refresh";}});
+  document.getElementById("adminCloseDetails").addEventListener("click",function(){document.getElementById("adminOrderDetails").style.display="none";selectedOrderId=null;});
+  document.getElementById("adminPrintBillTop").addEventListener("click",function(){if(selectedOrderId)printBill(selectedOrderId);});
+  document.getElementById("adminOrdersList").addEventListener("click",function(event){const button=event.target.closest(".admin-view-order");if(button)showOrderDetails(button.dataset.orderId);});
+  document.getElementById("adminOrdersList").addEventListener("change",async function(event){const select=event.target.closest(".admin-status-change");if(!select)return;try{select.disabled=true;await updateOrderStatus(select.dataset.orderId,select.value);}catch(e){window.zynggiNotify(e.message||"Unable to update order.");await loadData();}finally{select.disabled=false;}});
+  document.getElementById("adminLogout").addEventListener("click",function(){sessionStorage.removeItem("zynggi_salesman_access_token"); localStorage.removeItem("zynggi_salesman_access_token");localStorage.removeItem("zynggi_salesman_refresh_token");localStorage.removeItem("zynggi_salesman");localStorage.removeItem("zynggi_salesman_user_id");window.location.href="/pages/zynggi-business-portal";});
+
+  let adminInventory=[];
+  let adminInventoryMovements=[];
+
+  async function loadInventory(){
+    const results=await Promise.all([
+      getJson("/rest/v1/inventory?select=product_id,stock_quantity,low_stock_threshold,updated_at&order=product_id.asc"),
+      getJson("/rest/v1/products?select=id,name,mrp,retailer_rate,distributor_rate,net_weight,packaging&order=name.asc"),
+      getJson("/rest/v1/inventory_movements?select=id,product_id,quantity,movement_type,reason,order_id,created_at&order=created_at.desc&limit=100")
+    ]);
+    const stock=Array.isArray(results[0])?results[0]:[],products=Array.isArray(results[1])?results[1]:[];adminInventoryMovements=Array.isArray(results[2])?results[2]:[];
+    const map={};stock.forEach(r=>map[String(r.product_id)]=r);
+    adminInventory=products.map(p=>{const s=map[String(p.id)]||{};return {product:p,stock:Number(s.stock_quantity||0),threshold:Number(s.low_stock_threshold||10)};});
+    renderInventory();renderInventoryHistory();populateInventoryProducts();
+  }
+
+  function renderInventory(){
+    const list=document.getElementById("adminInventoryList"),q=String(document.getElementById("adminInventorySearch").value||"").trim().toLowerCase();
+    const rows=adminInventory.filter(r=>!q||String(r.product.name||"").toLowerCase().includes(q));let total=0,low=0,out=0;
+    adminInventory.forEach(r=>{total+=r.stock;if(r.stock<=0)out++;else if(r.stock<=r.threshold)low++;});
+    document.getElementById("adminInventoryTotalUnits").textContent=total;document.getElementById("adminInventoryLowStock").textContent=low;document.getElementById("adminInventoryOutStock").textContent=out;
+    if(!rows.length){list.innerHTML='<div class="zynggi-admin-empty">No inventory products found.</div>';return;}
+    list.innerHTML=rows.map(r=>{const p=r.product,status=r.stock<=0?"Out of stock":r.stock<=r.threshold?"Low stock":"In stock";return `<div class="zynggi-admin-inventory-card"><div><strong>${escapeHtml(p.name)}</strong><div class="zynggi-admin-inventory-meta">${escapeHtml(p.net_weight||"")}${p.packaging?" • "+escapeHtml(p.packaging):""}</div></div><div class="zynggi-admin-inventory-number"><span>Current</span><strong>${r.stock}</strong></div><div class="zynggi-admin-inventory-number"><span>Low at</span><strong>${r.threshold}</strong></div><div class="zynggi-admin-inventory-number"><span>Retailer</span><strong>₹${Number(p.retailer_rate||0).toFixed(2)}</strong></div><div class="zynggi-admin-inventory-number"><span>Status</span><strong>${status}</strong></div><div class="zynggi-admin-inventory-actions"><button type="button" data-stock-action="add" data-product-id="${escapeHtml(p.id)}">+ Stock</button><button type="button" data-stock-action="damage" data-product-id="${escapeHtml(p.id)}">Damage</button><button type="button" data-stock-action="adjust" data-product-id="${escapeHtml(p.id)}">Adjust</button></div></div>`;}).join("");
+  }
+  function renderInventoryHistory(){const box=document.getElementById("adminInventoryHistory");if(!adminInventoryMovements.length){box.innerHTML='<div class="zynggi-admin-empty">No stock movements yet.</div>';return;}const names={};adminInventory.forEach(r=>names[String(r.product.id)]=r.product.name);box.innerHTML=adminInventoryMovements.map(m=>{const q=Number(m.quantity||0);return `<div class="zynggi-admin-history-row"><span>${formatDate(m.created_at)}</span><strong>${escapeHtml(names[String(m.product_id)]||m.product_id)}</strong><strong>${q>=0?"+":""}${q}</strong><span>${escapeHtml(m.movement_type||"")}${m.reason?" • "+escapeHtml(m.reason):""}</span></div>`;}).join("");}
+  function populateInventoryProducts(){document.getElementById("adminStockProduct").innerHTML=adminInventory.map(r=>`<option value="${escapeHtml(r.product.id)}">${escapeHtml(r.product.name)}</option>`).join("");}
+  function openInventoryModal(productId,mode){const m=document.getElementById("adminStockModalBackdrop");document.getElementById("adminStockProduct").value=productId||"";document.getElementById("adminStockQuantity").value=1;m.dataset.mode=mode||"add";document.getElementById("adminStockModalTitle").textContent=mode==="damage"?"Record Damage / Wastage":mode==="adjust"?"Adjust Stock":"Add Stock";document.getElementById("adminStockReason").value=mode==="damage"?"Damaged / wastage":mode==="adjust"?"Manual adjustment":"";m.style.display="flex";m.classList.add("is-open");m.setAttribute("aria-hidden","false");setTimeout(()=>document.getElementById("adminStockProduct").focus(),0);}
+  async function saveInventoryMovement(){const m=document.getElementById("adminStockModalBackdrop"),productId=document.getElementById("adminStockProduct").value,quantity=Number(document.getElementById("adminStockQuantity").value||0),reason=String(document.getElementById("adminStockReason").value||"").trim(),mode=m.dataset.mode||"add";if(!productId||quantity<=0)throw new Error("Select a product and enter a valid quantity.");let type="stock_in",qty=quantity;if(mode==="damage"){type="damage";qty=-quantity;}if(mode==="adjust"){type="adjustment";qty=quantity;}const response=await supabaseFetch("/rest/v1/inventory_movements",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({product_id:String(productId),quantity:qty,movement_type:type,reason:reason||null,created_by:currentUser?.id||null})});await readResponse(response);m.style.display="none";m.classList.remove("is-open");m.setAttribute("aria-hidden","true");await loadInventory();}
+
+  document.getElementById("adminInventoryRefresh").addEventListener("click",loadInventory);
+  document.getElementById("adminInventorySearch").addEventListener("input",renderInventory);
+  document.getElementById("adminInventoryAddStock").addEventListener("click",()=>openInventoryModal("","add"));
+  document.getElementById("adminStockCancel").addEventListener("click",()=>{const m=document.getElementById("adminStockModalBackdrop");m.style.display="none";m.classList.remove("is-open");m.setAttribute("aria-hidden","true");});
+  document.getElementById("adminStockSave").addEventListener("click",async()=>{const msg=document.getElementById("adminInventoryMessage");try{await saveInventoryMovement();msg.style.color="#287a3e";msg.textContent="Inventory updated successfully.";}catch(e){msg.style.color="#b42318";msg.textContent=e.message||"Unable to update inventory.";}});
+  document.getElementById("adminInventoryList").addEventListener("click",e=>{const b=e.target.closest("[data-stock-action]");if(b)openInventoryModal(b.dataset.productId,b.dataset.stockAction);});
+  document.getElementById("adminStockModalBackdrop").addEventListener("click",function(e){if(e.target===this){this.style.display="none";this.classList.remove("is-open");this.setAttribute("aria-hidden","true");}});
+
+  (async function(){
+    try{
+      const allowed=await checkAdmin();if(!allowed)return;
+      await loadData();await loadInventory();loading.style.display="none";app.style.display="block";
+    }catch(error){console.error("Zynggi Admin Dashboard Error:",error);loading.innerHTML=`<strong>Unable to load admin dashboard</strong><p>${escapeHtml(error.message||"Something went wrong.")}</p>`;}
+  })();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Zynggi Admin Dashboard",
+  "settings": [],
+  "presets": [{"name":"Zynggi Admin Dashboard"}]
+}
+{% endschema %}

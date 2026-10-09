@@ -1,0 +1,28 @@
+{
+  "general": {
+    "search": "Search",
+    "close": "Close",
+    "home": "Home",
+    "shop": "Shop",
+    "account": "Account",
+    "cart": "Cart",
+    "add_to_cart": "Add to cart",
+    "buy_now": "Buy now",
+    "sold_out": "Sold out",
+    "view_product": "View product",
+    "checkout": "Checkout",
+    "continue_shopping": "Continue shopping",
+    "your_cart": "Your cart",
+    "empty_cart": "Your cart is empty.",
+    "start_shopping": "Start shopping",
+    "clear_all": "Clear all",
+    "filters": "Filters",
+    "no_results": "No products match these filters."
+  },
+  "accessibility": {
+    "close": "Close",
+    "open_cart": "Open cart",
+    "open_menu": "Open menu",
+    "search": "Search"
+  }
+}

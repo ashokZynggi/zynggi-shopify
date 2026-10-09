@@ -1,0 +1,147 @@
+{
+ "sections": {
+  "main": {
+   "type": "main-product",
+   "blocks": {
+    "t1": {
+     "type": "trust",
+     "settings": {
+      "text": "Authentic ingredients"
+     }
+    },
+    "t2": {
+     "type": "trust",
+     "settings": {
+      "text": "Hygienically packed"
+     }
+    },
+    "t3": {
+     "type": "trust",
+     "settings": {
+      "text": "Secure checkout"
+     }
+    },
+    "t4": {
+     "type": "trust",
+     "settings": {
+      "text": "Fast shipping"
+     }
+    },
+    "pin": {
+     "type": "pincode",
+     "settings": {}
+    }
+   },
+   "block_order": [
+    "t1",
+    "t2",
+    "t3",
+    "t4",
+    "pin"
+   ],
+   "settings": {}
+  },
+  "benefits": {
+   "type": "product-benefits",
+   "blocks": {
+    "b1": {
+     "type": "benefit",
+     "settings": {
+      "icon": "leaf",
+      "title": "Premium ingredients",
+      "text": "Carefully selected ingredients."
+     }
+    },
+    "b2": {
+     "type": "benefit",
+     "settings": {
+      "icon": "flame",
+      "title": "Authentic taste",
+      "text": "Created for traditional Indian cooking."
+     }
+    },
+    "b3": {
+     "type": "benefit",
+     "settings": {
+      "icon": "shield",
+      "title": "Quality processing",
+      "text": "Processed under controlled conditions."
+     }
+    },
+    "b4": {
+     "type": "benefit",
+     "settings": {
+      "icon": "box",
+      "title": "Freshness",
+      "text": "Packaging designed to preserve aroma."
+     }
+    }
+   },
+   "block_order": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "settings": {}
+  },
+  "usage": {
+   "type": "product-usage",
+   "settings": {}
+  },
+  "faq": {
+   "type": "faq",
+   "blocks": {
+    "f1": {
+     "type": "qa",
+     "settings": {
+      "question": "Is this product vegetarian?",
+      "answer": ""
+     }
+    },
+    "f2": {
+     "type": "qa",
+     "settings": {
+      "question": "How should I store it?",
+      "answer": ""
+     }
+    },
+    "f3": {
+     "type": "qa",
+     "settings": {
+      "question": "What is the shelf life?",
+      "answer": ""
+     }
+    },
+    "f4": {
+     "type": "qa",
+     "settings": {
+      "question": "What pack sizes are available?",
+      "answer": ""
+     }
+    }
+   },
+   "block_order": [
+    "f1",
+    "f2",
+    "f3",
+    "f4"
+   ],
+   "settings": {
+    "heading": "Product questions",
+    "bg": "warm"
+   }
+  },
+  "recs": {
+   "type": "product-recommendations",
+   "settings": {}
+  }
+ },
+ "order": [
+  "main",
+  "benefits",
+  "usage",
+  "faq",
+  "recs"
+ ]
+}

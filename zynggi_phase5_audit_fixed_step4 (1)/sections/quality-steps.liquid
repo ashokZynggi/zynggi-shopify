@@ -1,0 +1,149 @@
+<section class="section quality-process-section bg-{{ section.settings.bg }}">
+  <div class="container">
+    <div class="section__head"><div><h2>{{ section.settings.heading }}</h2><p>{{ section.settings.subheading }}</p></div>{%- if section.settings.cta_link != blank -%}<a class="btn btn--outline" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>{%- endif -%}</div>
+    <div class="steps" style="--n:{{ section.blocks.size | at_most: 6 }}">
+      {%- for block in section.blocks -%}
+        <div class="step" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank or block.settings.mobile_image != blank -%}
+            <picture>
+              {%- if block.settings.mobile_image != blank -%}
+                <source media="(max-width: 749px)" srcset="{{ block.settings.mobile_image | image_url: width: 700 }}">
+              {%- endif -%}
+              {%- assign step_image = block.settings.image | default: block.settings.mobile_image -%}
+              {{ step_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: block.settings.title }}
+            </picture>
+          {%- endif -%}
+          <h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Quality process steps","settings":[
+ {"type":"text","id":"heading","label":"Heading","default":"From whole spice to your kitchen"},
+ {"type":"textarea","id":"subheading","label":"Subheading","info":"Only describe processes the brand actually follows."},
+ {"type":"text","id":"cta_text","label":"Button text","default":"Our quality promise"},
+ {"type":"url","id":"cta_link","label":"Button link"},
+ {"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],
+"blocks":[{"type":"step","name":"Step","settings":[{"type":"image_picker","id":"image","label":"Desktop image"},{"type":"image_picker","id":"mobile_image","label":"Mobile image","info":"Optional portrait/square image used only on phones."},{"type":"text","id":"title","label":"Title","default":"Carefully sourced"},{"type":"textarea","id":"text","label":"Description","default":"[PROCESS DETAIL FROM CLIENT]"}]}],
+"presets":[{"name":"Quality process steps","blocks":[{"type":"step","settings":{"title":"Carefully sourced"}},{"type":"step","settings":{"title":"Quality checked"}},{"type":"step","settings":{"title":"Carefully processed"}},{"type":"step","settings":{"title":"Hygienically packed"}},{"type":"step","settings":{"title":"Delivered fresh"}}]}]}
+{% endschema %}
+<style>
+  /* =========================================
+     Zynggi - Quality Process Section
+     ========================================= */
+
+  .quality-process-section {
+    padding-top: 35px !important;
+    padding-bottom: 35px !important;
+  }
+
+  .quality-process-section .section_head {
+    margin-bottom: 22px;
+  }
+
+  .quality-process-section .steps {
+    gap: 14px;
+  }
+
+  .quality-process-section .step {
+    padding: 14px;
+  }
+
+  .quality-process-section .step picture { display:block; width:100%; }
+
+  .quality-process-section .step img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+  }
+
+  .quality-process-section .step h3 {
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+
+  .quality-process-section .step p {
+    margin-top: 6px;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 749px) {
+    .quality-process-section {
+      padding-top: 25px !important;
+      padding-bottom: 25px !important;
+    }
+
+    .quality-process-section .section_head {
+      margin-bottom: 18px;
+    }
+
+    .quality-process-section .steps {
+      gap: 10px;
+    }
+
+    .quality-process-section .step {
+      padding: 10px;
+    }
+  }
+
+  /* =========================================
+     v2 COMPACT, SINGLE ROW ON EVERY DEVICE
+     ========================================= */
+  .quality-process-section { padding-top: 28px !important; padding-bottom: 28px !important; }
+  .quality-process-section .section__head { margin-bottom: 16px; align-items: center; }
+  .quality-process-section .section__head h2 { font-size: clamp(1.3rem, 2.4vw, 1.9rem); }
+  .quality-process-section .section__head p { font-size: .92rem; margin-top: 4px; }
+  .quality-process-section .steps {
+    grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)) !important; gap: 12px;
+  }
+  .quality-process-section .step { padding: 12px; color: var(--c-text); text-align: center; }
+  .quality-process-section .step::before { width: 28px; height: 28px; font-size: .85rem; margin: 0 auto 8px; }
+  .quality-process-section .step img { aspect-ratio: 16 / 10; margin-bottom: 8px; }
+  .quality-process-section .step h3 { font-size: 1rem; margin: 0; line-height: 1.2; }
+  .quality-process-section .step p {
+    font-size: .82rem; margin: 4px 0 0; line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  @media screen and (max-width: 749px) {
+    .quality-process-section { padding-top: 18px !important; padding-bottom: 18px !important; }
+    .quality-process-section .section__head { margin-bottom: 10px; gap: 8px; }
+    .quality-process-section .section__head h2 { font-size: 1.15rem; }
+    .quality-process-section .section__head p { display: none; }
+    .quality-process-section .section__head .btn { padding: 7px 14px; min-height: 34px; font-size: .78rem; }
+    .quality-process-section .steps {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+
+.quality-process-section .step {
+  flex: 0 0 82px;
+  scroll-snap-align: start;
+}
+    .quality-process-section .step { position: relative; padding: 6px 4px 8px; border-radius: 12px; }
+    .quality-process-section .step::before {
+      position: absolute; top: 5px; left: 5px; z-index: 1;
+      width: 18px; height: 18px; font-size: 10px; margin: 0;
+    }
+    .quality-process-section .step img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      margin: 0 auto 6px;
+      border-radius: 10px;
+      background: #f5ead9;
+    }
+    .quality-process-section .step h3 { font-size: 10px; line-height: 1.15; overflow-wrap: anywhere; }
+    .quality-process-section .step p { display: none; }
+  }
+</style>

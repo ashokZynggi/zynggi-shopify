@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "zynggi-admin-dashboard",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

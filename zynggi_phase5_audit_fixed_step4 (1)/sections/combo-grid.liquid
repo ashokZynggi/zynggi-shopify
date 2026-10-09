@@ -1,0 +1,211 @@
+<section class="section bg-{{ section.settings.bg }} zynggi-combo-section">
+  <div class="container">
+
+    <div class="section__head zynggi-combo-head">
+      <div>
+        <h2>{{ section.settings.heading }}</h2>
+
+        {%- if section.settings.subheading != blank -%}
+          <p>{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.collection != blank -%}
+        <a class="link" href="{{ section.settings.collection.url }}">
+          All combos
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="grid grid--3 zynggi-combo-grid">
+
+      {%- for product in section.settings.collection.products limit: section.settings.limit -%}
+
+        {% render 'product-card',
+          product: product,
+          style: 'combo'
+        %}
+
+      {%- endfor -%}
+
+    </div>
+
+    <p class="muted zynggi-combo-note">
+      Bundle contents come from the product metafield custom.bundle_contents
+      (one item per line). Savings are calculated from compare-at price.
+    </p>
+
+  </div>
+</section>
+
+
+<style>
+
+/* =========================================================
+   ZYNGGI COMBO OFFERS
+   Compact section
+   ========================================================= */
+
+
+/* DESKTOP */
+
+.zynggi-combo-section {
+  padding-top: 36px !important;
+  padding-bottom: 36px !important;
+}
+
+
+.zynggi-combo-head {
+  margin-bottom: 20px !important;
+}
+
+
+.zynggi-combo-head h2 {
+  margin-bottom: 4px !important;
+}
+
+
+.zynggi-combo-head p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+
+.zynggi-combo-grid {
+  gap: 20px !important;
+}
+
+
+/* Make product images slightly shorter */
+
+.zynggi-combo-grid img {
+  max-height: 340px;
+  width: 100%;
+  object-fit: cover;
+}
+
+
+/* Small description at bottom */
+
+.zynggi-combo-note {
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+  font-size: 0.78rem !important;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+
+  .zynggi-combo-section {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+  }
+
+  .zynggi-combo-head {
+    margin-bottom: 18px !important;
+  }
+
+  .zynggi-combo-grid {
+    gap: 16px !important;
+  }
+
+  .zynggi-combo-grid img {
+    max-height: 300px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .zynggi-combo-section {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+
+  .zynggi-combo-head {
+    margin-bottom: 16px !important;
+  }
+
+  .zynggi-combo-grid {
+    gap: 14px !important;
+  }
+
+  .zynggi-combo-grid img {
+    max-height: 300px;
+  }
+
+  .zynggi-combo-note {
+    font-size: 0.72rem !important;
+  }
+
+}
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Combo offers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Smart combos. Better value."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Combos collection"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Combos to show",
+      "min": 3,
+      "max": 9,
+      "step": 3,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Background",
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "warm",
+          "label": "Warm cream"
+        },
+        {
+          "value": "green",
+          "label": "Deep green"
+        }
+      ],
+      "default": "white"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Combo offers"
+    }
+  ]
+}
+{% endschema %}

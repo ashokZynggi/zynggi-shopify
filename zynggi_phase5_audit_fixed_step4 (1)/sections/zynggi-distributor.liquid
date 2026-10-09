@@ -1,0 +1,1357 @@
+{% comment %}
+  ZYNGGI DISTRIBUTOR PARTNERSHIP (UX/CRO redesign)
+  File: sections/zynggi-distributor.liquid
+
+  Strategy:
+  - Short primary enquiry (essentials only) → submit in <30s
+  - "Add business information" toggle reveals the full application
+  - WhatsApp as a low-friction secondary path
+  - All original contact[...] field names preserved
+  - CSS scoped to section ID — homepage untouched
+{% endcomment %}
+
+<section id="ZynggiDistributor-{{ section.id }}" class="zynggi-distributor">
+  <div class="zynggi-distributor__container">
+
+    {%- comment -%} ================= HERO ================= {%- endcomment -%}
+    <div
+      class="zynggi-distributor__hero"
+      {% if section.settings.hero_image != blank %}
+        style="background-image:
+          linear-gradient(
+            90deg,
+            rgba(35,20,14,{{ section.settings.hero_overlay | divided_by: 100.0 }}) 0%,
+            rgba(45,27,20,{{ section.settings.hero_overlay | times: 0.75 | divided_by: 100.0 }}) 48%,
+            rgba(45,27,20,{{ section.settings.hero_overlay | times: 0.25 | divided_by: 100.0 }}) 100%
+          ),
+          url('{{ section.settings.hero_image | image_url: width: 2200 }}');"
+      {% endif %}
+    >
+      <div class="zynggi-distributor__hero-content">
+        {% if section.settings.hero_eyebrow != blank %}
+          <span class="zynggi-distributor__eyebrow">{{ section.settings.hero_eyebrow }}</span>
+        {% endif %}
+
+        <h1>{{ section.settings.hero_heading }}</h1>
+
+        {% if section.settings.hero_text != blank %}
+          <p>{{ section.settings.hero_text }}</p>
+        {% endif %}
+
+        <div class="zynggi-distributor__hero-cta">
+          {% if section.settings.hero_button_text != blank %}
+            <a href="#DistributorApplication-{{ section.id }}" class="zynggi-distributor__btn zynggi-distributor__btn--primary" data-zynggi-scroll>
+              {{ section.settings.hero_button_text }}
+              <span aria-hidden="true">→</span>
+            </a>
+          {% endif %}
+
+          {% if section.settings.whatsapp_number != blank %}
+            <a
+              class="zynggi-distributor__btn zynggi-distributor__btn--ghost"
+              href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in becoming a distributor.' | url_encode }}"
+              target="_blank" rel="noopener"
+            >Talk to Zynggi</a>
+          {% endif %}
+        </div>
+
+        <ul class="zynggi-distributor__hero-points">
+          <li>No payment to apply</li>
+          <li>Reply within 1 working day</li>
+          <li>Territory-based partnership</li>
+        </ul>
+      </div>
+    </div>
+
+    {%- comment -%} ================= WHY ZYNGGI ================= {%- endcomment -%}
+    <div class="zynggi-distributor__section">
+      <div class="zynggi-distributor__section-heading">
+        <span class="zynggi-distributor__number" aria-hidden="true">01</span>
+        <div>
+          <span class="zynggi-distributor__label">{{ section.settings.why_eyebrow }}</span>
+          <h2>{{ section.settings.why_heading }}</h2>
+          <p>{{ section.settings.why_text }}</p>
+        </div>
+      </div>
+
+      <div class="zynggi-distributor__benefits">
+        {% for block in section.blocks %}
+          {% if block.type == 'benefit' %}
+            <div class="zynggi-distributor__benefit" {{ block.shopify_attributes }}>
+              <span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {%- comment -%} ================= WHO CAN PARTNER ================= {%- endcomment -%}
+    <div class="zynggi-distributor__section zynggi-distributor__section--soft">
+      <div class="zynggi-distributor__section-heading">
+        <span class="zynggi-distributor__number" aria-hidden="true">02</span>
+        <div>
+          <span class="zynggi-distributor__label">{{ section.settings.who_eyebrow }}</span>
+          <h2>{{ section.settings.who_heading }}</h2>
+          <p>{{ section.settings.who_text }}</p>
+        </div>
+      </div>
+
+      <div class="zynggi-distributor__audience-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'audience' %}
+            <div class="zynggi-distributor__audience-card" {{ block.shopify_attributes }}>
+              <strong>{{ block.settings.title }}</strong>
+              <span>{{ block.settings.text }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {%- comment -%} ================= HOW IT WORKS ================= {%- endcomment -%}
+    <div class="zynggi-distributor__section">
+      <div class="zynggi-distributor__section-heading">
+        <span class="zynggi-distributor__number" aria-hidden="true">03</span>
+        <div>
+          <span class="zynggi-distributor__label">{{ section.settings.process_eyebrow }}</span>
+          <h2>{{ section.settings.process_heading }}</h2>
+          <p>{{ section.settings.process_text }}</p>
+        </div>
+      </div>
+
+      <div class="zynggi-distributor__steps">
+        {% for block in section.blocks %}
+          {% if block.type == 'step' %}
+            <div class="zynggi-distributor__step" {{ block.shopify_attributes }}>
+              <span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {%- comment -%} ================= APPLICATION ================= {%- endcomment -%}
+    <div id="DistributorApplication-{{ section.id }}" class="zynggi-distributor__application">
+      <div class="zynggi-distributor__application-header">
+        <span class="zynggi-distributor__eyebrow">{{ section.settings.form_eyebrow }}</span>
+        <h2>{{ section.settings.form_heading }}</h2>
+        <p>{{ section.settings.form_text }}</p>
+      </div>
+
+      {% form 'contact', id: 'ZynggiDistributorForm' %}
+
+        {%- if form.posted_successfully? -%}
+          <div class="zynggi-distributor__notice zynggi-distributor__notice--success" role="status">
+            <strong>Thank you — your enquiry has been received.</strong>
+            <p>Our team will review your details and contact you to discuss your market and the distribution opportunity.</p>
+          </div>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="zynggi-distributor__notice zynggi-distributor__notice--error" role="alert">
+            <strong>Please check the highlighted fields and try again.</strong>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ============== ESSENTIALS ============== {%- endcomment -%}
+        <div class="zynggi-distributor__card">
+          <div class="zynggi-distributor__card-heading">
+            <span aria-hidden="true">01</span>
+            <div>
+              <h3>Start your enquiry</h3>
+              <p>Just the essentials — you can share more details after this if you like.</p>
+            </div>
+          </div>
+
+          <div class="zynggi-distributor__grid">
+            <div class="zynggi-distributor__field">
+              <label for="DistributorName-{{ section.id }}">Full name <span aria-hidden="true">*</span></label>
+              <input
+                id="DistributorName-{{ section.id }}"
+                type="text"
+                name="contact[Full Name]"
+                placeholder="Your full name"
+                autocomplete="name"
+                required
+              >
+            </div>
+
+            <div class="zynggi-distributor__field">
+              <label for="DistributorPhone-{{ section.id }}">Phone number <span aria-hidden="true">*</span></label>
+              <input
+                id="DistributorPhone-{{ section.id }}"
+                type="tel"
+                name="contact[Phone]"
+                placeholder="+91 XXXXX XXXXX"
+                autocomplete="tel"
+                inputmode="tel"
+                required
+              >
+            </div>
+
+            <div class="zynggi-distributor__field">
+              <label for="DistributorCity-{{ section.id }}">City / District <span aria-hidden="true">*</span></label>
+              <input
+                id="DistributorCity-{{ section.id }}"
+                type="text"
+                name="contact[City]"
+                placeholder="Where do you want to distribute?"
+                autocomplete="address-level2"
+                required
+              >
+            </div>
+
+            <div class="zynggi-distributor__field">
+              <label for="DistributorBusinessType-{{ section.id }}">Business type</label>
+              <select id="DistributorBusinessType-{{ section.id }}" name="contact[Business Type]">
+                <option value="">Select business type</option>
+                <option value="FMCG Distributor">FMCG Distributor</option>
+                <option value="Spice Distributor">Spice Distributor</option>
+                <option value="Grocery Wholesaler">Grocery Wholesaler</option>
+                <option value="Super Stockist">Super Stockist</option>
+                <option value="Retail Network">Retail Network</option>
+                <option value="Food Business">Food Business</option>
+                <option value="Manufacturer">Manufacturer</option>
+                <option value="New Entrepreneur">New Entrepreneur</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="zynggi-distributor__field zynggi-distributor__field--full">
+              <label for="DistributorExperience-{{ section.id }}">Do you currently distribute FMCG or spices?</label>
+              <select id="DistributorExperience-{{ section.id }}" name="contact[Existing Distribution Experience]">
+                <option value="">Select one</option>
+                <option value="Yes - FMCG / Spices">Yes — in FMCG / Spices</option>
+                <option value="Yes - different category">Yes — but a different category</option>
+                <option value="No - new to distribution">No — I'm new to distribution</option>
+              </select>
+            </div>
+
+            <div class="zynggi-distributor__field zynggi-distributor__field--full">
+              <label for="DistributorMessage-{{ section.id }}">Anything you'd like to discuss? <span class="zynggi-distributor__optional">(optional)</span></label>
+              <textarea
+                id="DistributorMessage-{{ section.id }}"
+                name="contact[Message]"
+                rows="3"
+                placeholder="Example: I want to distribute Zynggi in Nagpur district. I currently supply ~80 retail shops."
+              ></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="zynggi-distributor__submit-btn">
+            <span>{{ section.settings.submit_button_text | default: 'Start My Distributor Enquiry' }}</span>
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <p class="zynggi-distributor__submit-note">
+            {{ section.settings.submit_note | default: "No payment required. Our team will contact you to discuss your market and the distribution opportunity." }}
+          </p>
+
+          {% if section.settings.whatsapp_number != blank %}
+            <p class="zynggi-distributor__submit-wa">
+              Prefer to talk first?
+              <a
+                href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in becoming a distributor.' | url_encode }}"
+                target="_blank" rel="noopener"
+              >Chat on WhatsApp →</a>
+            </p>
+          {% endif %}
+        </div>
+
+        {%- comment -%} ============== OPTIONAL DETAILS (progressive disclosure) ============== {%- endcomment -%}
+        <div class="zynggi-distributor__advanced" data-zynggi-advanced>
+          <button
+            type="button"
+            class="zynggi-distributor__advanced-toggle"
+            aria-expanded="false"
+            aria-controls="DistributorAdvanced-{{ section.id }}"
+            data-zynggi-advanced-toggle
+          >
+            <span class="zynggi-distributor__advanced-toggle-text">
+              <strong>Want to add more details?</strong>
+              <small>Optional — helps our team review your enquiry faster.</small>
+            </span>
+            <span class="zynggi-distributor__advanced-toggle-icon" aria-hidden="true"></span>
+          </button>
+
+          <div id="DistributorAdvanced-{{ section.id }}" class="zynggi-distributor__advanced-body" hidden>
+
+            {%- comment -%} ---- 02 — Business information ---- {%- endcomment -%}
+            <details class="zynggi-distributor__details" open>
+              <summary>
+                <span aria-hidden="true">02</span>
+                <span>Business information</span>
+              </summary>
+              <div class="zynggi-distributor__details-body">
+                <div class="zynggi-distributor__grid">
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorBusiness-{{ section.id }}">Business name</label>
+                    <input
+                      id="DistributorBusiness-{{ section.id }}"
+                      type="text"
+                      name="contact[Business Name]"
+                      placeholder="Your business name"
+                      autocomplete="organization"
+                    >
+                  </div>
+
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorEmail-{{ section.id }}">Email <span class="zynggi-distributor__optional">(optional)</span></label>
+                    <input
+                      id="DistributorEmail-{{ section.id }}"
+                      type="email"
+                      name="contact[email]"
+                      placeholder="you@example.com"
+                      autocomplete="email"
+                    >
+                  </div>
+
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorGST-{{ section.id }}">GST number <span class="zynggi-distributor__optional">(optional)</span></label>
+                    <input
+                      id="DistributorGST-{{ section.id }}"
+                      type="text"
+                      name="contact[GST Number]"
+                      placeholder="GSTIN, if applicable"
+                    >
+                  </div>
+
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorYears-{{ section.id }}">Years in business</label>
+                    <select id="DistributorYears-{{ section.id }}" name="contact[Years in Business]">
+                      <option value="">Select</option>
+                      <option value="New Business">New Business</option>
+                      <option value="Less than 1 year">Less than 1 year</option>
+                      <option value="1 - 3 years">1 – 3 years</option>
+                      <option value="3 - 5 years">3 – 5 years</option>
+                      <option value="5 - 10 years">5 – 10 years</option>
+                      <option value="10+ years">10+ years</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            {%- comment -%} ---- 03 — Market & territory ---- {%- endcomment -%}
+            <details class="zynggi-distributor__details">
+              <summary>
+                <span aria-hidden="true">03</span>
+                <span>Market &amp; territory</span>
+              </summary>
+              <div class="zynggi-distributor__details-body">
+                <div class="zynggi-distributor__grid">
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorState-{{ section.id }}">State</label>
+                    <input id="DistributorState-{{ section.id }}" type="text" name="contact[State]" placeholder="State" autocomplete="address-level1">
+                  </div>
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorDistrict-{{ section.id }}">District</label>
+                    <input id="DistributorDistrict-{{ section.id }}" type="text" name="contact[District]" placeholder="District">
+                  </div>
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorPincode-{{ section.id }}">Pincode</label>
+                    <input id="DistributorPincode-{{ section.id }}" type="text" name="contact[Pincode]" placeholder="Pincode" inputmode="numeric" autocomplete="postal-code">
+                  </div>
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorTerritory-{{ section.id }}">Preferred territory</label>
+                    <select id="DistributorTerritory-{{ section.id }}" name="contact[Preferred Territory]">
+                      <option value="">Select</option>
+                      <option value="City">City</option>
+                      <option value="District">District</option>
+                      <option value="Multiple Districts">Multiple Districts</option>
+                      <option value="State">State</option>
+                      <option value="Multiple States">Multiple States</option>
+                      <option value="Not Sure">Not Sure</option>
+                    </select>
+                  </div>
+                  <div class="zynggi-distributor__field zynggi-distributor__field--full">
+                    <label for="DistributorRetailers-{{ section.id }}">Current retailer network</label>
+                    <select id="DistributorRetailers-{{ section.id }}" name="contact[Current Retailer Network]">
+                      <option value="">Select approximate network</option>
+                      <option value="No Retail Network">No retail network</option>
+                      <option value="1 - 25">1 – 25 shops</option>
+                      <option value="26 - 50">26 – 50 shops</option>
+                      <option value="51 - 100">51 – 100 shops</option>
+                      <option value="101 - 250">101 – 250 shops</option>
+                      <option value="251 - 500">251 – 500 shops</option>
+                      <option value="500+">500+ shops</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            {%- comment -%} ---- 04 — Distribution capability ---- {%- endcomment -%}
+            <details class="zynggi-distributor__details">
+              <summary>
+                <span aria-hidden="true">04</span>
+                <span>Distribution capability</span>
+              </summary>
+              <div class="zynggi-distributor__details-body">
+                <div class="zynggi-distributor__capability-grid">
+                  <label class="zynggi-distributor__check-card">
+                    <input type="checkbox" name="contact[Capability - Warehouse]" value="Available">
+                    <span>
+                      <strong>Warehouse / Storage</strong>
+                      <small>Storage space for FMCG products.</small>
+                    </span>
+                  </label>
+                  <label class="zynggi-distributor__check-card">
+                    <input type="checkbox" name="contact[Capability - Delivery Vehicle]" value="Available">
+                    <span>
+                      <strong>Delivery Vehicle</strong>
+                      <small>Delivery arrangement for retailer supply.</small>
+                    </span>
+                  </label>
+                  <label class="zynggi-distributor__check-card">
+                    <input type="checkbox" name="contact[Capability - Sales Team]" value="Available">
+                    <span>
+                      <strong>Sales Team</strong>
+                      <small>Salesmen or field sales network.</small>
+                    </span>
+                  </label>
+                  <label class="zynggi-distributor__check-card">
+                    <input type="checkbox" name="contact[Capability - Retail Network]" value="Available">
+                    <span>
+                      <strong>Retailer Network</strong>
+                      <small>Existing retailers served in your market.</small>
+                    </span>
+                  </label>
+                </div>
+
+                <div class="zynggi-distributor__grid zynggi-distributor__grid--margin">
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorSalesTeam-{{ section.id }}">Sales team size</label>
+                    <select id="DistributorSalesTeam-{{ section.id }}" name="contact[Sales Team Size]">
+                      <option value="">Select</option>
+                      <option value="None">None</option>
+                      <option value="1 - 2">1 – 2</option>
+                      <option value="3 - 5">3 – 5</option>
+                      <option value="6 - 10">6 – 10</option>
+                      <option value="10+">10+</option>
+                    </select>
+                  </div>
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorVehicle-{{ section.id }}">Delivery arrangement</label>
+                    <select id="DistributorVehicle-{{ section.id }}" name="contact[Delivery Arrangement]">
+                      <option value="">Select</option>
+                      <option value="Own Vehicle">Own Vehicle</option>
+                      <option value="Multiple Vehicles">Multiple Vehicles</option>
+                      <option value="Third Party Logistics">Third Party Logistics</option>
+                      <option value="Not Available Yet">Not Available Yet</option>
+                    </select>
+                  </div>
+                  <div class="zynggi-distributor__field zynggi-distributor__field--full">
+                    <label for="DistributorBrands-{{ section.id }}">FMCG / spice brands you currently handle</label>
+                    <input id="DistributorBrands-{{ section.id }}" type="text" name="contact[Current Brands]" placeholder="Brands or categories you currently distribute">
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            {%- comment -%} ---- 05 — Product interest ---- {%- endcomment -%}
+            <details class="zynggi-distributor__details">
+              <summary>
+                <span aria-hidden="true">05</span>
+                <span>Zynggi products you're interested in</span>
+              </summary>
+              <div class="zynggi-distributor__details-body">
+                <div class="zynggi-distributor__product-grid">
+                  <label class="zynggi-distributor__product-card">
+                    <input type="checkbox" name="contact[Product Interest]" value="Pure Spices">
+                    <span><strong>Pure Spices</strong><small>Turmeric, coriander, chilli and other pure spices.</small></span>
+                  </label>
+                  <label class="zynggi-distributor__product-card">
+                    <input type="checkbox" name="contact[Product Interest]" value="Blended Masalas">
+                    <span><strong>Blended Masalas</strong><small>Everyday Indian masalas and cooking blends.</small></span>
+                  </label>
+                  <label class="zynggi-distributor__product-card">
+                    <input type="checkbox" name="contact[Product Interest]" value="Specialty Spices">
+                    <span><strong>Specialty Spices</strong><small>Specialty ingredients and flavour products.</small></span>
+                  </label>
+                  <label class="zynggi-distributor__product-card">
+                    <input type="checkbox" name="contact[Product Interest]" value="Non-Veg Range">
+                    <span><strong>Non-Veg Range</strong><small>Chicken, meat and non-vegetarian cooking masalas.</small></span>
+                  </label>
+                  <label class="zynggi-distributor__product-card">
+                    <input type="checkbox" name="contact[Product Interest]" value="Complete Zynggi Range">
+                    <span><strong>Complete Zynggi Range</strong><small>Interested in the complete Zynggi portfolio.</small></span>
+                  </label>
+                  <label class="zynggi-distributor__product-card">
+                    <input type="checkbox" name="contact[Product Interest]" value="Other">
+                    <span><strong>Other</strong><small>Another product or category you want to discuss.</small></span>
+                  </label>
+                </div>
+
+                <div class="zynggi-distributor__field zynggi-distributor__field--margin">
+                  <label for="DistributorProductDetails-{{ section.id }}">Specific products or SKUs</label>
+                  <textarea
+                    id="DistributorProductDetails-{{ section.id }}"
+                    name="contact[Specific Product Interest]"
+                    rows="3"
+                    placeholder="Example: Garam Masala, Chana Masala, Haldi, Kashmiri Lal Mirch…"
+                  ></textarea>
+                </div>
+              </div>
+            </details>
+
+            {%- comment -%} ---- 06 — Expected requirement ---- {%- endcomment -%}
+            <details class="zynggi-distributor__details">
+              <summary>
+                <span aria-hidden="true">06</span>
+                <span>Expected requirement</span>
+              </summary>
+              <div class="zynggi-distributor__details-body">
+                <div class="zynggi-distributor__grid">
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorFrequency-{{ section.id }}">Expected order frequency</label>
+                    <select id="DistributorFrequency-{{ section.id }}" name="contact[Expected Order Frequency]">
+                      <option value="">Select</option>
+                      <option value="One Time">One Time</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Fortnightly">Fortnightly</option>
+                      <option value="Monthly">Monthly</option>
+                      <option value="Regular Requirement">Regular Requirement</option>
+                      <option value="Not Sure">Not Sure</option>
+                    </select>
+                  </div>
+                  <div class="zynggi-distributor__field">
+                    <label for="DistributorExpectedQuantity-{{ section.id }}">Approximate quantity</label>
+                    <input id="DistributorExpectedQuantity-{{ section.id }}" type="text" name="contact[Expected Quantity]" placeholder="Example: 100 kg / 500 kg / 1 Ton">
+                  </div>
+                  <div class="zynggi-distributor__field zynggi-distributor__field--full">
+                    <label for="DistributorMonthlyPotential-{{ section.id }}">Approximate monthly business potential <span class="zynggi-distributor__optional">(optional)</span></label>
+                    <input id="DistributorMonthlyPotential-{{ section.id }}" type="text" name="contact[Monthly Business Potential]" placeholder="Optional">
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            {%- comment -%} ---- 07 — Notes ---- {%- endcomment -%}
+            <details class="zynggi-distributor__details">
+              <summary>
+                <span aria-hidden="true">07</span>
+                <span>Anything else we should know</span>
+              </summary>
+              <div class="zynggi-distributor__details-body">
+                <div class="zynggi-distributor__field">
+                  <label for="DistributorPlan-{{ section.id }}">Your distribution plan <span class="zynggi-distributor__optional">(optional)</span></label>
+                  <textarea
+                    id="DistributorPlan-{{ section.id }}"
+                    name="contact[Distribution Plan]"
+                    rows="4"
+                    placeholder="Target market, retailer network, areas you want to cover…"
+                  ></textarea>
+                </div>
+                <div class="zynggi-distributor__field zynggi-distributor__field--margin">
+                  <label for="DistributorAdditional-{{ section.id }}">Additional requirements or questions <span class="zynggi-distributor__optional">(optional)</span></label>
+                  <textarea
+                    id="DistributorAdditional-{{ section.id }}"
+                    name="contact[Additional Requirements]"
+                    rows="3"
+                    placeholder="Anything else you'd like our team to know."
+                  ></textarea>
+                </div>
+              </div>
+            </details>
+
+            <button type="submit" class="zynggi-distributor__submit-btn zynggi-distributor__submit-btn--alt">
+              <span>Submit Full Application</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+      {% endform %}
+    </div>
+
+    {%- comment -%} ================= CONTACT / WHATSAPP ================= {%- endcomment -%}
+    <div class="zynggi-distributor__contact">
+      <div>
+        <span class="zynggi-distributor__label">{{ section.settings.contact_eyebrow }}</span>
+        <h2>{{ section.settings.contact_heading }}</h2>
+        <p>{{ section.settings.contact_text }}</p>
+      </div>
+
+      <div class="zynggi-distributor__contact-details">
+        <a href="tel:+919728326350">+91 97283 26350</a>
+        <a href="mailto:Contact.zynggi@gmail.com">Contact.zynggi@gmail.com</a>
+        {% if section.settings.whatsapp_number != blank %}
+          <a
+            class="zynggi-distributor__contact-wa"
+            href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in becoming a distributor.' | url_encode }}"
+            target="_blank" rel="noopener"
+          >Chat on WhatsApp →</a>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+
+  {%- comment -%} ================= MOBILE STICKY BAR ================= {%- endcomment -%}
+  <div class="zynggi-distributor__mobilebar" data-zynggi-mobilebar>
+    {% if section.settings.whatsapp_number != blank %}
+      <a
+        class="zynggi-distributor__mobilebar-wa"
+        href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in becoming a distributor.' | url_encode }}"
+        target="_blank" rel="noopener"
+        aria-label="Chat on WhatsApp"
+      >WhatsApp</a>
+    {% endif %}
+    <a
+      href="#DistributorApplication-{{ section.id }}"
+      class="zynggi-distributor__mobilebar-cta"
+      data-zynggi-scroll
+    >
+      Start My Enquiry →
+    </a>
+  </div>
+</section>
+
+<style>
+  #ZynggiDistributor-{{ section.id }} {
+    --zynggi-brown: #2d1b14;
+    --zynggi-gold: #c58a28;
+    --zynggi-gold-light: #e2bd72;
+    --zynggi-cream: #f6efe4;
+    --zynggi-light: #fbf8f3;
+    --zynggi-border: #e3d8ca;
+    --zynggi-text: #3a2b24;
+    --zynggi-muted: #75675e;
+
+    background: var(--zynggi-cream);
+    color: var(--zynggi-text);
+    padding: 0 20px 80px;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #ZynggiDistributor-{{ section.id }} *,
+  #ZynggiDistributor-{{ section.id }} *::before,
+  #ZynggiDistributor-{{ section.id }} *::after { box-sizing: border-box; }
+
+  #ZynggiDistributor-{{ section.id }} [hidden] { display: none !important; }
+
+  #ZynggiDistributor-{{ section.id }} a { text-decoration: none; }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__container { max-width: 1180px; margin: 0 auto; }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__optional { font-weight: 500; color: var(--zynggi-muted); font-size: 12px; }
+
+  /* HERO */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero {
+    position: relative;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    margin: 0 -20px 70px;
+    padding: 70px 8%;
+    overflow: hidden;
+    background-color: var(--zynggi-brown);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    color: #fff;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--zynggi-gold);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero .zynggi-distributor__eyebrow { color: var(--zynggi-gold-light); }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero h1 {
+    margin: 0 0 18px;
+    color: #fff;
+    font-size: clamp(38px, 5.6vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -2px;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero p {
+    max-width: 620px;
+    margin: 0 0 26px;
+    color: rgba(255,255,255,.86);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 800;
+    transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+  }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__btn--primary { background: var(--zynggi-gold); color: #fff; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__btn--primary:hover { background: #a97018; transform: translateY(-2px); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__btn--ghost { background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(255,255,255,.4); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__btn--ghost:hover { background: rgba(255,255,255,.16); border-color: #fff; }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: rgba(255,255,255,.78);
+    font-size: 12.5px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero-points li { display: inline-flex; align-items: center; gap: 7px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero-points li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--zynggi-gold-light); }
+
+  /* GENERAL SECTIONS */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section { padding-bottom: 70px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section--soft {
+    margin: 0 -20px 70px;
+    padding: 60px max(20px, calc((100% - 1180px) / 2));
+    background: var(--zynggi-light);
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section-heading {
+    display: flex;
+    gap: 18px;
+    max-width: 900px;
+    margin: 0 auto 34px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--zynggi-gold);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--zynggi-gold);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  #ZynggiDistributor-{{ section.id }} h2 {
+    margin: 0 0 10px;
+    color: var(--zynggi-brown);
+    font-size: clamp(26px, 3.4vw, 40px);
+    line-height: 1.12;
+    letter-spacing: -1px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section-heading p,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__application-header p {
+    margin: 0;
+    color: var(--zynggi-muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* BENEFITS */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefits {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 14px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefit {
+    padding: 22px;
+    border: 1px solid var(--zynggi-border);
+    border-radius: 16px;
+    background: #fff;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefit > span {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--zynggi-gold);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefit h3 {
+    margin: 0 0 6px;
+    color: var(--zynggi-brown);
+    font-size: 16px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefit p {
+    margin: 0;
+    color: var(--zynggi-muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* WHO */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 12px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__audience-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px;
+    border: 1px solid var(--zynggi-border);
+    border-radius: 15px;
+    background: #fff;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__audience-card strong { color: var(--zynggi-brown); font-size: 15px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__audience-card span { color: var(--zynggi-muted); font-size: 13px; line-height: 1.55; }
+
+  /* STEPS */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 14px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__step {
+    padding: 22px;
+    border-top: 3px solid var(--zynggi-gold);
+    border-radius: 0 0 14px 14px;
+    background: #fff;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__step > span {
+    display: block;
+    margin-bottom: 16px;
+    color: var(--zynggi-gold);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__step h3 { margin: 0 0 6px; color: var(--zynggi-brown); font-size: 16px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__step p { margin: 0; color: var(--zynggi-muted); font-size: 13px; line-height: 1.55; }
+
+  /* APPLICATION */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__application { scroll-margin-top: 90px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__application-header {
+    max-width: 780px;
+    margin: 0 auto 34px;
+    text-align: center;
+  }
+
+  /* NOTICES */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__notice {
+    margin-bottom: 20px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__notice p { margin: 4px 0 0; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__notice--success { background: #eef7ee; border: 1px solid #cfe6cf; color: #235c23; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__notice--error { background: #fdf1f0; border: 1px solid #f0cfcb; color: #8a2b21; }
+
+  /* CARDS */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card {
+    margin-bottom: 20px;
+    padding: 26px;
+    border: 1px solid var(--zynggi-border);
+    border-radius: 20px;
+    background: var(--zynggi-light);
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card-heading {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card-heading > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--zynggi-gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card-heading h3 { margin: 0 0 3px; color: var(--zynggi-brown); font-size: 20px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card-heading p { margin: 0; color: var(--zynggi-muted); font-size: 13px; }
+
+  /* GRID + FIELDS */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 16px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__grid--margin { margin-top: 18px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__field { display: flex; flex-direction: column; gap: 6px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__field--full { grid-column: 1 / -1; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__field--margin { margin-top: 16px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__field label {
+    color: var(--zynggi-text);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  #ZynggiDistributor-{{ section.id }} input[type="text"],
+  #ZynggiDistributor-{{ section.id }} input[type="email"],
+  #ZynggiDistributor-{{ section.id }} input[type="tel"],
+  #ZynggiDistributor-{{ section.id }} select,
+  #ZynggiDistributor-{{ section.id }} textarea {
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 14px;
+    border: 1px solid var(--zynggi-border);
+    border-radius: 11px;
+    background: #fff;
+    color: var(--zynggi-text);
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .18s ease, box-shadow .18s ease;
+  }
+  #ZynggiDistributor-{{ section.id }} textarea { min-height: 90px; resize: vertical; line-height: 1.55; }
+  #ZynggiDistributor-{{ section.id }} input:focus,
+  #ZynggiDistributor-{{ section.id }} select:focus,
+  #ZynggiDistributor-{{ section.id }} textarea:focus {
+    border-color: var(--zynggi-gold);
+    box-shadow: 0 0 0 3px rgba(197,138,40,.12);
+  }
+
+  /* SUBMIT BUTTON */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    min-height: 56px;
+    margin-top: 22px;
+    padding: 15px 26px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--zynggi-brown);
+    color: #fff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__submit-btn:hover { background: var(--zynggi-gold); transform: translateY(-2px); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__submit-btn--alt { margin-top: 26px; }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__submit-note {
+    margin: 12px 0 0;
+    color: var(--zynggi-muted);
+    font-size: 12.5px;
+    text-align: center;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__submit-wa {
+    margin: 8px 0 0;
+    color: var(--zynggi-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__submit-wa a { color: var(--zynggi-gold); font-weight: 700; }
+
+  /* ADVANCED / PROGRESSIVE DISCLOSURE */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced { margin-top: 8px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+    padding: 18px 20px;
+    border: 1px dashed var(--zynggi-gold);
+    border-radius: 16px;
+    background: #fffaf2;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle:hover { background: #fff5e0; border-color: var(--zynggi-gold); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-text { min-width: 0; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-text strong { display: block; color: var(--zynggi-brown); font-size: 15px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-text small { display: block; color: var(--zynggi-muted); font-size: 12.5px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-icon {
+    position: relative;
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--zynggi-gold);
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-icon::before,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-icon::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    background: #fff;
+    border-radius: 2px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-icon::before { width: 11px; height: 2px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle-icon::after { width: 2px; height: 11px; transition: transform .2s ease; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-toggle[aria-expanded="true"] .zynggi-distributor__advanced-toggle-icon::after { transform: translate(-50%,-50%) scaleY(0); }
+
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__advanced-body { margin-top: 16px; }
+
+  /* Details (collapsible subsections) */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__details {
+    margin-bottom: 12px;
+    border: 1px solid var(--zynggi-border);
+    border-radius: 16px;
+    background: #fff;
+    overflow: hidden;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__details summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--zynggi-brown);
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__details summary::-webkit-details-marker { display: none; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__details summary > span:first-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 26px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--zynggi-gold);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 800;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__details[open] summary { border-bottom: 1px solid var(--zynggi-border); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__details-body { padding: 18px; }
+
+  /* CHECK / PRODUCT CARDS */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__capability-grid,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 10px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__check-card,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 15px;
+    border: 1px solid var(--zynggi-border);
+    border-radius: 13px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__check-card:hover,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-card:hover { border-color: var(--zynggi-gold); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__check-card input,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-card input {
+    width: 18px;
+    height: 18px;
+    min-height: 18px;
+    margin-top: 2px;
+    accent-color: var(--zynggi-gold);
+    flex: 0 0 auto;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__check-card strong,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-card strong {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--zynggi-brown);
+    font-size: 13.5px;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__check-card small,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-card small {
+    display: block;
+    color: var(--zynggi-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* CONTACT */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 34px;
+    border-radius: 20px;
+    background: var(--zynggi-brown);
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact h2 { color: #fff; font-size: clamp(24px, 3.4vw, 36px); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact p {
+    max-width: 560px;
+    margin: 0;
+    color: rgba(255,255,255,.75);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact-details { display: flex; flex-direction: column; gap: 8px; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact-details a {
+    color: var(--zynggi-gold-light);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact-wa { margin-top: 6px; }
+
+  /* MOBILE STICKY BAR */
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 30;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(45,27,20,.18);
+    transform: translateY(140%);
+    transition: transform .25s ease;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar.is-visible { transform: translateY(0); }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar-wa,
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar-wa { flex: 0 0 auto; background: #25D366; color: #fff; }
+  #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar-cta { flex: 1 1 auto; background: var(--zynggi-brown); color: #fff; }
+  @media screen and (max-width: 989px) {
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__mobilebar { display: flex; }
+    #ZynggiDistributor-{{ section.id }} { padding-bottom: 110px; }
+  }
+
+  /* TABLET */
+  @media screen and (max-width: 1000px) {
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefits { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__steps { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__audience-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  }
+
+  /* MOBILE */
+  @media screen and (max-width: 749px) {
+    #ZynggiDistributor-{{ section.id }} { padding: 0 14px 110px; }
+
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero {
+      min-height: 480px;
+      margin: 0 -14px 50px;
+      padding: 50px 22px;
+    }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero h1 { font-size: 36px; letter-spacing: -1.4px; }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero p { font-size: 14.5px; }
+
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section { padding-bottom: 50px; }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section--soft {
+      margin: 0 -14px 50px;
+      padding: 45px 14px;
+    }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__section-heading { gap: 12px; margin-bottom: 24px; }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__number { flex-basis: 36px; width: 36px; height: 36px; }
+
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__benefits,
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__audience-grid,
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__steps,
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__grid,
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__capability-grid,
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__product-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card { padding: 20px 16px; border-radius: 17px; }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__card-heading h3 { font-size: 18px; }
+
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__contact {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 26px 20px;
+    }
+
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__hero-cta { flex-direction: column; align-items: stretch; }
+    #ZynggiDistributor-{{ section.id }} .zynggi-distributor__btn { width: 100%; }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById('ZynggiDistributor-{{ section.id }}');
+  if (!root) return;
+
+  /* ---- Progressive disclosure toggle ---- */
+  var toggle = root.querySelector('[data-zynggi-advanced-toggle]');
+  var body = document.getElementById('DistributorAdvanced-{{ section.id }}');
+  if (toggle && body) {
+    toggle.addEventListener('click', function () {
+      var open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+      body.hidden = open;
+      if (!open) {
+        // scroll into view smoothly
+        setTimeout(function () {
+          body.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    });
+  }
+
+  /* ---- Smooth scroll to form ---- */
+  root.querySelectorAll('[data-zynggi-scroll]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ---- Mobile sticky bar visibility ---- */
+  var bar = root.querySelector('[data-zynggi-mobilebar]');
+  var form = root.querySelector('.zynggi-distributor__application');
+  if (bar && form && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        bar.classList.toggle('is-visible', !entry.isIntersecting);
+      });
+    }, { rootMargin: '-80px 0px 0px 0px', threshold: 0.05 });
+    io.observe(form);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Zynggi Distributor",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow", "default": "ZYNGGI DISTRIBUTOR PARTNERSHIP" },
+    { "type": "text", "id": "hero_heading", "label": "Heading", "default": "Become a Zynggi Distributor" },
+    { "type": "textarea", "id": "hero_text", "label": "Description", "default": "Build a spice and masala distribution business in your territory. Tell us a little about yourself — our team will take it from there." },
+    { "type": "text", "id": "hero_button_text", "label": "Primary button text", "default": "Start My Enquiry" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "range", "id": "hero_overlay", "label": "Hero overlay", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 65 },
+
+    { "type": "header", "content": "Why Zynggi" },
+    { "type": "text", "id": "why_eyebrow", "label": "Eyebrow", "default": "WHY PARTNER WITH US" },
+    { "type": "text", "id": "why_heading", "label": "Heading", "default": "Build Your Distribution Business With Zynggi" },
+    { "type": "textarea", "id": "why_text", "label": "Description", "default": "A growing spice and masala portfolio designed for everyday Indian cooking — with the support you need to develop your market." },
+
+    { "type": "header", "content": "Who Can Partner" },
+    { "type": "text", "id": "who_eyebrow", "label": "Eyebrow", "default": "WHO CAN APPLY" },
+    { "type": "text", "id": "who_heading", "label": "Heading", "default": "Is Zynggi Distribution Right For You?" },
+    { "type": "textarea", "id": "who_text", "label": "Description", "default": "We welcome established distributors, wholesalers and new entrepreneurs interested in building a spice distribution business." },
+
+    { "type": "header", "content": "How It Works" },
+    { "type": "text", "id": "process_eyebrow", "label": "Eyebrow", "default": "THE PROCESS" },
+    { "type": "text", "id": "process_heading", "label": "Heading", "default": "How Zynggi Distribution Works" },
+    { "type": "textarea", "id": "process_text", "label": "Description", "default": "A short conversation to understand your market and check territory availability." },
+
+    { "type": "header", "content": "Application" },
+    { "type": "text", "id": "form_eyebrow", "label": "Eyebrow", "default": "DISTRIBUTOR ENQUIRY" },
+    { "type": "text", "id": "form_heading", "label": "Heading", "default": "Tell Us About You" },
+    { "type": "textarea", "id": "form_text", "label": "Description", "default": "Just your name, phone and city to start. You can share more details if you like — but it's not required." },
+    { "type": "text", "id": "submit_button_text", "label": "Submit button text", "default": "Start My Distributor Enquiry" },
+    { "type": "textarea", "id": "submit_note", "label": "Submit note", "default": "No payment required. Our team will contact you to discuss your market and the distribution opportunity." },
+
+    { "type": "header", "content": "WhatsApp" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "info": "Include country code, e.g. 919728326350", "default": "919728326350" },
+    { "type": "text", "id": "whatsapp_message", "label": "WhatsApp pre-filled message", "default": "Hi Zynggi, I am interested in becoming a distributor." },
+
+    { "type": "header", "content": "Contact" },
+    { "type": "text", "id": "contact_eyebrow", "label": "Eyebrow", "default": "HAVE QUESTIONS?" },
+    { "type": "text", "id": "contact_heading", "label": "Heading", "default": "Let's Talk About Your Market" },
+    { "type": "textarea", "id": "contact_text", "label": "Description", "default": "If you'd rather talk before applying, reach the Zynggi team directly." }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Why Zynggi",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Wide Product Range" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Pure spices, blended masalas, specialty products and everyday cooking essentials." }
+      ]
+    },
+    {
+      "type": "audience",
+      "name": "Who Can Apply",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "FMCG Distributor" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Existing FMCG distribution businesses looking to add Zynggi to their portfolio." }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "Process Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Apply" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Submit your distributor application with your business and market information." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Zynggi Distributor",
+      "blocks": [
+        { "type": "benefit", "settings": { "title": "Wide Product Range", "text": "Pure spices, blended masalas, specialty products and everyday cooking essentials." } },
+        { "type": "benefit", "settings": { "title": "Quality Products", "text": "Products made for everyday Indian cooking and retail demand." } },
+        { "type": "benefit", "settings": { "title": "Marketing Support", "text": "Brand and marketing resources to help develop your market." } },
+        { "type": "benefit", "settings": { "title": "Territory-Based Growth", "text": "Build your retailer network and grow your business within your territory." } },
+
+        { "type": "audience", "settings": { "title": "FMCG Distributor", "text": "Existing FMCG distribution businesses looking to add Zynggi to their portfolio." } },
+        { "type": "audience", "settings": { "title": "Spice Distributor", "text": "Businesses already serving grocery, spice and food retailers." } },
+        { "type": "audience", "settings": { "title": "Grocery Wholesaler", "text": "Wholesalers with an established network of retailers and food businesses." } },
+        { "type": "audience", "settings": { "title": "Retail Network Owner", "text": "Businesses with strong local retailer relationships and market reach." } },
+        { "type": "audience", "settings": { "title": "Super Stockist", "text": "Large-scale distribution businesses looking for additional product categories." } },
+        { "type": "audience", "settings": { "title": "New Entrepreneur", "text": "Entrepreneurs interested in entering the FMCG and spice distribution business." } },
+
+        { "type": "step", "settings": { "title": "Tell us about your market", "text": "Submit a short enquiry with your name, city and business type." } },
+        { "type": "step", "settings": { "title": "We discuss the opportunity", "text": "Our team calls you to understand your market and goals." } },
+        { "type": "step", "settings": { "title": "We check territory & requirements", "text": "We review territory availability and share product and pricing details." } },
+        { "type": "step", "settings": { "title": "We start the partnership", "text": "Once terms are agreed, we begin the distributor onboarding." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

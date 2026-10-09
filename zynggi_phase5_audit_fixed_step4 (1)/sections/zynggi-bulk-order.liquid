@@ -1,0 +1,763 @@
+<section id="ZynggiBulkOrder-{{ section.id }}" class="zynggi-bulk-order">
+  <div class="zynggi-container">
+
+    {%- comment -%} ============ CATALOGUE DATA ============ {%- endcomment -%}
+    {%- assign cat_keys    = 'whole|powder|herb|blend' | split: '|' -%}
+    {%- assign cat_titles  = 'Whole / Raw Spices & Seeds|Ground & Powdered Spices|Herbs, Leaves & Dried Botanicals|Blended Masalas & Seasonings' | split: '|' -%}
+    {%- assign cat_help    = 'Whole, raw and unground spices and seeds.|Ready ground and powdered spices.|Dried herbs, leaves, flakes and botanicals.|Indian masalas and international seasonings.' | split: '|' -%}
+    {%- assign cat_prefix  = 'Whole / Raw Spice|Ground / Powder|Herb / Leaf|Blended Masala' | split: '|' -%}
+    {%- assign cat_forms   = 'Whole / Raw~Crushed / Coarse~To Be Ground by Zynggi|Fine Powder~Medium Grind~Coarse Grind|Whole / Dried~Flakes~Powder|Ready Blend~Custom Blend~Recipe / Formula Based' | split: '|' -%}
+
+    {%- assign whole_products  = 'Turmeric / Haldi|Coriander / Dhaniya|Cumin / Jeera|Black Cumin / Kala Jeera|Fennel / Saunf|Fenugreek / Methi|Ajwain|Kalonji|Mustard / Rai|Black Pepper / Kali Mirch|White Pepper|Pippali|Green Cardamom / Chhoti Elaichi|Black Cardamom / Badi Elaichi|Clove / Laung|Cinnamon / Dalchini|Cassia|Nutmeg / Jaiphal|Mace / Javitri|Star Anise|Bay Leaf / Tej Patta|Dagad Phool|Saffron / Kesar|Dry Red Chilli|Kashmiri Red Chilli|Degi Red Chilli|Paprika|Dry Ginger / Sonth|Galangal|Mulethi|Hing|Celery Seed|Dill Seed / Suva|Poppy Seed / Khus Khus|Sesame / Til|Flax / Alsi|Anardana|Kabab Chini|Juniper Berry' | split: '|' -%}
+    {%- assign powder_products = 'Turmeric Powder / Haldi|Coriander Powder / Dhaniya|Cumin Powder / Jeera|Black Pepper Powder|White Pepper Powder|Red Chilli Powder|Kashmiri Chilli Powder|Degi Chilli Powder|Paprika Powder|Fennel Powder / Saunf|Fenugreek Powder / Methi|Dry Ginger Powder / Sonth|Cardamom Powder|Cinnamon Powder|Clove Powder|Nutmeg Powder / Jaiphal|Mace Powder / Javitri|Amchur Powder|Tamarind Powder|Garlic Powder|Onion Powder|Tomato Powder|Curry Leaf Powder|Mint Powder / Pudina|Coriander Leaf Powder|Kasuri Methi Powder|Lemon Powder|Moringa Powder|Coconut Powder|Black Salt / Kala Namak|Rock Salt / Sendha Namak|Normal Salt|Chaat Salt|Hing Compound' | split: '|' -%}
+    {%- assign herb_products   = 'Kasuri Methi / Dried Fenugreek Leaves|Dried Mint / Pudina|Dried Coriander Leaves|Dried Curry Leaves|Dried Basil|Dried Oregano|Dried Thyme|Dried Rosemary|Dried Sage|Dried Parsley|Dried Tarragon|Dried Dill|Dried Marjoram|Dry Lemongrass|Moringa Leaves|Dried Garlic Flakes|Dried Onion Flakes|Dried Chilli Flakes' | split: '|' -%}
+    {%- assign blend_products  = 'Garam Masala|Chana Masala|Chhole Masala|Chicken Masala|Meat Masala|Mutton Masala|Fish Masala|Biryani Masala|Pulao Masala|Tandoori Masala|Tikka Masala|Butter Chicken Masala|Korma Masala|Curry Masala|Curry Powder|Kitchen King Masala|Paneer Masala|Shahi Paneer Masala|Kadai Masala|Sabzi Masala|Mixed Vegetable Masala|Dal Masala|Dal Tadka Masala|Rajma Masala|Pav Bhaji Masala|Chaat Masala|Jaljeera Masala|Sambhar Masala|Rasam Powder|Idli / Dosa Masala|Achari Masala|Keema Masala|Seekh Kebab Masala|Shawarma Masala|Grill Masala|Barbecue Masala|Peri Peri Masala|Chilli Garlic Seasoning|Italian Seasoning|Pizza Seasoning|Pasta Seasoning|Chinese Five Spice|Cajun Seasoning|Taco Seasoning|Fajita Seasoning|Steak Seasoning|Lemon Pepper Seasoning|Custom Spice Blend' | split: '|' -%}
+    {%- assign all_products    = whole_products | concat: powder_products | concat: herb_products | concat: blend_products -%}
+
+    {%- assign form_id = 'ZynggiBulkOrderForm-' | append: section.id -%}
+
+    {%- comment -%} ============ HERO ============ {%- endcomment -%}
+    <header class="zynggi-hero">
+      <span class="zynggi-eyebrow">ZYNGGI B2B</span>
+      <h1>Bulk Spices &amp; Custom Blends for Your Business</h1>
+      <p>Source whole spices, powders, blends and custom seasonings directly from Zynggi. Tell us what you need — our team handles the rest.</p>
+
+      <ul class="zynggi-benefits">
+        <li>Bulk Supply</li>
+        <li>Custom Grinding</li>
+        <li>Custom Blending</li>
+        <li>Business Packaging</li>
+      </ul>
+
+      <div class="zynggi-hero-cta">
+        <a href="#zynggi-form-{{ section.id }}" class="zynggi-btn zynggi-btn--primary" data-zynggi-scroll>Request Bulk Quote</a>
+        {%- if section.settings.whatsapp_number != blank -%}
+          <a class="zynggi-btn zynggi-btn--ghost"
+             href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I would like a bulk spice quote.' | url_encode }}"
+             target="_blank" rel="noopener">Talk to Zynggi</a>
+        {%- endif -%}
+      </div>
+    </header>
+
+    <div id="zynggi-form-{{ section.id }}"></div>
+
+    {%- comment -%} ============ FORM ============ {%- endcomment -%}
+    {% form 'contact', id: form_id, class: 'zynggi-form' %}
+
+      {%- if form.posted_successfully? -%}
+        <div class="zynggi-notice zynggi-notice--success" role="status">
+          <strong>Thank you — your enquiry has been sent.</strong>
+          <p>Our team will review your requirement and contact you with pricing and availability.</p>
+        </div>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="zynggi-notice zynggi-notice--error" role="alert">
+          <strong>Please check your details and try again.</strong>
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="zynggi-layout">
+        <div class="zynggi-main">
+
+          {%- comment -%} ---- STEP 1: WHAT DO YOU NEED ---- {%- endcomment -%}
+          <div class="zynggi-card">
+            <div class="zynggi-card-head">
+              <span aria-hidden="true">01</span>
+              <div>
+                <h2>What do you need?</h2>
+                <p>Pick products from the list, or just tell us in your own words.</p>
+              </div>
+            </div>
+
+            <div class="zynggi-modes" role="tablist" aria-label="Enquiry mode">
+              <button type="button" role="tab" id="zynggi-tab-guided-{{ section.id }}" class="zynggi-mode" aria-selected="true" aria-controls="zynggi-panel-guided-{{ section.id }}" data-zynggi-mode="guided">Choose products</button>
+              <button type="button" role="tab" id="zynggi-tab-quick-{{ section.id }}" class="zynggi-mode" aria-selected="false" aria-controls="zynggi-panel-quick-{{ section.id }}" data-zynggi-mode="quick">Quick enquiry</button>
+            </div>
+
+            {%- comment -%} ===== GUIDED PANEL ===== {%- endcomment -%}
+            <div class="zynggi-panel" id="zynggi-panel-guided-{{ section.id }}" role="tabpanel" aria-labelledby="zynggi-tab-guided-{{ section.id }}" data-zynggi-panel="guided">
+
+              <div class="zynggi-search">
+                <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                  <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"></circle>
+                  <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                </svg>
+                <input type="search" class="zynggi-search-input" placeholder="Search spices, powders, blends…" aria-label="Search products" data-zynggi-search autocomplete="off">
+              </div>
+
+              <p class="zynggi-hint">Tap a category to see products. Tick what you need — quantity fields appear automatically.</p>
+
+              {%- for key in cat_keys -%}
+                {%- assign i = forloop.index0 -%}
+                {%- assign cat_title   = cat_titles[i] -%}
+                {%- assign cat_help_t  = cat_help[i] -%}
+                {%- assign cat_pref    = cat_prefix[i] -%}
+                {%- assign form_list   = cat_forms[i] | split: '~' -%}
+                {%- case key -%}
+                  {%- when 'whole'  -%}{%- assign items = whole_products  -%}
+                  {%- when 'powder' -%}{%- assign items = powder_products -%}
+                  {%- when 'herb'   -%}{%- assign items = herb_products   -%}
+                  {%- when 'blend'  -%}{%- assign items = blend_products  -%}
+                {%- endcase -%}
+                {%- assign panel_id = 'zynggi-cat-' | append: section.id | append: '-' | append: key -%}
+
+                <div class="zynggi-cat" data-cat-key="{{ key }}" data-cat-title="{{ cat_title | escape }}">
+                  <button type="button" class="zynggi-cat-head" aria-expanded="false" aria-controls="{{ panel_id }}" data-zynggi-acc>
+                    <span class="zynggi-cat-num" aria-hidden="true">0{{ i | plus: 1 }}</span>
+                    <span class="zynggi-cat-text">
+                      <strong>{{ cat_title }}</strong>
+                      <small>{{ cat_help_t }}</small>
+                    </span>
+                    <span class="zynggi-cat-badge" data-cat-count hidden>0</span>
+                    <span class="zynggi-cat-icon" aria-hidden="true"></span>
+                  </button>
+
+                  <div class="zynggi-cat-body" id="{{ panel_id }}" hidden>
+                    <div class="zynggi-chips">
+                      {%- for item in items -%}
+                        {%- assign unique_id = key | append: '-' | append: forloop.index -%}
+                        <label class="zynggi-chip" data-zynggi-chip data-search-term="{{ item | escape }}">
+                          <input type="checkbox" class="zynggi-prod-check" data-zynggi-target="zynggi-prod-{{ section.id }}-{{ unique_id }}" data-product-name="{{ item | escape }}" data-cat-title="{{ cat_title | escape }}">
+                          <span>{{ item }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+
+                    {%- comment -%} Product detail cards revealed per selection {%- endcomment -%}
+                    <div class="zynggi-prod-cards">
+                      {%- for item in items -%}
+                        {%- assign unique_id = key | append: '-' | append: forloop.index -%}
+                        {%- assign field_base = cat_pref | append: ' - ' | append: item -%}
+                        <div class="zynggi-prod-card" id="zynggi-prod-{{ section.id }}-{{ unique_id }}" data-zynggi-prod-card data-product-name="{{ item | escape }}" hidden>
+                          <div class="zynggi-prod-card-head">
+                            <strong>{{ item }}</strong>
+                            <span class="zynggi-prod-card-cat">{{ cat_title }}</span>
+                          </div>
+                          <div class="zynggi-prod-card-grid">
+                            <div class="zynggi-field">
+                              <label for="form-{{ section.id }}-{{ unique_id }}">Form</label>
+                              <select id="form-{{ section.id }}-{{ unique_id }}" name="contact[{{ field_base }} - Form]" disabled>
+                                <option value="">Select form</option>
+                                {%- for f in form_list -%}<option value="{{ f }}">{{ f }}</option>{%- endfor -%}
+                              </select>
+                            </div>
+                            <div class="zynggi-field">
+                              <label for="qty-{{ section.id }}-{{ unique_id }}">Quantity</label>
+                              <input id="qty-{{ section.id }}-{{ unique_id }}" type="number" min="0" step="0.01" inputmode="decimal" name="contact[{{ field_base }} - Quantity]" placeholder="e.g. 100" disabled>
+                            </div>
+                            <div class="zynggi-field">
+                              <label for="unit-{{ section.id }}-{{ unique_id }}">Unit</label>
+                              <select id="unit-{{ section.id }}-{{ unique_id }}" name="contact[{{ field_base }} - Unit]" disabled>
+                                <option value="kg">kg</option>
+                                <option value="g">g</option>
+                                <option value="ton">Ton</option>
+                              </select>
+                            </div>
+                          </div>
+                          <input type="hidden" name="contact[{{ field_base }} - Selected]" value="No" data-zynggi-selected disabled>
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+
+              {%- comment -%} ---- OTHER INGREDIENT ---- {%- endcomment -%}
+              <div class="zynggi-other">
+                <h3>Can't find it?</h3>
+                <p class="zynggi-hint">Add any other spice, herb or ingredient — we probably stock it.</p>
+                <div class="zynggi-other-grid">
+                  <input type="text" name="contact[Other Ingredient Name]" placeholder="Ingredient name" aria-label="Other ingredient name">
+                  <input type="number" min="0" step="0.01" inputmode="decimal" name="contact[Other Ingredient Quantity]" placeholder="Quantity" aria-label="Other ingredient quantity">
+                  <select name="contact[Other Ingredient Unit]" aria-label="Other ingredient unit">
+                    <option value="kg">kg</option><option value="g">g</option><option value="ton">Ton</option>
+                  </select>
+                  <select name="contact[Other Ingredient Form]" aria-label="Other ingredient form">
+                    <option value="">Form</option>
+                    <option>Whole / Raw</option><option>Crushed / Coarse</option><option>Fine Powder</option>
+                    <option>Flakes</option><option>Leaves</option><option>Blend</option><option>Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {%- comment -%} ===== QUICK PANEL ===== {%- endcomment -%}
+            <div class="zynggi-panel" id="zynggi-panel-quick-{{ section.id }}" role="tabpanel" aria-labelledby="zynggi-tab-quick-{{ section.id }}" data-zynggi-panel="quick" hidden>
+              <div class="zynggi-field">
+                <label for="zynggi-quick-{{ section.id }}">Tell us what you need</label>
+                <textarea id="zynggi-quick-{{ section.id }}" name="contact[body]" rows="5" placeholder="Example: I run a restaurant in Pune. I need around 100 kg turmeric powder and 50 kg red chilli powder every month."></textarea>
+                <p class="zynggi-hint">Write it however you like — Hindi or English. We'll work out the details with you.</p>
+              </div>
+            </div>
+          </div>
+
+          {%- comment -%} ---- STEP 2: QUANTITY ---- {%- endcomment -%}
+          <div class="zynggi-card">
+            <div class="zynggi-card-head">
+              <span aria-hidden="true">02</span>
+              <div>
+                <h2>Roughly how much?</h2>
+                <p>An estimate is fine — we'll confirm exact quantities later.</p>
+              </div>
+            </div>
+
+            <fieldset class="zynggi-fieldset">
+              <legend class="zynggi-legend">Approximate requirement</legend>
+              <div class="zynggi-ranges">
+                <label class="zynggi-range"><input type="radio" name="contact[Approximate Quantity]" value="Less than 50 kg"><span>Under 50 kg</span></label>
+                <label class="zynggi-range"><input type="radio" name="contact[Approximate Quantity]" value="50-100 kg"><span>50–100 kg</span></label>
+                <label class="zynggi-range"><input type="radio" name="contact[Approximate Quantity]" value="100-500 kg"><span>100–500 kg</span></label>
+                <label class="zynggi-range"><input type="radio" name="contact[Approximate Quantity]" value="500 kg - 1 Ton"><span>500 kg – 1 Ton</span></label>
+                <label class="zynggi-range"><input type="radio" name="contact[Approximate Quantity]" value="1 Ton+"><span>1 Ton +</span></label>
+                <label class="zynggi-range"><input type="radio" name="contact[Approximate Quantity]" value="Not sure yet"><span>Not sure yet</span></label>
+              </div>
+            </fieldset>
+
+            <div class="zynggi-field zynggi-field--spaced">
+              <label for="zynggi-exact-{{ section.id }}">Or enter an exact quantity <span class="zynggi-optional">(optional)</span></label>
+              <input id="zynggi-exact-{{ section.id }}" type="text" name="contact[Exact Quantity]" placeholder="Example: 250 kg per month">
+            </div>
+          </div>
+
+          {%- comment -%} ---- STEP 3: DETAILS ---- {%- endcomment -%}
+          <div class="zynggi-card">
+            <div class="zynggi-card-head">
+              <span aria-hidden="true">03</span>
+              <div>
+                <h2>Your details</h2>
+                <p>Just enough for us to get back to you.</p>
+              </div>
+            </div>
+
+            <div class="zynggi-grid zynggi-grid--2">
+              <div class="zynggi-field">
+                <label for="zynggi-name-{{ section.id }}">Full name *</label>
+                <input id="zynggi-name-{{ section.id }}" type="text" name="contact[Full Name]" placeholder="Your name" autocomplete="name" required>
+              </div>
+              <div class="zynggi-field">
+                <label for="zynggi-phone-{{ section.id }}">Phone number *</label>
+                <input id="zynggi-phone-{{ section.id }}" type="tel" name="contact[Phone]" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" required>
+              </div>
+              <div class="zynggi-field">
+                <label for="zynggi-business-{{ section.id }}">Business name <span class="zynggi-optional">(optional)</span></label>
+                <input id="zynggi-business-{{ section.id }}" type="text" name="contact[Business Name]" placeholder="Your business name" autocomplete="organization">
+              </div>
+              <div class="zynggi-field">
+                <label for="zynggi-type-{{ section.id }}">Business type</label>
+                <select id="zynggi-type-{{ section.id }}" name="contact[Business Type]">
+                  <option value="">Select business type</option>
+                  <option value="Retailer">Retailer / Shop</option>
+                  <option value="Restaurant / Hotel">Restaurant / Hotel</option>
+                  <option value="Cloud Kitchen">Cloud Kitchen</option>
+                  <option value="Distributor">Distributor</option>
+                  <option value="Manufacturer">Manufacturer</option>
+                  <option value="Food Brand">Food Brand</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="zynggi-field">
+                <label for="zynggi-city-{{ section.id }}">City <span class="zynggi-optional">(optional)</span></label>
+                <input id="zynggi-city-{{ section.id }}" type="text" name="contact[City]" placeholder="Your city" autocomplete="address-level2">
+              </div>
+              <div class="zynggi-field">
+                <label for="zynggi-email-{{ section.id }}">Email <span class="zynggi-optional">(optional)</span></label>
+                <input id="zynggi-email-{{ section.id }}" type="email" name="contact[email]" placeholder="you@example.com" autocomplete="email">
+              </div>
+            </div>
+          </div>
+
+          {%- comment -%} ---- STEP 4: ANYTHING ELSE ---- {%- endcomment -%}
+          <div class="zynggi-card">
+            <div class="zynggi-card-head">
+              <span aria-hidden="true">04</span>
+              <div>
+                <h2>Anything else we should know?</h2>
+                <p>Optional — quality, packaging, delivery location, timelines.</p>
+              </div>
+            </div>
+            <div class="zynggi-field">
+              <label class="zynggi-visually-hidden" for="zynggi-notes-{{ section.id }}">Additional requirements</label>
+              <textarea id="zynggi-notes-{{ section.id }}" name="contact[Additional Requirements]" rows="3" placeholder="Tell us about packaging, quality, delivery location or anything else."></textarea>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} ============ ASIDE ============ {%- endcomment -%}
+        <aside class="zynggi-aside" aria-label="Your requirement summary">
+          <div class="zynggi-aside-inner">
+            <div class="zynggi-summary">
+              <div class="zynggi-summary-head">
+                <h2>Your requirement</h2>
+                <span class="zynggi-summary-count"><b data-zynggi-count>0</b> items</span>
+              </div>
+
+              <p class="zynggi-empty" data-zynggi-empty>Nothing selected yet — that's fine. You can also just describe what you need and we'll help you choose.</p>
+
+              <div class="zynggi-items" data-zynggi-items></div>
+
+              <button type="submit" class="zynggi-submit">
+                <span>Request My Bulk Quote</span>
+                <span aria-hidden="true">→</span>
+              </button>
+
+              <p class="zynggi-trust">No payment required. Our team will contact you with availability and pricing.</p>
+
+              {%- if section.settings.whatsapp_number != blank -%}
+                <p class="zynggi-wa">
+                  Prefer WhatsApp?
+                  <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I would like a bulk spice quote.' | url_encode }}" target="_blank" rel="noopener">Chat with Zynggi →</a>
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+        </aside>
+      </div>
+
+    {% endform %}
+
+    {%- comment -%} ---------- WHAT HAPPENS NEXT ---------- {%- endcomment -%}
+    <section class="zynggi-block" aria-labelledby="zynggi-steps-title-{{ section.id }}">
+      <h2 class="zynggi-block-title" id="zynggi-steps-title-{{ section.id }}">What happens next?</h2>
+      <div class="zynggi-steps">
+        <div class="zynggi-step"><b>STEP 1</b><strong>You tell us what you need</strong><p>Submit your requirement in under a minute.</p></div>
+        <div class="zynggi-step"><b>STEP 2</b><strong>We review it</strong><p>Our team checks availability and your specifications.</p></div>
+        <div class="zynggi-step"><b>STEP 3</b><strong>You get a quote</strong><p>We contact you with pricing and options.</p></div>
+        <div class="zynggi-step"><b>STEP 4</b><strong>You confirm the order</strong><p>Once everything is finalised, we process your order.</p></div>
+      </div>
+    </section>
+
+    {%- comment -%} ---------- CUSTOM / PRIVATE LABEL ---------- {%- endcomment -%}
+    <section class="zynggi-block" aria-labelledby="zynggi-custom-title-{{ section.id }}">
+      <h2 class="zynggi-block-title" id="zynggi-custom-title-{{ section.id }}">Need something custom?</h2>
+      <p class="zynggi-block-sub">These are handled separately by our formulation team.</p>
+
+      <div class="zynggi-custom-grid">
+        <div class="zynggi-custom-card"><strong>Custom Spice Blend</strong><p>A blend created to your recipe, taste profile or specification.</p></div>
+        <div class="zynggi-custom-card"><strong>Private Label</strong><p>We manufacture and pack spices under your own brand.</p></div>
+        <div class="zynggi-custom-card"><strong>Custom Packaging</strong><p>Business packaging, pack sizes and formats built around you.</p></div>
+      </div>
+
+      <div class="zynggi-custom-cta">
+        <a href="#zynggi-form-{{ section.id }}" class="zynggi-btn zynggi-btn--primary" data-zynggi-scroll data-zynggi-preset="Custom blend / private label">Discuss Custom Requirement</a>
+      </div>
+    </section>
+  </div>
+
+  {%- comment -%} ---------- MOBILE STICKY BAR ---------- {%- endcomment -%}
+  <div class="zynggi-mobilebar" data-zynggi-bar>
+    <span class="zynggi-mobilebar-text">
+      <b data-zynggi-count>0</b> items selected
+      <span>No payment required</span>
+    </span>
+    <button type="submit" form="{{ form_id }}" class="zynggi-btn zynggi-btn--primary">Request Quote →</button>
+  </div>
+</section>
+
+<style>
+  #ZynggiBulkOrder-{{ section.id }} {
+    --zynggi-brown: #2d1b14;
+    --zynggi-gold: #c58a28;
+    --zynggi-cream: #f6efe4;
+    --zynggi-light: #fbf8f3;
+    --zynggi-border: #e3d8ca;
+    --zynggi-text: #3a2b24;
+    --zynggi-muted: #75675e;
+    --zynggi-radius: 18px;
+    background: var(--zynggi-cream);
+    color: var(--zynggi-text);
+    padding: 40px 16px 90px;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  #ZynggiBulkOrder-{{ section.id }} *, #ZynggiBulkOrder-{{ section.id }} *::before, #ZynggiBulkOrder-{{ section.id }} *::after { box-sizing: border-box; }
+  #ZynggiBulkOrder-{{ section.id }} [hidden] { display: none !important; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-container { max-width: 1180px; margin: 0 auto; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+  /* Hero */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-hero { max-width: 820px; margin: 0 auto 30px; text-align: center; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-eyebrow { display: inline-block; padding: 6px 14px; border: 1px solid var(--zynggi-border); border-radius: 999px; background: #fff; color: var(--zynggi-gold); font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; }
+  #ZynggiBulkOrder-{{ section.id }} h1 { margin: 16px 0 14px; color: var(--zynggi-brown); font-size: clamp(30px, 6.5vw, 50px); line-height: 1.08; letter-spacing: -1px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-hero > p { max-width: 620px; margin: 0 auto; color: var(--zynggi-muted); font-size: 16px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-benefits { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-benefits li { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid var(--zynggi-border); border-radius: 999px; background: #fff; font-size: 13px; font-weight: 600; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-benefits li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--zynggi-gold); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-hero-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+
+  /* Buttons */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; border: 1px solid transparent; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-btn--primary { background: var(--zynggi-brown); color: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-btn--primary:hover { background: var(--zynggi-gold); color: #fff; transform: translateY(-1px); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-btn--ghost { background: #fff; color: var(--zynggi-brown); border-color: var(--zynggi-border); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-btn--ghost:hover { border-color: var(--zynggi-gold); color: var(--zynggi-gold); }
+
+  /* Notices */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-notice { margin-bottom: 18px; padding: 16px 18px; border-radius: 14px; font-size: 14px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-notice p { margin: 4px 0 0; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-notice--success { background: #eef7ee; border: 1px solid #cfe6cf; color: #235c23; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-notice--error { background: #fdf1f0; border: 1px solid #f0cfcb; color: #8a2b21; }
+
+  /* Layout */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-layout { display: grid; gap: 18px; }
+  @media screen and (min-width: 990px) {
+    #ZynggiBulkOrder-{{ section.id }} .zynggi-layout { grid-template-columns: minmax(0, 1fr) 360px; gap: 26px; align-items: start; }
+    #ZynggiBulkOrder-{{ section.id }} .zynggi-aside-inner { position: sticky; top: 20px; }
+  }
+
+  /* Cards */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-card { margin-bottom: 16px; padding: 20px; border: 1px solid var(--zynggi-border); border-radius: var(--zynggi-radius); background: var(--zynggi-light); box-shadow: 0 6px 24px rgba(45,27,20,.04); }
+  @media screen and (min-width: 750px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-card { padding: 28px; } }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-card-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-card-head > span { display: flex; align-items: center; justify-content: center; flex: 0 0 30px; width: 30px; height: 30px; margin-top: 2px; border-radius: 50%; background: var(--zynggi-gold); color: #fff; font-size: 12px; font-weight: 700; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-card-head h2 { margin: 0; color: var(--zynggi-brown); font-size: 19px; line-height: 1.25; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-card-head p { margin: 3px 0 0; color: var(--zynggi-muted); font-size: 13.5px; }
+
+  /* Mode tabs */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-modes { display: flex; gap: 5px; margin-bottom: 18px; padding: 5px; border: 1px solid var(--zynggi-border); border-radius: 999px; background: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mode { flex: 1 1 0; min-height: 44px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent; color: var(--zynggi-muted); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .18s ease, color .18s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mode[aria-selected="true"] { background: var(--zynggi-brown); color: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mode:focus-visible { outline: 2px solid var(--zynggi-gold); outline-offset: 2px; }
+
+  /* Search */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-search { position: relative; margin-bottom: 12px; color: var(--zynggi-muted); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-search svg { position: absolute; left: 15px; top: 50%; width: 18px; height: 18px; margin-top: -9px; pointer-events: none; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-search input { width: 100%; min-height: 50px; padding: 12px 14px 12px 44px; border: 1px solid var(--zynggi-border); border-radius: 12px; background: #fff; color: var(--zynggi-text); font: inherit; font-size: 15px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-hint { margin: 0 0 14px; color: var(--zynggi-muted); font-size: 13px; }
+
+  /* Accordion */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat { margin-bottom: 10px; border: 1px solid var(--zynggi-border); border-radius: 14px; background: #fff; overflow: hidden; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-head { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 62px; padding: 12px 16px; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-head:focus-visible { outline: 2px solid var(--zynggi-gold); outline-offset: -2px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-num { flex: 0 0 auto; color: var(--zynggi-gold); font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-text { min-width: 0; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-text strong { display: block; font-size: 15px; color: var(--zynggi-brown); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-text small { display: block; font-size: 12px; color: var(--zynggi-muted); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-badge { flex: 0 0 auto; padding: 2px 9px; border-radius: 999px; background: var(--zynggi-gold); color: #fff; font-size: 11px; font-weight: 700; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-icon { position: relative; flex: 0 0 22px; width: 22px; height: 22px; margin-left: auto; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-icon::before, #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-icon::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: var(--zynggi-gold); border-radius: 2px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-icon::before { width: 12px; height: 2px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-icon::after { width: 2px; height: 12px; transition: transform .2s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-head[aria-expanded="true"] .zynggi-cat-icon::after { transform: translate(-50%,-50%) scaleY(0); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-cat-body { padding: 0 14px 14px; }
+
+  /* Chips */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-chip { position: relative; display: inline-flex; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-chip input { position: absolute; width: 1px; height: 1px; opacity: 0; margin: 0; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 15px; border: 1px solid var(--zynggi-border); border-radius: 999px; background: #fff; color: var(--zynggi-text); font-size: 13.5px; line-height: 1.2; cursor: pointer; transition: border-color .15s ease, background .15s ease, color .15s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-chip input:checked + span { border-color: var(--zynggi-gold); background: var(--zynggi-gold); color: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-chip input:focus-visible + span { outline: 2px solid var(--zynggi-gold); outline-offset: 2px; }
+
+  /* Product cards */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-card { padding: 14px; border: 1px dashed var(--zynggi-gold); border-radius: 12px; background: #fffaf2; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-card-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-card-head strong { font-size: 14px; color: var(--zynggi-brown); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-card-cat { font-size: 11px; color: var(--zynggi-muted); text-transform: uppercase; letter-spacing: .8px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-card-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media screen and (min-width: 560px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-prod-card-grid { grid-template-columns: 1.3fr 1fr .7fr; align-items: end; } }
+
+  /* Fields */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-field { display: flex; flex-direction: column; gap: 6px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-field--spaced { margin-top: 16px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-field label { color: var(--zynggi-text); font-size: 13px; font-weight: 700; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-optional { font-weight: 500; color: var(--zynggi-muted); }
+  #ZynggiBulkOrder-{{ section.id }} input[type="text"], #ZynggiBulkOrder-{{ section.id }} input[type="email"], #ZynggiBulkOrder-{{ section.id }} input[type="tel"], #ZynggiBulkOrder-{{ section.id }} input[type="number"], #ZynggiBulkOrder-{{ section.id }} input[type="search"], #ZynggiBulkOrder-{{ section.id }} select, #ZynggiBulkOrder-{{ section.id }} textarea { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid var(--zynggi-border); border-radius: 11px; background: #fff; color: var(--zynggi-text); font: inherit; font-size: 15px; outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
+  #ZynggiBulkOrder-{{ section.id }} textarea { min-height: 110px; resize: vertical; }
+  #ZynggiBulkOrder-{{ section.id }} input:focus, #ZynggiBulkOrder-{{ section.id }} select:focus, #ZynggiBulkOrder-{{ section.id }} textarea:focus { border-color: var(--zynggi-gold); box-shadow: 0 0 0 3px rgba(197,138,40,.14); }
+  #ZynggiBulkOrder-{{ section.id }} input:disabled, #ZynggiBulkOrder-{{ section.id }} select:disabled, #ZynggiBulkOrder-{{ section.id }} textarea:disabled { background: #f3efea; color: #aaa09a; cursor: not-allowed; }
+
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-grid { display: grid; gap: 14px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-grid--2 { grid-template-columns: 1fr; }
+  @media screen and (min-width: 560px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-grid--2 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+  /* Other ingredient */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-other { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--zynggi-border); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-other h3 { margin: 0 0 4px; color: var(--zynggi-brown); font-size: 15px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-other-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media screen and (min-width: 640px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-other-grid { grid-template-columns: 1.6fr 1fr .8fr 1fr; } }
+
+  /* Ranges */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-fieldset { margin: 0; padding: 0; border: 0; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-legend { padding: 0; margin-bottom: 10px; color: var(--zynggi-text); font-size: 13px; font-weight: 700; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-ranges { display: flex; flex-wrap: wrap; gap: 8px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-range { position: relative; display: inline-flex; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-range input { position: absolute; width: 1px; height: 1px; opacity: 0; margin: 0; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-range span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 1px solid var(--zynggi-border); border-radius: 999px; background: #fff; font-size: 13.5px; cursor: pointer; transition: border-color .15s ease, background .15s ease, color .15s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-range input:checked + span { border-color: var(--zynggi-gold); background: var(--zynggi-gold); color: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-range input:focus-visible + span { outline: 2px solid var(--zynggi-gold); outline-offset: 2px; }
+
+  /* Aside */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-summary { padding: 20px; border: 1px solid var(--zynggi-border); border-radius: var(--zynggi-radius); background: #fff; box-shadow: 0 10px 30px rgba(45,27,20,.06); }
+  @media screen and (min-width: 750px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-summary { padding: 24px; } }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-summary-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-summary-head h2 { margin: 0; font-size: 16px; color: var(--zynggi-brown); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-summary-count { font-size: 12px; color: var(--zynggi-muted); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-summary-count b { color: var(--zynggi-gold); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-empty { margin: 0 0 14px; padding: 12px 14px; border: 1px dashed var(--zynggi-border); border-radius: 10px; color: var(--zynggi-muted); font-size: 13px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-items { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; max-height: 260px; overflow-y: auto; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border: 1px solid var(--zynggi-border); border-radius: 10px; background: #fffaf2; font-size: 13px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-item strong { font-weight: 600; color: var(--zynggi-brown); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-item-meta { flex: 0 0 auto; color: var(--zynggi-gold); font-weight: 700; font-size: 12px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-submit { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 54px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--zynggi-brown); color: #fff; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .18s ease, transform .18s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-submit:hover { background: var(--zynggi-gold); transform: translateY(-1px); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-trust { margin: 12px 0 0; color: var(--zynggi-muted); font-size: 12.5px; text-align: center; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-wa { margin: 10px 0 0; color: var(--zynggi-muted); font-size: 13px; text-align: center; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-wa a { color: var(--zynggi-gold); font-weight: 700; text-decoration: none; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-wa a:hover { text-decoration: underline; }
+
+  /* Blocks */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-block { margin-top: 44px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-block-title { margin: 0 0 6px; color: var(--zynggi-brown); font-size: 24px; letter-spacing: -.4px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-block-sub { margin: 0 0 18px; color: var(--zynggi-muted); font-size: 14px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-steps { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media screen and (min-width: 640px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-steps { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media screen and (min-width: 990px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-steps { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-step { padding: 18px; border: 1px solid var(--zynggi-border); border-radius: 14px; background: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-step b { display: inline-block; margin-bottom: 8px; color: var(--zynggi-gold); font-size: 11px; letter-spacing: 1.4px; font-weight: 700; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-step strong { display: block; margin-bottom: 4px; color: var(--zynggi-brown); font-size: 15px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-step p { margin: 0; color: var(--zynggi-muted); font-size: 13px; }
+
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-custom-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media screen and (min-width: 640px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-custom-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-custom-card { padding: 20px; border: 1px solid var(--zynggi-border); border-radius: 14px; background: #fff; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-custom-card strong { display: block; margin-bottom: 6px; color: var(--zynggi-brown); font-size: 15px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-custom-card p { margin: 0; color: var(--zynggi-muted); font-size: 13px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-custom-cta { margin-top: 18px; text-align: center; }
+
+  /* Mobile sticky bar */
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid var(--zynggi-border); box-shadow: 0 -6px 20px rgba(45,27,20,.06); transform: translateY(120%); transition: transform .25s ease; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar.is-visible { transform: translateY(0); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar-text { display: flex; flex-direction: column; line-height: 1.2; font-size: 12px; color: var(--zynggi-muted); }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar-text b { color: var(--zynggi-brown); font-size: 14px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar-text span { font-size: 11px; }
+  #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar .zynggi-btn { min-height: 46px; padding: 0 18px; font-size: 14px; }
+  @media screen and (min-width: 990px) { #ZynggiBulkOrder-{{ section.id }} .zynggi-mobilebar { display: none; } }
+  @media screen and (max-width: 989px) { #ZynggiBulkOrder-{{ section.id }} { padding-bottom: 100px; } }
+
+  @media screen and (max-width: 749px) {
+    #ZynggiBulkOrder-{{ section.id }} { padding: 30px 14px 110px; }
+    #ZynggiBulkOrder-{{ section.id }} h1 { font-size: 30px; letter-spacing: -.6px; }
+    #ZynggiBulkOrder-{{ section.id }} .zynggi-card { padding: 18px; }
+    #ZynggiBulkOrder-{{ section.id }} .zynggi-block-title { font-size: 20px; }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById('ZynggiBulkOrder-{{ section.id }}');
+  if (!root) return;
+
+  var formId = 'ZynggiBulkOrderForm-{{ section.id }}';
+  var form = document.getElementById(formId);
+
+  /* ---------- 1. Accordion ---------- */
+  root.querySelectorAll('[data-zynggi-acc]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var body = document.getElementById(btn.getAttribute('aria-controls'));
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      if (body) body.hidden = open;
+    });
+  });
+
+  /* ---------- 2. Mode tabs ---------- */
+  var modeButtons = root.querySelectorAll('[data-zynggi-mode]');
+  var panels = root.querySelectorAll('[data-zynggi-panel]');
+
+  function setMode(mode) {
+    modeButtons.forEach(function (b) {
+      b.setAttribute('aria-selected', b.getAttribute('data-zynggi-mode') === mode ? 'true' : 'false');
+    });
+    panels.forEach(function (p) {
+      p.hidden = p.getAttribute('data-zynggi-panel') !== mode;
+    });
+    // Toggle guided inputs
+    var guidedInputs = root.querySelectorAll('[data-zynggi-panel="guided"] input, [data-zynggi-panel="guided"] select, [data-zynggi-panel="guided"] textarea');
+    guidedInputs.forEach(function (el) {
+      if (mode === 'quick') {
+        el.dataset.prevDisabled = el.disabled ? '1' : '0';
+        el.disabled = true;
+      } else {
+        // restore: chips checked => enable, product cards handled by change listener
+        if (el.classList.contains('zynggi-prod-check')) {
+          el.disabled = false;
+        } else if (el.closest('[data-zynggi-prod-card]')) {
+          // product card fields stay as they were (controlled by checkbox)
+        } else {
+          el.disabled = false;
+        }
+      }
+    });
+    // Re-apply product card state
+    if (mode === 'guided') {
+      root.querySelectorAll('.zynggi-prod-check').forEach(function (cb) {
+        cb.dispatchEvent(new Event('change', { bubbles: false }));
+      });
+    }
+  }
+  modeButtons.forEach(function (b) {
+    b.addEventListener('click', function () { setMode(b.getAttribute('data-zynggi-mode')); });
+  });
+
+  /* ---------- 3. Product chip → reveal card ---------- */
+  var itemsContainer = root.querySelector('[data-zynggi-items]');
+  var emptyMsg = root.querySelector('[data-zynggi-empty]');
+  var countEls = root.querySelectorAll('[data-zynggi-count]');
+
+  function refreshSummary() {
+    if (!itemsContainer) return;
+    var selected = [];
+    root.querySelectorAll('.zynggi-prod-check:checked').forEach(function (cb) {
+      var card = document.getElementById(cb.getAttribute('data-zynggi-target'));
+      var qty = '', unit = '';
+      if (card) {
+        var q = card.querySelector('input[type="number"]');
+        var u = card.querySelector('select:not([name*="Form"])');
+        if (q && q.value) qty = q.value;
+        if (u && u.value) unit = u.value;
+      }
+      selected.push({ name: cb.getAttribute('data-product-name'), qty: qty, unit: unit });
+    });
+
+    // update count
+    countEls.forEach(function (el) { el.textContent = selected.length; });
+
+    // items list
+    itemsContainer.innerHTML = '';
+    selected.forEach(function (s) {
+      var row = document.createElement('div');
+      row.className = 'zynggi-item';
+      var meta = s.qty ? (s.qty + ' ' + (s.unit || '')) : '—';
+      row.innerHTML = '<strong></strong><span class="zynggi-item-meta"></span>';
+      row.querySelector('strong').textContent = s.name;
+      row.querySelector('.zynggi-item-meta').textContent = meta;
+      itemsContainer.appendChild(row);
+    });
+
+    if (emptyMsg) emptyMsg.hidden = selected.length > 0;
+
+    // category badge counts
+    root.querySelectorAll('.zynggi-cat').forEach(function (cat) {
+      var n = cat.querySelectorAll('.zynggi-prod-check:checked').length;
+      var badge = cat.querySelector('[data-cat-count]');
+      if (badge) {
+        badge.textContent = n;
+        badge.hidden = n === 0;
+      }
+    });
+  }
+
+  root.querySelectorAll('.zynggi-prod-check').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      var card = document.getElementById(cb.getAttribute('data-zynggi-target'));
+      if (!card) return;
+      var fields = card.querySelectorAll('select, input[type="number"], input[type="hidden"]');
+      if (cb.checked) {
+        card.hidden = false;
+        fields.forEach(function (f) {
+          f.disabled = false;
+          if (f.type === 'hidden') f.value = 'Yes';
+        });
+      } else {
+        card.hidden = true;
+        fields.forEach(function (f) {
+          f.disabled = true;
+          if (f.type === 'hidden') f.value = 'No';
+          else if (f.tagName === 'SELECT') f.selectedIndex = 0;
+          else f.value = '';
+        });
+      }
+      refreshSummary();
+    });
+  });
+
+  /* summary refresh when qty/unit change */
+  root.querySelectorAll('[data-zynggi-prod-card] input[type="number"], [data-zynggi-prod-card] select').forEach(function (el) {
+    el.addEventListener('input', refreshSummary);
+    el.addEventListener('change', refreshSummary);
+  });
+
+  /* ---------- 4. Search ---------- */
+  var searchInput = root.querySelector('[data-zynggi-search]');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value.trim().toLowerCase();
+      root.querySelectorAll('.zynggi-cat').forEach(function (cat) {
+        var catTitle = (cat.getAttribute('data-cat-title') || '').toLowerCase();
+        var anyVisible = false;
+        cat.querySelectorAll('[data-zynggi-chip]').forEach(function (chip) {
+          var term = (chip.getAttribute('data-search-term') || '').toLowerCase();
+          var show = !q || term.indexOf(q) !== -1 || catTitle.indexOf(q) !== -1;
+          chip.style.display = show ? '' : 'none';
+          if (show) anyVisible = true;
+        });
+        cat.style.display = (anyVisible || !q) ? '' : 'none';
+        // auto expand on active search
+        if (q && anyVisible) {
+          var head = cat.querySelector('[data-zynggi-acc]');
+          var body = document.getElementById(head.getAttribute('aria-controls'));
+          head.setAttribute('aria-expanded', 'true');
+          if (body) body.hidden = false;
+        }
+      });
+    });
+  }
+
+  /* ---------- 5. Scroll-to-form helper ---------- */
+  root.querySelectorAll('[data-zynggi-scroll]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var preset = a.getAttribute('data-zynggi-preset');
+      if (preset) {
+        // switch to quick mode & prefill
+        setMode('quick');
+        var ta = root.querySelector('[data-zynggi-panel="quick"] textarea');
+        if (ta) ta.value = preset;
+      }
+    });
+  });
+
+  /* ---------- 6. Mobile sticky bar visibility ---------- */
+  var bar = root.querySelector('[data-zynggi-bar]');
+  var formEl = document.getElementById(formId);
+  if (bar && formEl && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        bar.classList.toggle('is-visible', !entry.isIntersecting);
+      });
+    }, { rootMargin: '-60px 0px 0px 0px' });
+    io.observe(formEl);
+  }
+
+  /* ---------- 7. Initial state ---------- */
+  refreshSummary();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Zynggi Bulk Order",
+  "settings": [
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp number",
+      "info": "Include country code, e.g. 919876543210",
+      "default": "919999999999"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "WhatsApp pre-filled message",
+      "default": "Hi Zynggi, I would like a bulk spice quote."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Zynggi Bulk Order"
+    }
+  ]
+}
+{% endschema %}

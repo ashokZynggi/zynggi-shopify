@@ -1,0 +1,15 @@
+{%- liquid
+  assign cp = product.compare_at_price
+  assign pr = product.price
+  if variant
+    assign cp = variant.compare_at_price
+    assign pr = variant.price
+  endif
+-%}
+<div class="price">
+  <span class="price__now">{{ pr | money }}</span>
+  {%- if cp > pr -%}
+    <s class="price__was">{{ cp | money }}</s>
+    <span class="price__save">Save {{ cp | minus: pr | times: 100.0 | divided_by: cp | round }}%</span>
+  {%- endif -%}
+</div>

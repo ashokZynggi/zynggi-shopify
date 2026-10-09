@@ -1,0 +1,22 @@
+{%- assign rack = product.metafields.custom.complete_rack.value -%}
+<section class="section bg-{{ section.settings.bg }}" data-recs data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}&intent={{ section.settings.intent }}">
+  <div class="container">
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <div class="section__head"><h2>{{ section.settings.heading }}</h2></div>
+      <div class="grid grid--4">{%- for pr in recommendations.products -%}{% render 'product-card', product: pr, style: 'premium' %}{%- endfor -%}</div>
+    {%- endif -%}
+    {%- if section.settings.show_rack and rack != blank -%}
+      <div class="section__head" style="margin-top:48px"><div><h2>Complete your spice rack</h2></div><button class="btn btn--primary" data-add-all>Add all to cart</button></div>
+      <div class="grid grid--4" data-rack>{%- for pr in rack -%}<div data-rack-id="{{ pr.selected_or_first_available_variant.id }}">{% render 'product-card', product: pr, style: 'minimal' %}</div>{%- endfor -%}</div>
+    {%- endif -%}
+  </div>
+  <script>
+    (function(){var s=document.currentScript.parentElement;
+      if(s.dataset.url&&!s.querySelector('.pcard')&&{{ recommendations.performed | json }}===false){fetch(s.dataset.url).then(function(r){return r.text()}).then(function(t){var d=new DOMParser().parseFromString(t,'text/html').querySelector('[data-recs]');if(d&&d.querySelector('.pcard'))s.innerHTML=d.innerHTML+s.querySelector('script').outerHTML;})}
+      var b=s.querySelector('[data-add-all]');if(b)b.addEventListener('click',function(){var items=[].map.call(s.querySelectorAll('[data-rack-id]'),function(e){return{id:+e.dataset.rackId,quantity:1}});fetch('/cart/add.js',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items})}).then(function(){location.href='{{ routes.cart_url }}'})})})();
+  </script>
+</section>
+{% schema %}
+{"name":"Related products","settings":[{"type":"text","id":"heading","label":"Heading","default":"You may also like"},{"type":"range","id":"limit","label":"Products","min":2,"max":8,"default":4},{"type":"select","id":"intent","label":"Recommendation type","options":[{"value":"related","label":"Related"},{"value":"complementary","label":"Complementary"}],"default":"related"},{"type":"checkbox","id":"show_rack","label":"Show 'Complete your spice rack' (metafield custom.complete_rack)","default":true},{"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"}],"default":"white"}],
+"presets":[{"name":"Related products"}]}
+{% endschema %}

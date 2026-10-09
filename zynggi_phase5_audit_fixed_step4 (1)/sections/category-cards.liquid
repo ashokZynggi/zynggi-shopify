@@ -1,0 +1,856 @@
+<section
+  class="category-rail bg-{{ section.settings.bg }}"
+  data-section-id="{{ section.id }}"
+  data-category-autoplay="{{ section.settings.auto_scroll }}"
+  data-category-interval="{{ section.settings.auto_scroll_interval }}"
+  aria-label="{{ section.settings.accessibility_label | escape }}"
+>
+  <div class="category-rail__container">
+
+    <div class="category-rail__layout">
+
+      {% if section.settings.show_heading and section.settings.heading != blank %}
+        <div class="category-rail__heading">
+
+          <h2>{{ section.settings.heading }}</h2>
+
+          {% if section.settings.subheading != blank %}
+            <p>{{ section.settings.subheading }}</p>
+          {% endif %}
+
+        </div>
+      {% endif %}
+
+
+      <div class="category-rail__viewport">
+
+        <div
+          class="category-rail__list"
+          style="
+            --category-size: {{ section.settings.image_size }}px;
+            --category-item: {{ section.settings.item_width }}px;
+            --category-gap: {{ section.settings.gap }}px;
+            --mobile-items: {{ section.settings.mobile_items | default: '3.5' }};
+          "
+        >
+
+          {% for block in section.blocks %}
+
+            {% assign c = block.settings.collection %}
+            {% assign cat_image = block.settings.image %}
+
+            {% if cat_image == blank and c != blank %}
+              {% assign cat_image = c.featured_image %}
+            {% endif %}
+
+            {% assign cat_title = block.settings.title %}
+
+            {% if cat_title == blank and c != blank %}
+              {% assign cat_title = c.title %}
+            {% endif %}
+
+            {% if cat_title == blank %}
+              {% assign cat_title = 'Category' %}
+            {% endif %}
+
+
+            <a
+              class="category-rail__item"
+              href="{% if c != blank %}{{ c.url }}{% else %}#{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+
+              <span class="category-rail__media">
+
+                {% if cat_image != blank %}
+
+                  <img
+                    src="{{ cat_image | image_url: width: 240 }}"
+                    srcset="{{ cat_image | image_url: width: 80 }} 80w, {{ cat_image | image_url: width: 120 }} 120w, {{ cat_image | image_url: width: 160 }} 160w, {{ cat_image | image_url: width: 240 }} 240w"
+                    sizes="(min-width: 990px) {{ section.settings.image_size }}px, 76px"
+                    alt="{{ cat_title | escape }}"
+                    width="240"
+                    height="240"
+                    loading="lazy"
+                  >
+
+                {% else %}
+
+                  <span
+                    class="category-rail__placeholder"
+                    aria-hidden="true"
+                  >
+                    {{ cat_title | slice: 0, 1 }}
+                  </span>
+
+                {% endif %}
+
+              </span>
+
+
+              <span class="category-rail__title">
+                {{ cat_title }}
+              </span>
+
+
+              {% if section.settings.show_shop_link %}
+                <span class="category-rail__shop">
+                  Shop now
+                </span>
+              {% endif %}
+
+            </a>
+
+          {% endfor %}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<style>
+
+  /* =========================================================
+     ZYNGGI — SHOP BY CATEGORY
+     ========================================================= */
+
+  .category-rail {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  .category-rail__container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 18px 5%;
+    box-sizing: border-box;
+  }
+
+
+  /* =========================================================
+     DESKTOP
+     ========================================================= */
+
+  .category-rail__layout {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+  }
+
+
+  .category-rail__heading {
+    flex: 0 0 190px;
+    width: 190px;
+  }
+
+
+  .category-rail__heading h2 {
+    margin: 0;
+    padding: 0;
+
+    font-size: 24px;
+    line-height: 1.15;
+    font-weight: 700;
+
+    color: inherit;
+  }
+
+
+  .category-rail__heading p {
+    margin: 8px 0 0;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    color: inherit;
+  }
+
+
+  /* =========================================================
+     VIEWPORT
+     ========================================================= */
+
+  .category-rail__viewport {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
+
+  /* =========================================================
+     CATEGORY LIST
+     ========================================================= */
+
+  .category-rail__list {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: var(--category-gap);
+
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    padding: 3px 2px 5px;
+
+    box-sizing: border-box;
+  }
+
+
+  .category-rail__list::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  /* =========================================================
+     CATEGORY ITEM
+     ========================================================= */
+
+  .category-rail__item {
+    flex: 0 0 var(--category-item);
+
+    width: var(--category-item);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    text-align: center;
+    text-decoration: none;
+
+    color: inherit;
+
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+  }
+
+
+  /* =========================================================
+     IMAGE
+     ========================================================= */
+
+  .category-rail__media {
+    display: block;
+
+    width: var(--category-size);
+    height: var(--category-size);
+
+    flex: 0 0 var(--category-size);
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    margin: 0 auto 7px;
+
+    background: #f3f0e8;
+
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+
+  .category-rail__media img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+
+  .category-rail__item:hover .category-rail__media {
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 7px 16px rgba(0, 0, 0, 0.15);
+  }
+
+
+  /* =========================================================
+     TITLE
+     ========================================================= */
+
+  .category-rail__title {
+    display: block;
+
+    width: 100%;
+
+    font-size: 12px;
+    line-height: 1.25;
+
+    font-weight: 600;
+
+    color: inherit;
+
+    text-align: center;
+  }
+
+
+  /* =========================================================
+     SHOP NOW
+     ========================================================= */
+
+  .category-rail__shop {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 10px;
+    line-height: 1.2;
+
+    color: #b42318;
+
+    text-decoration: underline;
+  }
+
+
+  /* =========================================================
+     PLACEHOLDER
+     ========================================================= */
+
+  .category-rail__placeholder {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    color: #17110b;
+  }
+
+
+  /* =========================================================
+     TABLET
+     ========================================================= */
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+
+    .category-rail__container {
+      padding: 16px 4%;
+    }
+
+    .category-rail__layout {
+      gap: 25px;
+    }
+
+    .category-rail__heading {
+      flex-basis: 150px;
+      width: 150px;
+    }
+
+    .category-rail__heading h2 {
+      font-size: 20px;
+    }
+
+  }
+
+
+  /* =========================================================
+     MOBILE
+     ========================================================= */
+
+  @media screen and (max-width: 749px) {
+
+    .category-rail__container {
+      width: 100%;
+      max-width: 100%;
+
+      padding: 10px 12px 8px;
+
+      box-sizing: border-box;
+    }
+
+
+    .category-rail__layout {
+      display: block;
+    }
+
+
+    .category-rail__heading {
+      width: 100%;
+
+      margin: 0 0 8px;
+    }
+
+
+    .category-rail__heading h2 {
+      margin: 0;
+
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+
+    .category-rail__heading p {
+      display: none;
+    }
+
+
+    .category-rail__viewport {
+      width: 100%;
+      max-width: 100%;
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      box-sizing: border-box;
+    }
+
+
+    /*
+      IMPORTANT:
+
+      The list itself is the scrollable element.
+      We deliberately keep a clean zero-left starting position.
+    */
+
+    .category-rail__list {
+      --mobile-visible: var(--mobile-items, 3.5);
+
+      display: flex !important;
+
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+
+      justify-content: flex-start !important;
+      align-items: flex-start;
+
+      width: 100% !important;
+      max-width: 100% !important;
+
+      gap: 10px;
+
+      margin: 0;
+
+      padding: 2px 0 10px;
+
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+
+      box-sizing: border-box;
+
+      scroll-snap-type: x proximity;
+      scroll-padding-left: 0;
+      overscroll-behavior-x: contain;
+
+      -webkit-overflow-scrolling: touch;
+
+      scrollbar-width: thin;
+    }
+
+
+    .category-rail__list::-webkit-scrollbar {
+      display: block;
+
+      height: 4px;
+    }
+
+
+    .category-rail__list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.10);
+
+      border-radius: 20px;
+    }
+
+
+    .category-rail__list::-webkit-scrollbar-thumb {
+      background: rgba(80, 45, 25, 0.45);
+
+      border-radius: 20px;
+    }
+
+
+    /*
+      3 FULL CATEGORIES
+      + PARTIAL 4TH CATEGORY
+    */
+
+    .category-rail__item {
+      min-height: 44px;
+      touch-action: manipulation;
+      flex: 0 0
+        calc(
+          (
+            100% -
+            30px
+          ) / 3.5
+        ) !important;
+
+      width:
+        calc(
+          (
+            100% -
+            30px
+          ) / 3.5
+        ) !important;
+
+      min-width: 0 !important;
+      max-width: none !important;
+
+      margin: 0 !important;
+
+      flex-shrink: 0 !important;
+
+      display: flex !important;
+
+      flex-direction: column !important;
+
+      align-items: center !important;
+
+      box-sizing: border-box;
+
+      scroll-snap-align: start;
+    }
+
+
+    .category-rail__media {
+      width: 76px;
+      height: 76px;
+
+      max-width: 100%;
+
+      flex: 0 0 76px;
+
+      margin: 0 auto 5px;
+
+      border-radius: 50%;
+
+      overflow: hidden;
+    }
+
+
+    .category-rail__media img {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+
+    .category-rail__title {
+      width: 100%;
+
+      margin: 0;
+
+      font-size: 11px;
+      line-height: 1.2;
+
+      text-align: center;
+
+      display: -webkit-box;
+
+      -webkit-box-orient: vertical;
+
+      -webkit-line-clamp: 2;
+
+      overflow: hidden;
+    }
+
+
+    .category-rail__shop {
+      display: none;
+    }
+
+  }
+
+
+  /* =========================================================
+     SMALL PHONES
+     ========================================================= */
+
+  @media screen and (max-width: 390px) {
+
+    .category-rail__container {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+
+    .category-rail__heading h2 {
+      font-size: 15px;
+    }
+
+
+    .category-rail__list {
+      gap: 8px;
+    }
+
+
+    .category-rail__item {
+      flex-basis:
+        calc(
+          (
+            100% -
+            24px
+          ) / 3.5
+        ) !important;
+
+      width:
+        calc(
+          (
+            100% -
+            24px
+          ) / 3.5
+        ) !important;
+    }
+
+
+    .category-rail__media {
+      width: 68px;
+      height: 68px;
+
+      flex-basis: 68px;
+    }
+
+  }
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Shop by category",
+
+  "settings": [
+
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "Circle image size",
+      "min": 56,
+      "max": 104,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+
+    {
+      "type": "range",
+      "id": "item_width",
+      "label": "Category width",
+      "min": 82,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 108
+    },
+
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between categories",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+
+    {
+      "type": "select",
+      "id": "mobile_items",
+      "label": "Categories visible at once on phones",
+      "info": "Half numbers show a peek of the next category so people know to swipe.",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "3.5",
+          "label": "3.5"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "4.5",
+          "label": "4.5"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "5.5",
+          "label": "5.5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "3.5"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "auto_scroll",
+      "label": "Auto-scroll categories on phones",
+      "default": true
+    },
+
+    {
+      "type": "range",
+      "id": "auto_scroll_interval",
+      "label": "Auto-scroll interval (seconds)",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_shop_link",
+      "label": "Show “Shop now” link",
+      "default": false
+    },
+
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Background",
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "warm",
+          "label": "Warm cream"
+        },
+        {
+          "value": "green",
+          "label": "Deep green"
+        }
+      ],
+      "default": "white"
+    },
+
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Shop by category"
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+      "type": "category",
+      "name": "Category",
+
+      "settings": [
+
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title override"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Circle image override"
+        }
+
+      ]
+    }
+
+  ],
+
+  "max_blocks": 12,
+
+  "presets": [
+
+    {
+      "name": "Shop by category",
+
+      "blocks": [
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        }
+      ]
+
+    }
+
+  ]
+}
+{% endschema %}

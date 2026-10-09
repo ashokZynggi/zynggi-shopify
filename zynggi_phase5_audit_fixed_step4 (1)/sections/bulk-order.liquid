@@ -1,0 +1,792 @@
+<style>
+  .zynggi-bulk-section {
+    background: #f5eee5;
+    color: #2b1b16;
+    padding: 80px 20px;
+  }
+
+  .zynggi-bulk-container {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .zynggi-bulk-header {
+    max-width: 800px;
+    margin: 0 auto 55px;
+    text-align: center;
+  }
+
+  .zynggi-bulk-eyebrow {
+    color: #b98524;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .zynggi-bulk-header h2 {
+    margin: 0 0 18px;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.05;
+    font-weight: 700;
+  }
+
+  .zynggi-bulk-header p {
+    margin: 0;
+    color: #6d5c54;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .zynggi-bulk-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 45px;
+    box-shadow: 0 15px 45px rgba(43, 27, 22, 0.08);
+  }
+
+  .zynggi-bulk-step {
+    margin-bottom: 45px;
+  }
+
+  .zynggi-bulk-step:last-child {
+    margin-bottom: 0;
+  }
+
+  .zynggi-bulk-step-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .zynggi-bulk-number {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #c7922e;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .zynggi-bulk-step-title h3 {
+    margin: 0;
+    font-size: 25px;
+  }
+
+  .zynggi-bulk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .zynggi-bulk-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .zynggi-bulk-field.full {
+    grid-column: 1 / -1;
+  }
+
+  .zynggi-bulk-field label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .zynggi-bulk-required {
+    color: #b42318;
+  }
+
+  .zynggi-bulk-field input,
+  .zynggi-bulk-field select,
+  .zynggi-bulk-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd2c8;
+    border-radius: 10px;
+    padding: 14px 15px;
+    background: #fffdfb;
+    color: #2b1b16;
+    font-size: 15px;
+    outline: none;
+  }
+
+  .zynggi-bulk-field textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .zynggi-bulk-field input:focus,
+  .zynggi-bulk-field select:focus,
+  .zynggi-bulk-field textarea:focus {
+    border-color: #c7922e;
+    box-shadow: 0 0 0 3px rgba(199, 146, 46, 0.12);
+  }
+
+  .zynggi-bulk-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .zynggi-bulk-option {
+    position: relative;
+  }
+
+  .zynggi-bulk-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .zynggi-bulk-option label {
+    display: flex;
+    align-items: center;
+    min-height: 54px;
+    padding: 12px 15px;
+    border: 1px solid #ddd2c8;
+    border-radius: 10px;
+    background: #fffdfb;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+
+  .zynggi-bulk-option input:checked + label {
+    border-color: #c7922e;
+    background: #fbf2df;
+    box-shadow: inset 0 0 0 1px #c7922e;
+  }
+
+  .zynggi-bulk-spices {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .zynggi-bulk-spice {
+    position: relative;
+  }
+
+  .zynggi-bulk-spice input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .zynggi-bulk-spice label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 13px;
+    border: 1px solid #e0d6cc;
+    border-radius: 9px;
+    background: #fffdfb;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+  }
+
+  .zynggi-bulk-spice label::before {
+    content: "";
+    width: 17px;
+    height: 17px;
+    border: 1px solid #cbbeb2;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .zynggi-bulk-spice input:checked + label {
+    border-color: #c7922e;
+    background: #fbf2df;
+  }
+
+  .zynggi-bulk-spice input:checked + label::before {
+    content: "✓";
+    background: #c7922e;
+    border-color: #c7922e;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .zynggi-bulk-note {
+    margin-top: 12px;
+    color: #75665e;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .zynggi-bulk-submit {
+    margin-top: 35px;
+    text-align: center;
+  }
+
+  .zynggi-bulk-submit button {
+    border: 0;
+    border-radius: 50px;
+    padding: 17px 38px;
+    background: #c7922e;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .zynggi-bulk-submit button:hover {
+    background: #a9781d;
+    transform: translateY(-1px);
+  }
+
+  .zynggi-bulk-success {
+    padding: 18px 20px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    background: #edf7ed;
+    color: #245b2a;
+    font-weight: 600;
+  }
+
+  .zynggi-bulk-errors {
+    padding: 18px 20px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    background: #fff0f0;
+    color: #9b1c1c;
+  }
+
+  @media screen and (max-width: 749px) {
+    .zynggi-bulk-section {
+      padding: 55px 15px;
+    }
+
+    .zynggi-bulk-card {
+      padding: 25px 18px;
+      border-radius: 18px;
+    }
+
+    .zynggi-bulk-grid,
+    .zynggi-bulk-options,
+    .zynggi-bulk-spices {
+      grid-template-columns: 1fr;
+    }
+
+    .zynggi-bulk-field.full {
+      grid-column: auto;
+    }
+
+    .zynggi-bulk-header {
+      margin-bottom: 35px;
+    }
+
+    .zynggi-bulk-header h2 {
+      font-size: 36px;
+    }
+  }
+</style>
+
+<section class="zynggi-bulk-section">
+  <div class="zynggi-bulk-container">
+
+    <div class="zynggi-bulk-header">
+      <div class="zynggi-bulk-eyebrow">
+        ZYNGGI BULK ORDERS
+      </div>
+
+      <h2>
+        Tell Us What Your Business Needs
+      </h2>
+
+      <p>
+        Whether you need raw spices, whole spices, loose spices, powders,
+        ground spices or blended masalas, share your requirements and
+        our team will prepare the right bulk solution for you.
+      </p>
+    </div>
+
+    {% form 'contact', id: 'ZynggiBulkOrderForm' %}
+
+      {% if form.posted_successfully? %}
+        <div class="zynggi-bulk-success">
+          Thank you! Your bulk order enquiry has been received.
+          Our Zynggi team will contact you shortly.
+        </div>
+      {% endif %}
+
+      {% if form.errors %}
+        <div class="zynggi-bulk-errors">
+          Please check the required fields and try again.
+        </div>
+      {% endif %}
+
+      <div class="zynggi-bulk-card">
+
+        <!-- STEP 01 -->
+
+        <div class="zynggi-bulk-step">
+
+          <div class="zynggi-bulk-step-title">
+            <div class="zynggi-bulk-number">
+              01
+            </div>
+
+            <h3>
+              Business Details
+            </h3>
+          </div>
+
+          <div class="zynggi-bulk-grid">
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Your Name
+                <span class="zynggi-bulk-required">*</span>
+              </label>
+
+              <input
+                type="text"
+                name="contact[name]"
+                placeholder="Enter your name"
+                required
+              >
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Business Name
+                <span class="zynggi-bulk-required">*</span>
+              </label>
+
+              <input
+                type="text"
+                name="contact[business_name]"
+                placeholder="Your business name"
+                required
+              >
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Phone Number
+                <span class="zynggi-bulk-required">*</span>
+              </label>
+
+              <input
+                type="tel"
+                name="contact[phone]"
+                placeholder="+91 XXXXX XXXXX"
+                required
+              >
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Email
+              </label>
+
+              <input
+                type="email"
+                name="contact[email]"
+                placeholder="business@example.com"
+              >
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Business Type
+              </label>
+
+              <select name="contact[business_type]">
+                <option value="">
+                  Select business type
+                </option>
+
+                <option>
+                  Retailer / Shop
+                </option>
+
+                <option>
+                  Restaurant
+                </option>
+
+                <option>
+                  Hotel
+                </option>
+
+                <option>
+                  Cloud Kitchen
+                </option>
+
+                <option>
+                  Distributor
+                </option>
+
+                <option>
+                  Food Manufacturer
+                </option>
+
+                <option>
+                  Trader / Wholesaler
+                </option>
+
+                <option>
+                  Other
+                </option>
+              </select>
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                City / Location
+              </label>
+
+              <input
+                type="text"
+                name="contact[location]"
+                placeholder="City, State"
+              >
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- STEP 02 -->
+
+        <div class="zynggi-bulk-step">
+
+          <div class="zynggi-bulk-step-title">
+            <div class="zynggi-bulk-number">
+              02
+            </div>
+
+            <h3>
+              What Type of Spice Do You Need?
+            </h3>
+          </div>
+
+          <div class="zynggi-bulk-options">
+
+            <div class="zynggi-bulk-option">
+              <input
+                type="checkbox"
+                id="whole-spices"
+                name="contact[product_type][]"
+                value="Whole / Sabut Spices"
+              >
+
+              <label for="whole-spices">
+                Whole / Sabut Spices
+              </label>
+            </div>
+
+            <div class="zynggi-bulk-option">
+              <input
+                type="checkbox"
+                id="loose-spices"
+                name="contact[product_type][]"
+                value="Loose Spices"
+              >
+
+              <label for="loose-spices">
+                Loose Spices
+              </label>
+            </div>
+
+            <div class="zynggi-bulk-option">
+              <input
+                type="checkbox"
+                id="crushed-spices"
+                name="contact[product_type][]"
+                value="Crushed / Coarse"
+              >
+
+              <label for="crushed-spices">
+                Crushed / Coarse
+              </label>
+            </div>
+
+            <div class="zynggi-bulk-option">
+              <input
+                type="checkbox"
+                id="powder-spices"
+                name="contact[product_type][]"
+                value="Powder / Grind"
+              >
+
+              <label for="powder-spices">
+                Powder / Grind
+              </label>
+            </div>
+
+            <div class="zynggi-bulk-option">
+              <input
+                type="checkbox"
+                id="blended-masala"
+                name="contact[product_type][]"
+                value="Blended Masala"
+              >
+
+              <label for="blended-masala">
+                Blended Masala
+              </label>
+            </div>
+
+            <div class="zynggi-bulk-option">
+              <input
+                type="checkbox"
+                id="custom-blend"
+                name="contact[product_type][]"
+                value="Custom Blend"
+              >
+
+              <label for="custom-blend">
+                Custom Blend
+              </label>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- STEP 03 -->
+
+        <div class="zynggi-bulk-step">
+
+          <div class="zynggi-bulk-step-title">
+            <div class="zynggi-bulk-number">
+              03
+            </div>
+
+            <h3>
+              Select Your Spices
+            </h3>
+          </div>
+
+          <div class="zynggi-bulk-spices">
+
+            {% assign zynggi_spices = "Turmeric / Haldi|Coriander / Dhaniya|Cumin / Jeera|Fennel / Saunf|Red Chilli|Kashmiri Red Chilli|Degi Red Chilli|Black Pepper|Cardamom|Cloves|Cinnamon|Bay Leaf|Dry Ginger / Sonth|Kasuri Methi|Amchur|Pudina|Kala Namak|Normal Salt|Hing|Garam Masala|Chana Masala|Chhole Masala|Paneer Masala|Chicken Masala|Meat Masala|Kitchen King|Chat Masala|Custom Masala" | split: "|" %}
+
+            {% for spice in zynggi_spices %}
+
+              {% assign spice_id = spice | handleize %}
+
+              <div class="zynggi-bulk-spice">
+
+                <input
+                  type="checkbox"
+                  id="spice-{{ spice_id }}"
+                  name="contact[spices][]"
+                  value="{{ spice }}"
+                >
+
+                <label for="spice-{{ spice_id }}">
+                  {{ spice }}
+                </label>
+
+              </div>
+
+            {% endfor %}
+
+          </div>
+
+          <div class="zynggi-bulk-note">
+            You can select multiple spices. If your required spice is not listed,
+            mention it in the additional requirements below.
+          </div>
+
+        </div>
+
+
+        <!-- STEP 04 -->
+
+        <div class="zynggi-bulk-step">
+
+          <div class="zynggi-bulk-step-title">
+            <div class="zynggi-bulk-number">
+              04
+            </div>
+
+            <h3>
+              Quantity & Packaging
+            </h3>
+          </div>
+
+          <div class="zynggi-bulk-grid">
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Approximate Quantity
+              </label>
+
+              <input
+                type="text"
+                name="contact[quantity]"
+                placeholder="Example: 100 kg / 500 kg / 2 MT"
+              >
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Preferred Unit
+              </label>
+
+              <select name="contact[quantity_unit]">
+                <option value="">
+                  Select unit
+                </option>
+
+                <option>
+                  Kg
+                </option>
+
+                <option>
+                  Quintal
+                </option>
+
+                <option>
+                  Metric Ton
+                </option>
+
+                <option>
+                  Not Sure
+                </option>
+              </select>
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Packaging Requirement
+              </label>
+
+              <select name="contact[packaging]">
+                <option value="">
+                  Select packaging
+                </option>
+
+                <option>
+                  Loose / Open Bulk
+                </option>
+
+                <option>
+                  Plain Bulk Packaging
+                </option>
+
+                <option>
+                  Custom Packaging
+                </option>
+
+                <option>
+                  Zynggi Packaging
+                </option>
+
+                <option>
+                  Not Sure
+                </option>
+              </select>
+            </div>
+
+            <div class="zynggi-bulk-field">
+              <label>
+                Preferred Pack Size
+              </label>
+
+              <input
+                type="text"
+                name="contact[pack_size]"
+                placeholder="Example: 1 kg / 5 kg / 25 kg"
+              >
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- STEP 05 -->
+
+        <div class="zynggi-bulk-step">
+
+          <div class="zynggi-bulk-step-title">
+            <div class="zynggi-bulk-number">
+              05
+            </div>
+
+            <h3>
+              Additional Requirements
+            </h3>
+          </div>
+
+          <div class="zynggi-bulk-grid">
+
+            <div class="zynggi-bulk-field full">
+
+              <label>
+                Tell Us About Your Requirement
+              </label>
+
+              <textarea
+                name="contact[bulk_requirement]"
+                placeholder="Tell us about your required quantity, spice quality, grind size, blend requirements, packaging, delivery requirements or anything else..."
+              ></textarea>
+
+            </div>
+
+            <div class="zynggi-bulk-field full">
+
+              <label>
+                Delivery Address / Location
+              </label>
+
+              <textarea
+                name="contact[delivery_location]"
+                placeholder="Where do you need the material delivered?"
+              ></textarea>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <div class="zynggi-bulk-submit">
+
+          <button type="submit">
+            Send Bulk Order Enquiry
+          </button>
+
+        </div>
+
+      </div>
+
+    {% endform %}
+
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Zynggi Bulk Order",
+  "settings": []
+}
+{% endschema %}

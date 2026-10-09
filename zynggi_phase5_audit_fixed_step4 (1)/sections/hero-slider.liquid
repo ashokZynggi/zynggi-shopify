@@ -1,0 +1,2036 @@
+<section
+  class="zynggi-hero zynggi-hero--{{ section.settings.mobile_height | default: 'fit' }}"
+  data-hero-slider
+  data-autoplay="{{ section.settings.autoplay }}"
+  aria-roledescription="carousel"
+  aria-label="Featured products"
+>
+  <div class="zynggi-hero__viewport">
+
+    <div class="zynggi-hero__track">
+
+      {%- for block in section.blocks -%}
+
+        {%- assign s = block.settings -%}
+
+        <article
+          class="zynggi-hero__slide{% if s.slide_link != blank %} zynggi-hero__slide--linked{% endif %}"
+          {{ block.shopify_attributes }}
+          data-slide-link="{{ s.slide_link }}"
+          role="group"
+          aria-roledescription="slide"
+          aria-label="Slide {{ forloop.index }} of {{ section.blocks.size }}"
+          {% if s.slide_link != blank %}tabindex="0"{% endif %}
+          aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
+        >
+
+          <!-- =====================================================
+               MEDIA
+               ===================================================== -->
+
+          <div class="zynggi-hero__media">
+
+            {%- if s.video != blank -%}
+
+              <video
+                class="zynggi-hero__video"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                {% if s.image != blank %}
+                  poster="{{ s.image | image_url: width: 2000 }}"
+                {% endif %}
+              >
+                <source
+                  src="{{ s.video }}"
+                  type="video/mp4"
+                >
+              </video>
+
+            {%- elsif s.image != blank -%}
+
+              {%- assign lazy_loading = 'lazy' -%}
+              {%- assign fetch_priority = 'auto' -%}
+
+              {%- if forloop.first -%}
+                {%- assign lazy_loading = 'eager' -%}
+                {%- assign fetch_priority = 'high' -%}
+              {%- endif -%}
+
+
+              <!-- =================================================
+                   DESKTOP IMAGE
+                   ================================================= -->
+
+              {{
+                s.image
+                | image_url: width: 2200
+                | image_tag:
+                  loading: lazy_loading,
+                  fetchpriority: fetch_priority,
+                  widths: '1000, 1400, 1800, 2000, 2200',
+                  sizes: '100vw',
+                  class: 'zynggi-hero__image zynggi-hero__image--desktop',
+                  alt: s.heading | default: 'Zynggi Indian spices'
+              }}
+
+
+              <!-- =================================================
+                   MOBILE IMAGE
+                   ================================================= -->
+
+              {%- if s.mobile_image != blank -%}
+
+                {{
+                  s.mobile_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: lazy_loading,
+                    fetchpriority: fetch_priority,
+                    widths: '500, 750, 900, 1200',
+                    sizes: '100vw',
+                    class: 'zynggi-hero__image zynggi-hero__image--mobile',
+                    alt: s.heading | default: 'Zynggi Indian spices'
+                }}
+
+              {%- else -%}
+
+                {{
+                  s.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: lazy_loading,
+                    fetchpriority: fetch_priority,
+                    widths: '500, 750, 900, 1200',
+                    sizes: '100vw',
+                    class: 'zynggi-hero__image zynggi-hero__image--mobile',
+                    alt: s.heading | default: 'Zynggi Indian spices'
+                }}
+
+              {%- endif -%}
+
+            {%- endif -%}
+
+          </div>
+
+
+          <!-- =====================================================
+               OVERLAY
+               ===================================================== -->
+
+          <div
+            class="zynggi-hero__overlay"
+            style="
+              background-color: {{ s.overlay_color }};
+              opacity: {{ s.overlay_opacity | divided_by: 100.0 }};
+            "
+            aria-hidden="true"
+          ></div>
+
+
+          <!-- =====================================================
+               CONTENT
+               ===================================================== -->
+
+          <div
+            class="zynggi-hero__content"
+            style="--hero-text-color: {{ s.text_color }};"
+          >
+
+            <div class="zynggi-hero__text">
+
+              {% if forloop.first %}
+
+                <h1 class="{% if s.heading == blank %}visually-hidden{% endif %}">
+                  {{ s.heading | default: 'Pure Indian Spices, Ground Fresh' }}
+                </h1>
+
+              {% else %}
+
+                <h2>
+                  {{ s.heading }}
+                </h2>
+
+              {% endif %}
+
+
+              {% if s.subheading != blank %}
+
+                <div class="zynggi-hero__subheading">
+                  {{ s.subheading }}
+                </div>
+
+              {% endif %}
+
+            </div>
+
+
+            <!-- ===================================================
+                 BUTTONS
+                 =================================================== -->
+
+            {% if s.cta_text != blank or s.cta2_text != blank %}
+
+              <div class="zynggi-hero__buttons">
+
+                {% if s.cta_text != blank %}
+
+                  <a
+                    class="zynggi-hero__button zynggi-hero__button--primary"
+                    href="{{ s.cta_link | default: routes.all_products_collection_url }}"
+                  >
+                    {{ s.cta_text }}
+                  </a>
+
+                {% endif %}
+
+
+                {% if s.cta2_text != blank %}
+
+                  <a
+                    class="zynggi-hero__button zynggi-hero__button--secondary"
+                    href="{{ s.cta2_link | default: routes.all_products_collection_url }}"
+                  >
+                    {{ s.cta2_text }}
+                  </a>
+
+                {% endif %}
+
+              </div>
+
+            {% endif %}
+
+          </div>
+
+        </article>
+
+      {%- endfor -%}
+
+    </div>
+
+  </div>
+
+
+  <!-- ===========================================================
+       PREVIOUS / NEXT ARROWS
+       =========================================================== -->
+
+  {% if section.blocks.size > 1 %}
+
+    <button
+      type="button"
+      class="zynggi-hero__arrow zynggi-hero__arrow--prev"
+      data-hero-prev
+      aria-label="Previous slide"
+    >
+      <span aria-hidden="true">‹</span>
+    </button>
+
+
+    <button
+      type="button"
+      class="zynggi-hero__arrow zynggi-hero__arrow--next"
+      data-hero-next
+      aria-label="Next slide"
+    >
+      <span aria-hidden="true">›</span>
+    </button>
+
+
+    <!-- =========================================================
+         DOTS
+         ========================================================= -->
+
+    <button
+      type="button"
+      class="zynggi-hero__pause"
+      data-hero-pause
+      aria-pressed="false"
+      aria-label="Pause slideshow"
+    >Pause</button>
+
+    <div
+      class="zynggi-hero__dots"
+      role="tablist"
+      aria-label="Hero slides"
+    >
+
+      {% for block in section.blocks %}
+
+        <button
+          type="button"
+          class="zynggi-hero__dot"
+          data-hero-dot="{{ forloop.index0 }}"
+          role="tab"
+          aria-label="Go to slide {{ forloop.index }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+        ></button>
+
+      {% endfor %}
+
+    </div>
+
+  {% endif %}
+
+</section>
+
+
+<style>
+
+/* ============================================================
+   ZYNGGI HERO SLIDER
+   ============================================================ */
+
+
+/* ============================================================
+   MAIN HERO
+   ============================================================ */
+
+[data-hero-slider] {
+  position: relative !important;
+
+  display: block !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+
+  isolation: isolate !important;
+}
+
+
+/* ============================================================
+   HERO VIEWPORT
+
+   DESKTOP:
+   440px fixed height.
+
+   This is intentional.
+   It prevents the hero from changing height based on
+   different laptop widths.
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__viewport {
+  position: relative !important;
+
+  display: block !important;
+
+  width: 100% !important;
+
+  height: 480px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   TRACK
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__track {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  flex-wrap: nowrap !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  transform: translate3d(0, 0, 0);
+
+  transition: transform 0.65s ease-in-out;
+
+  will-change: transform;
+}
+
+
+/* ============================================================
+   EACH SLIDE
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__slide {
+  position: relative !important;
+
+  flex: 0 0 100% !important;
+
+  width: 100% !important;
+
+  min-width: 100% !important;
+  max-width: 100% !important;
+
+  height: 480px !important;
+
+  min-height: 480px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+
+  overflow: hidden !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__slide--linked {
+  cursor: pointer;
+}
+
+[data-hero-slider] .zynggi-hero__slide--linked .zynggi-hero__button,
+[data-hero-slider] .zynggi-hero__slide--linked .zynggi-hero__arrow,
+[data-hero-slider] .zynggi-hero__slide--linked .zynggi-hero__pause {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 5;
+  border: 1px solid rgba(255,255,255,.7);
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  border-radius: 999px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.zynggi-hero__dots {
+  cursor: pointer;
+}
+
+/* ============================================================
+   MEDIA CONTAINER
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__media {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+
+  line-height: 0 !important;
+
+  z-index: 1 !important;
+}
+
+
+/* ============================================================
+   ALL HERO IMAGES
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__image {
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 0 !important;
+
+  object-fit: cover !important;
+
+  object-position: center center !important;
+}
+
+
+/* ============================================================
+   DESKTOP IMAGE
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__image--desktop {
+  display: block !important;
+}
+
+
+/* ============================================================
+   MOBILE IMAGE
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__image--mobile {
+  display: none !important;
+}
+
+
+/* ============================================================
+   VIDEO
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__video {
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  object-fit: cover !important;
+
+  object-position: center center !important;
+}
+
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__overlay {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  z-index: 2 !important;
+
+  pointer-events: none !important;
+}
+
+
+/* ============================================================
+   CONTENT LAYER
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__content {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  z-index: 10 !important;
+
+  box-sizing: border-box !important;
+
+  padding: 45px 5% 75px !important;
+
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  align-items: flex-start !important;
+
+  justify-content: flex-start !important;
+
+  color: var(--hero-text-color, #ffffff) !important;
+
+  pointer-events: none !important;
+}
+
+
+/* ============================================================
+   TEXT
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__text {
+  position: relative !important;
+
+  max-width: 620px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  pointer-events: none !important;
+}
+
+
+/* ============================================================
+   HEADING
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__text h1,
+[data-hero-slider] .zynggi-hero__text h2 {
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  color: inherit !important;
+
+  line-height: 1.05 !important;
+}
+
+
+/* ============================================================
+   SUBHEADING
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__subheading {
+  margin-top: 16px !important;
+
+  color: inherit !important;
+
+  line-height: 1.5 !important;
+}
+
+
+/* ============================================================
+   BUTTON CONTAINER
+
+   IMPORTANT:
+   This is positioned relative to the hero itself,
+   NOT relative to the text.
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__buttons {
+  position: absolute !important;
+
+  left: 5% !important;
+
+  bottom: 42px !important;
+
+  z-index: 30 !important;
+
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  gap: 14px !important;
+
+  width: auto !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  pointer-events: auto !important;
+
+  visibility: visible !important;
+
+  opacity: 1 !important;
+}
+
+
+/* ============================================================
+   BUTTON BASE
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__button {
+  position: relative !important;
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  width: auto !important;
+
+  min-width: 150px !important;
+
+  min-height: 48px !important;
+
+  padding: 12px 26px !important;
+
+  margin: 0 !important;
+
+  border-radius: 999px !important;
+
+  font-size: 16px !important;
+
+  font-weight: 600 !important;
+
+  line-height: 1.2 !important;
+
+  text-decoration: none !important;
+
+  white-space: nowrap !important;
+
+  box-sizing: border-box !important;
+
+  cursor: pointer !important;
+
+  pointer-events: auto !important;
+
+  visibility: visible !important;
+
+  opacity: 1 !important;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease !important;
+}
+
+
+/* ============================================================
+   PRIMARY BUTTON — PREMIUM 3D FLOATING CTA
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__button--primary {
+
+  /* Main button */
+  background: #e9a515 !important;
+  color: #17110b !important;
+
+  /* Remove normal flat border */
+  border: 2px solid #e9a515 !important;
+
+  /* Make it feel like a floating pill */
+  border-radius: 999px !important;
+
+  /* 3D depth + soft shadow */
+  box-shadow:
+    0 4px 0 #b87500,
+    0 8px 18px rgba(0, 0, 0, 0.22) !important;
+
+  /* Important for the 3D movement */
+  position: relative !important;
+
+  transform: translateY(0);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease !important;
+
+  /* Make sure it stays above the banner */
+  z-index: 50 !important;
+}
+
+
+/* ============================================================
+   HOVER — BUTTON FLOATS UP
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__button--primary:hover {
+
+  background: #f2b52d !important;
+  color: #17110b !important;
+
+  /* Lift the button */
+  transform: translateY(-3px) !important;
+
+  /* Stronger floating shadow */
+  box-shadow:
+    0 7px 0 #b87500,
+    0 13px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+
+/* ============================================================
+   CLICK — BUTTON PRESSES DOWN
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__button--primary:active {
+
+  background: #e9a515 !important;
+
+  /* Press into the banner */
+  transform: translateY(3px) !important;
+
+  /* Reduce depth while pressing */
+  box-shadow:
+    0 1px 0 #b87500,
+    0 4px 10px rgba(0, 0, 0, 0.18) !important;
+
+}
+
+
+/* ============================================================
+   KEYBOARD ACCESSIBILITY
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__button--primary:focus-visible {
+
+  outline: 3px solid rgba(255, 255, 255, 0.9) !important;
+
+  outline-offset: 4px !important;
+}
+
+
+/* ============================================================
+   SECONDARY BUTTON
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__button--secondary {
+  background: transparent !important;
+
+  color: #ffffff !important;
+
+  border: 2px solid #ffffff !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__button--secondary:hover {
+  transform: translateY(-2px) !important;
+
+  background: #ffffff !important;
+
+  color: #17110b !important;
+}
+
+
+/* ============================================================
+   ARROWS
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__arrow {
+  position: absolute !important;
+
+  top: 50% !important;
+
+  z-index: 40 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  width: 44px !important;
+  height: 44px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+
+  border-radius: 50% !important;
+
+  background: rgba(0, 0, 0, 0.30) !important;
+
+  color: #ffffff !important;
+
+  font-size: 32px !important;
+
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+
+  transform: translateY(-50%) !important;
+
+  backdrop-filter: blur(4px);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__arrow:hover {
+  background: rgba(0, 0, 0, 0.55) !important;
+
+  transform: translateY(-50%) scale(1.05) !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__arrow--prev {
+  left: 18px !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__arrow--next {
+  right: 18px !important;
+}
+
+
+/* ============================================================
+   DOTS
+   ============================================================ */
+
+[data-hero-slider] .zynggi-hero__dots {
+  position: absolute !important;
+
+  left: 50% !important;
+
+  bottom: 14px !important;
+
+  z-index: 40 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 8px !important;
+
+  transform: translateX(-50%) !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__dot {
+  width: 9px !important;
+  height: 9px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  border: 0 !important;
+
+  border-radius: 50% !important;
+
+  background: rgba(255, 255, 255, 0.55) !important;
+
+  cursor: pointer !important;
+
+  transition:
+    width 0.2s ease,
+    background 0.2s ease !important;
+}
+
+
+[data-hero-slider] .zynggi-hero__dot[aria-selected="true"] {
+  width: 28px !important;
+
+  border-radius: 20px !important;
+
+  background: #ffffff !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media screen and (max-width: 749px) {
+
+  [data-hero-slider] .zynggi-hero__viewport {
+    height: 520px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__slide {
+    height: 520px !important;
+
+    min-height: 520px !important;
+  }
+
+
+  /* Hide desktop image */
+
+  [data-hero-slider] .zynggi-hero__image--desktop {
+    display: none !important;
+  }
+
+
+  /* Show mobile image */
+
+  [data-hero-slider] .zynggi-hero__image--mobile {
+    display: block !important;
+  }
+
+
+  /* Mobile content */
+
+  [data-hero-slider] .zynggi-hero__content {
+    padding: 35px 5% 80px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__text {
+    max-width: 90% !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__text h1,
+  [data-hero-slider] .zynggi-hero__text h2 {
+    font-size: clamp(2rem, 9vw, 3rem) !important;
+
+    line-height: 1.05 !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__subheading {
+    margin-top: 10px !important;
+
+    font-size: 14px !important;
+  }
+
+
+  /* Mobile buttons */
+
+  [data-hero-slider] .zynggi-hero__buttons {
+    left: 5% !important;
+
+    bottom: 38px !important;
+
+    gap: 9px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__button {
+    min-width: 120px !important;
+
+    min-height: 44px !important;
+
+    padding: 11px 17px !important;
+
+    font-size: 13px !important;
+  }
+
+
+  /* Mobile arrows */
+
+  [data-hero-slider] .zynggi-hero__arrow {
+    width: 36px !important;
+
+    height: 36px !important;
+
+    font-size: 27px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__arrow--prev {
+    left: 10px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__arrow--next {
+    right: 10px !important;
+  }
+
+
+  /* Mobile dots */
+
+  [data-hero-slider] .zynggi-hero__dots {
+    bottom: 12px !important;
+
+    gap: 6px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__dot {
+    width: 7px !important;
+
+    height: 7px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__dot[aria-selected="true"] {
+    width: 22px !important;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL PHONES
+   ============================================================ */
+
+@media screen and (max-width: 420px) {
+
+  [data-hero-slider] .zynggi-hero__viewport {
+    height: 500px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__slide {
+    height: 500px !important;
+
+    min-height: 500px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__buttons {
+    bottom: 34px !important;
+
+    gap: 6px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__button {
+    min-width: 108px !important;
+
+    padding: 10px 14px !important;
+
+    font-size: 12px !important;
+  }
+
+
+  [data-hero-slider] .zynggi-hero__arrow {
+    display: none !important;
+  }
+
+}
+
+
+/* ============================================================
+   v2 RESPONSIVE HEIGHT (overrides the fixed heights above)
+   Desktop/tablet: follows screen height, never taller than 480px
+   Phone: "fit" mode keeps banner + category rail in one screen
+   ============================================================ */
+@media screen and (min-width: 750px) {
+  [data-hero-slider].zynggi-hero .zynggi-hero__viewport,
+  [data-hero-slider].zynggi-hero .zynggi-hero__slide {
+    height: clamp(360px, calc(100vh - 330px), 480px) !important;
+    min-height: 0 !important;
+  }
+}
+@supports (height: 100svh) {
+  @media screen and (min-width: 750px) {
+    [data-hero-slider].zynggi-hero .zynggi-hero__viewport,
+    [data-hero-slider].zynggi-hero .zynggi-hero__slide {
+      height: clamp(360px, calc(100svh - 330px), 480px) !important;
+    }
+  }
+}
+@media screen and (max-width: 749px) {
+  /*
+     MOBILE IMAGE STANDARD
+     ----------------------
+     The mobile artwork is designed at 1080 x 1350 (4:5).
+     Keep the hero container at the same 4:5 ratio so the artwork
+     is not cropped by a viewport-dependent height.
+  */
+  [data-hero-slider].zynggi-hero .zynggi-hero__viewport,
+  [data-hero-slider].zynggi-hero .zynggi-hero__slide {
+    height: auto !important;
+    aspect-ratio: 4 / 5 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  /* Use the supplied mobile artwork whenever it exists. */
+  [data-hero-slider] .zynggi-hero__image--mobile {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
+  /* Keep the content usable over the taller 4:5 mobile banner. */
+  [data-hero-slider].zynggi-hero .zynggi-hero__content { padding: 20px 5% 64px !important; }
+  [data-hero-slider].zynggi-hero .zynggi-hero__text { max-width: 94% !important; }
+  [data-hero-slider].zynggi-hero .zynggi-hero__text h1,
+  [data-hero-slider].zynggi-hero .zynggi-hero__text h2 { font-size: clamp(1.6rem, 7.4vw, 2.4rem) !important; }
+  [data-hero-slider].zynggi-hero .zynggi-hero__subheading {
+    margin-top: 6px !important; font-size: 13px !important;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  [data-hero-slider].zynggi-hero .zynggi-hero__buttons { bottom: 26px !important; }
+  [data-hero-slider].zynggi-hero .zynggi-hero__button { min-height: 42px !important; padding: 9px 16px !important; font-size: 13px !important; min-width: 0 !important; }
+  [data-hero-slider].zynggi-hero .zynggi-hero__arrow { display: none !important; }
+  [data-hero-slider].zynggi-hero .zynggi-hero__dots { bottom: 8px !important; }
+}
+@supports (height: 100svh) {
+  /* No viewport-height override on phones: the mobile artwork remains 4:5. */
+  @media screen and (max-width: 749px) {
+    [data-hero-slider].zynggi-hero .zynggi-hero__viewport,
+    [data-hero-slider].zynggi-hero .zynggi-hero__slide {
+      height: auto !important;
+      aspect-ratio: 4 / 5 !important;
+    }
+  }
+}
+</style>
+
+
+<script>
+(function () {
+
+  'use strict';
+
+
+  /* ==========================================================
+     INITIALIZE HERO SLIDER
+     ========================================================== */
+
+  function initHeroSlider(section) {
+
+    if (!section) {
+      return;
+    }
+
+
+    /*
+     * Prevent duplicate initialization.
+     */
+
+    if (section.dataset.heroInitialized === 'true') {
+      return;
+    }
+
+    section.dataset.heroInitialized = 'true';
+
+
+    /* ========================================================
+       ELEMENTS
+       ======================================================== */
+
+    const track = section.querySelector(
+      '.zynggi-hero__track'
+    );
+
+
+    const slides = Array.from(
+      section.querySelectorAll(
+        '.zynggi-hero__slide'
+      )
+    );
+
+
+    const nextButton = section.querySelector(
+      '[data-hero-next]'
+    );
+
+
+    const prevButton = section.querySelector(
+      '[data-hero-prev]'
+    );
+
+
+    const dots = Array.from(
+      section.querySelectorAll(
+        '[data-hero-dot]'
+      )
+    );
+
+
+    /* ========================================================
+       WHOLE-SLIDE LINKS
+       ======================================================== */
+
+    slides.forEach(function (slide) {
+
+      const slideLink = (slide.dataset.slideLink || '').trim();
+      if (!slideLink) return;
+
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+      let pointerMoved = false;
+
+      slide.addEventListener('pointerdown', function (event) {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+        pointerMoved = false;
+      }, { passive: true });
+
+      slide.addEventListener('pointermove', function (event) {
+        if (Math.abs(event.clientX - pointerStartX) > 10 || Math.abs(event.clientY - pointerStartY) > 10) {
+          pointerMoved = true;
+        }
+      }, { passive: true });
+
+      slide.addEventListener('pointerup', function (event) {
+        if (pointerMoved) return;
+
+        const interactive = event.target.closest('a, button, input, select, textarea, summary');
+        if (interactive) return;
+
+        window.location.href = slideLink;
+      });
+
+      slide.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (event.target.closest('a, button, input, select, textarea, summary')) return;
+        event.preventDefault();
+        window.location.href = slideLink;
+      });
+
+    });
+
+
+    /* ========================================================
+       VALIDATION
+       ======================================================== */
+
+    if (!track || slides.length === 0) {
+      return;
+    }
+
+
+    /* ========================================================
+       SETTINGS
+       ======================================================== */
+
+    let currentIndex = 0;
+
+
+    const autoplaySeconds =
+      parseInt(
+        section.dataset.autoplay,
+        10
+      ) || 0;
+
+
+    const autoplayDelay =
+      autoplaySeconds * 1000;
+
+
+    let autoplayTimer = null;
+    let manuallyPaused = false;
+
+
+    /* ========================================================
+       GO TO SLIDE
+       ======================================================== */
+
+    function goToSlide(
+      index,
+      animate = true
+    ) {
+
+      if (slides.length === 0) {
+        return;
+      }
+
+
+      /*
+       * Keep index inside valid range.
+       */
+
+      currentIndex =
+        (index + slides.length) %
+        slides.length;
+
+
+      /*
+       * Set transition.
+       */
+
+      track.style.transition =
+        animate
+          ? 'transform 0.65s ease-in-out'
+          : 'none';
+
+
+      /*
+       * Move slider.
+       */
+
+      track.style.transform =
+        'translate3d(-' +
+        (currentIndex * 100) +
+        '%, 0, 0)';
+
+
+      /*
+       * Accessibility.
+       */
+
+      slides.forEach(
+        function (slide, slideIndex) {
+
+          slide.setAttribute(
+            'aria-hidden',
+            slideIndex === currentIndex
+              ? 'false'
+              : 'true'
+          );
+
+        }
+      );
+
+
+      /*
+       * Update dots.
+       */
+
+      dots.forEach(
+        function (dot, dotIndex) {
+
+          dot.setAttribute(
+            'aria-selected',
+            dotIndex === currentIndex
+              ? 'true'
+              : 'false'
+          );
+
+        }
+      );
+
+    }
+
+
+    /* ========================================================
+       NEXT
+       ======================================================== */
+
+    function nextSlide() {
+
+      goToSlide(
+        currentIndex + 1,
+        true
+      );
+
+    }
+
+
+    /* ========================================================
+       PREVIOUS
+       ======================================================== */
+
+    function previousSlide() {
+
+      goToSlide(
+        currentIndex - 1,
+        true
+      );
+
+    }
+
+
+    /* ========================================================
+       AUTOPLAY
+       ======================================================== */
+
+    function stopAutoplay() {
+
+      if (autoplayTimer !== null) {
+
+        clearInterval(
+          autoplayTimer
+        );
+
+        autoplayTimer = null;
+
+      }
+
+    }
+
+
+    function startAutoplay() {
+
+      stopAutoplay();
+
+
+      /*
+       * 0 = autoplay disabled.
+       */
+
+      if (
+        manuallyPaused ||
+        autoplaySeconds <= 0 ||
+        slides.length <= 1
+      ) {
+        return;
+      }
+
+
+      autoplayTimer =
+        setInterval(
+          function () {
+
+            nextSlide();
+
+          },
+          autoplayDelay
+        );
+
+    }
+
+
+    if (pauseButton) {
+      pauseButton.addEventListener('click', () => {
+        manuallyPaused = !manuallyPaused;
+
+        if (manuallyPaused) {
+          stopAutoplay();
+        } else {
+          startAutoplay();
+        }
+
+        pauseButton.setAttribute('aria-pressed', manuallyPaused ? 'true' : 'false');
+        pauseButton.textContent = manuallyPaused ? 'Play' : 'Pause';
+        pauseButton.setAttribute('aria-label', manuallyPaused ? 'Play slideshow' : 'Pause slideshow');
+      });
+    }
+
+    section.addEventListener('mouseenter', stopAutoplay);
+    section.addEventListener('mouseleave', () => {
+      if (!manuallyPaused) startAutoplay();
+    });
+    section.addEventListener('focusin', stopAutoplay);
+    section.addEventListener('focusout', event => {
+      if (!section.contains(event.relatedTarget) && !manuallyPaused) {
+        startAutoplay();
+      }
+    });
+
+
+    /* ========================================================
+       NEXT ARROW
+       ======================================================== */
+
+    if (nextButton) {
+
+      nextButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          nextSlide();
+
+          startAutoplay();
+
+        }
+      );
+
+    }
+
+
+    /* ========================================================
+       PREVIOUS ARROW
+       ======================================================== */
+
+    if (prevButton) {
+
+      prevButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          previousSlide();
+
+          startAutoplay();
+
+        }
+      );
+
+    }
+
+
+    /* ========================================================
+       DOTS
+       ======================================================== */
+
+    dots.forEach(
+      function (dot) {
+
+        dot.addEventListener(
+          'click',
+          function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            const index =
+              parseInt(
+                dot.dataset.heroDot,
+                10
+              );
+
+
+            if (Number.isNaN(index)) {
+              return;
+            }
+
+
+            goToSlide(
+              index,
+              true
+            );
+
+
+            startAutoplay();
+
+          }
+        );
+
+      }
+    );
+
+
+    /* ========================================================
+       TOUCH SWIPE
+       ======================================================== */
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+
+    section.addEventListener(
+      'touchstart',
+      function (event) {
+
+        if (
+          !event.touches ||
+          !event.touches.length
+        ) {
+          return;
+        }
+
+
+        touchStartX =
+          event.touches[0].clientX;
+
+
+        touchStartY =
+          event.touches[0].clientY;
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    section.addEventListener(
+      'touchend',
+      function (event) {
+
+        if (
+          !event.changedTouches ||
+          !event.changedTouches.length
+        ) {
+          return;
+        }
+
+
+        const touchEndX =
+          event.changedTouches[0].clientX;
+
+
+        const touchEndY =
+          event.changedTouches[0].clientY;
+
+
+        const deltaX =
+          touchStartX - touchEndX;
+
+
+        const deltaY =
+          touchStartY - touchEndY;
+
+
+        /*
+         * Ignore vertical swipes.
+         */
+
+        if (
+          Math.abs(deltaX) <=
+          Math.abs(deltaY)
+        ) {
+          return;
+        }
+
+
+        /*
+         * Ignore tiny movements.
+         */
+
+        if (
+          Math.abs(deltaX) < 50
+        ) {
+          return;
+        }
+
+
+        if (deltaX > 0) {
+
+          nextSlide();
+
+        } else {
+
+          previousSlide();
+
+        }
+
+
+        startAutoplay();
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    /* ========================================================
+       PAUSE WHILE HOVERING DESKTOP
+       ======================================================== */
+
+    section.addEventListener(
+      'mouseenter',
+      function () {
+
+        if (
+          window.matchMedia(
+            '(hover: hover)'
+          ).matches
+        ) {
+
+          stopAutoplay();
+
+        }
+
+      }
+    );
+
+
+    section.addEventListener(
+      'mouseleave',
+      function () {
+
+        if (
+          window.matchMedia(
+            '(hover: hover)'
+          ).matches
+        ) {
+
+          startAutoplay();
+
+        }
+
+      }
+    );
+
+
+    /* ========================================================
+       INITIAL STATE
+       ======================================================== */
+
+    goToSlide(
+      0,
+      false
+    );
+
+
+    /* ========================================================
+       START AUTOPLAY
+       ======================================================== */
+
+    startAutoplay();
+
+  }
+
+
+  /* ==========================================================
+     INITIALIZE ALL HERO SLIDERS
+     ========================================================== */
+
+  function initAllHeroSliders() {
+
+    document
+      .querySelectorAll(
+        '[data-hero-slider]'
+      )
+      .forEach(
+        function (section) {
+
+          initHeroSlider(section);
+
+        }
+      );
+
+  }
+
+
+  /* ==========================================================
+     PAGE LOAD
+     ========================================================== */
+
+  if (
+    document.readyState === 'loading'
+  ) {
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      initAllHeroSliders
+    );
+
+  } else {
+
+    initAllHeroSliders();
+
+  }
+
+
+  /* ==========================================================
+     SHOPIFY THEME EDITOR — SECTION LOAD
+     ========================================================== */
+
+  document.addEventListener(
+    'shopify:section:load',
+    function (event) {
+
+      let section = null;
+
+
+      /*
+       * Event target itself.
+       */
+
+      if (
+        event.target.matches &&
+        event.target.matches(
+          '[data-hero-slider]'
+        )
+      ) {
+
+        section = event.target;
+
+      }
+
+
+      /*
+       * Or hero exists inside event target.
+       */
+
+      else if (
+        event.target.querySelector
+      ) {
+
+        section =
+          event.target.querySelector(
+            '[data-hero-slider]'
+          );
+
+      }
+
+
+      if (section) {
+
+        section.dataset.heroInitialized =
+          'false';
+
+
+        initHeroSlider(section);
+
+      }
+
+    }
+  );
+
+
+  /* ==========================================================
+     SHOPIFY THEME EDITOR — SECTION SELECT
+     ========================================================== */
+
+  document.addEventListener(
+    'shopify:section:select',
+    function (event) {
+
+      const section =
+        event.target.querySelector
+          ? event.target.querySelector(
+              '[data-hero-slider]'
+            )
+          : null;
+
+
+      if (!section) {
+        return;
+      }
+
+
+      /*
+       * Restart autoplay when the
+       * section is selected.
+       */
+
+      section.dispatchEvent(
+        new CustomEvent(
+          'zynggi:hero-restart'
+        )
+      );
+
+    }
+  );
+
+
+  /* ==========================================================
+     CUSTOM RESTART EVENT
+     ========================================================== */
+
+  document.addEventListener(
+    'zynggi:hero-restart',
+    function (event) {
+
+      const section =
+        event.target;
+
+
+      if (
+        section &&
+        section.matches &&
+        section.matches(
+          '[data-hero-slider]'
+        )
+      ) {
+
+        /*
+         * Re-initialization is intentionally
+         * handled by Shopify's section events.
+         */
+
+      }
+
+    }
+  );
+
+})();
+</script>
+
+
+{% schema %}
+
+{
+  "name": "Hero slider",
+
+  "settings": [
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Banner height on phones",
+      "options": [
+        { "value": "fit", "label": "Fit screen (banner + categories in one view)" },
+        { "value": "compact", "label": "Compact (320px)" },
+        { "value": "medium", "label": "Medium (420px)" },
+        { "value": "tall", "label": "Tall (520px)" }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "range",
+      "id": "autoplay",
+      "label": "Autoplay seconds (0 = off)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    }
+  ],
+
+  "max_blocks": 4,
+
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+
+      "settings": [
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+
+        {
+          "type": "text",
+          "id": "video",
+          "label": "Background video file URL (mp4)",
+          "info": "Upload in Settings > Files and paste the link"
+        },
+
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Bring authentic Indian flavour home"
+        },
+
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "[BRAND TAGLINE]"
+        },
+
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Button text",
+          "default": "Shop now"
+        },
+
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Shop now button link"
+        },
+
+        {
+          "type": "url",
+          "id": "slide_link",
+          "label": "Whole slide link",
+          "info": "Optional. Clicking/tapping the hero image opens this link. Swiping still changes slides."
+        },
+
+        {
+          "type": "text",
+          "id": "cta2_text",
+          "label": "Second button text",
+          "default": "Explore spices"
+        },
+
+        {
+          "type": "url",
+          "id": "cta2_link",
+          "label": "Second button link"
+        },
+
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        },
+
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay color",
+          "default": "#1e0f08"
+        },
+
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 0,
+          "max": 90,
+          "step": 5,
+          "unit": "%",
+          "default": 10
+        }
+
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Hero slider",
+
+      "blocks": [
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+
+{% endschema %}

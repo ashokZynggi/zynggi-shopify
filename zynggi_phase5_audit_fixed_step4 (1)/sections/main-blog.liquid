@@ -1,0 +1,22 @@
+{%- paginate blog.articles by 12 -%}
+<div class="page-hero"><div class="container"><h1>{{ blog.title }}</h1>{%- if blog.tags.size > 0 -%}<div class="chips" style="justify-content:center"><a class="chip" href="{{ blog.url }}">All</a>{%- for t in blog.all_tags -%}<a class="chip" href="{{ blog.url }}/tagged/{{ t | handle }}">{{ t }}</a>{%- endfor -%}</div>{%- endif -%}</div></div>
+<div class="container section">
+  {%- assign first = blog.articles.first -%}
+  {%- if section.settings.show_featured and first and paginate.current_page == 1 -%}
+    <a class="split" href="{{ first.url }}" style="text-decoration:none;margin-bottom:48px">
+      <div class="split__media">{%- if first.image -%}{{ first.image | image_url: width: 900 | image_tag: loading: 'eager', alt: first.title }}{%- endif -%}</div>
+      <div><span class="badge badge--gold">Featured</span><h2 style="margin-top:12px">{{ first.title }}</h2><p>{{ first.excerpt_or_content | strip_html | truncate: 180 }}</p><span class="link">Read more</span></div>
+    </a>
+  {%- endif -%}
+  <div class="grid grid--3">
+    {%- for a in blog.articles -%}
+      <a class="rcard" href="{{ a.url }}">{%- if a.image -%}{{ a.image | image_url: width: 640 | image_tag: loading: 'lazy', widths: '320, 480, 640', sizes: '(min-width: 990px) 30vw, 90vw', alt: a.title }}{%- endif -%}
+        <div class="rcard__body"><h3>{{ a.title }}</h3><p style="font-size:.95rem">{{ a.excerpt_or_content | strip_html | truncate: 110 }}</p><span class="muted" style="font-size:.85rem">{{ a.published_at | date: '%d %b %Y' }}</span></div></a>
+    {%- endfor -%}
+  </div>
+  {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="Pagination">{%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}{%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}</nav>{%- endif -%}
+</div>
+{%- endpaginate -%}
+{% schema %}
+{"name":"Blog listing","settings":[{"type":"checkbox","id":"show_featured","label":"Show first article as featured","default":true}]}
+{% endschema %}

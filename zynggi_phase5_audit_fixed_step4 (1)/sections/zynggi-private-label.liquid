@@ -1,0 +1,1485 @@
+{% comment %}
+  Zynggi Private Label (UX/CRO redesign)
+  File name: sections/zynggi-private-label.liquid
+
+  Strategy:
+  - Short primary enquiry (essentials only) → submit in <30s
+  - "Add technical details" toggle reveals the full specification form
+  - WhatsApp as a low-friction alternative path
+  - All original contact[...] field names preserved
+  - Scoped CSS — homepage untouched
+{% endcomment %}
+
+<section
+  id="ZynggiPrivateLabel-{{ section.id }}"
+  class="zynggi-private-label"
+>
+  <style>
+    #ZynggiPrivateLabel-{{ section.id }} {
+      --zpl-brown: #2a1a12;
+      --zpl-brown-light: #4a3022;
+      --zpl-cream: #f7f2e7;
+      --zpl-gold: #b58a45;
+      --zpl-gold-light: #d7b36d;
+      --zpl-text: #2b211b;
+      --zpl-muted: #75685e;
+      --zpl-border: rgba(42, 26, 18, 0.12);
+      color: var(--zpl-text);
+      background: var(--zpl-cream);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} *,
+    #ZynggiPrivateLabel-{{ section.id }} *::before,
+    #ZynggiPrivateLabel-{{ section.id }} *::after {
+      box-sizing: border-box;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} [hidden] { display: none !important; }
+
+    #ZynggiPrivateLabel-{{ section.id }} a { text-decoration: none; }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-container {
+      width: min(1200px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-eyebrow {
+      margin: 0 0 12px;
+      color: var(--zpl-gold);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-heading {
+      margin: 0;
+      color: inherit;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-body {
+      margin: 18px 0 0;
+      color: var(--zpl-muted);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 14px 26px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--zpl-gold);
+      color: #fff;
+      text-decoration: none;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-button:hover {
+      transform: translateY(-2px);
+      opacity: 0.94;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-button--ghost {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.45);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-button--ghost:hover {
+      background: rgba(255,255,255,.12);
+      border-color: #fff;
+    }
+
+    /* HERO */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero {
+      position: relative;
+      min-height: {{ section.settings.hero_min_height }}px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--zpl-brown);
+      color: #fff;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-media {
+      position: absolute;
+      inset: 0;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-media img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: {{ section.settings.hero_image_position }};
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: {{ section.settings.hero_min_height }}px;
+      background: linear-gradient(90deg, #241710 0%, #332116 48%, #5a3922 100%);
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 12, 8, {{ section.settings.hero_overlay | divided_by: 100.0 }});
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(720px, 100%);
+      padding: 80px 0;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content .zpl-eyebrow { color: var(--zpl-gold-light); }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content .zpl-heading {
+      color: #fff;
+      font-size: clamp(38px, 5.2vw, 68px);
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content .zpl-body {
+      max-width: 640px;
+      color: rgba(255,255,255,.86);
+      font-size: 16.5px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      color: rgba(255,255,255,.78);
+      font-size: 12.5px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-points li { display: inline-flex; align-items: center; gap: 7px; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-points li::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--zpl-gold-light);
+    }
+
+    /* INTRO */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-intro {
+      padding: 80px 0 40px;
+      text-align: center;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-intro .zpl-heading { font-size: clamp(30px, 4vw, 46px); }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-intro .zpl-body {
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* CAPABILITIES */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section { padding: 80px 0; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section--white { background: #fff; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section--dark { background: var(--zpl-brown); color: #fff; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section--dark .zpl-heading { color: #fff; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section--dark .zpl-body { color: rgba(255,255,255,.72); }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section-header {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-section-header .zpl-heading { font-size: clamp(28px, 3.6vw, 44px); }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-card {
+      padding: 26px 22px;
+      background: var(--zpl-cream);
+      border: 1px solid var(--zpl-border);
+      border-radius: 14px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-num {
+      margin-bottom: 14px;
+      color: var(--zpl-gold);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.3;
+      color: var(--zpl-brown);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-card p {
+      margin: 0;
+      color: var(--zpl-muted);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    /* STEPS */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-step {
+      padding: 24px 0 0;
+      border-top: 1px solid var(--zpl-border);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-step-number {
+      margin-bottom: 12px;
+      color: var(--zpl-gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-step h3 { margin: 0 0 6px; font-size: 17px; color: var(--zpl-brown); }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-step p { margin: 0; color: var(--zpl-muted); font-size: 13.5px; line-height: 1.6; }
+
+    /* FORM SECTION */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-section {
+      padding: 90px 0;
+      background: #efe7d8;
+      scroll-margin-top: 90px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-wrap {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-intro {
+      position: sticky;
+      top: 30px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-intro .zpl-heading { font-size: clamp(30px, 3.6vw, 44px); }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-aside-block {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--zpl-border);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-aside-block strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--zpl-brown);
+      font-size: 14.5px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-aside-block p {
+      margin: 0;
+      color: var(--zpl-muted);
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      color: var(--zpl-gold);
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-wa:hover { text-decoration: underline; }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form {
+      padding: 30px;
+      background: #fff;
+      border: 1px solid var(--zpl-border);
+      border-radius: 18px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-group { margin-bottom: 28px; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-group:last-of-type { margin-bottom: 0; }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-group h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      color: var(--zpl-brown);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-group .zpl-group-help {
+      margin: 0 0 16px;
+      color: var(--zpl-muted);
+      font-size: 13px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-fields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field--full { grid-column: 1 / -1; }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--zpl-text);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-optional {
+      font-weight: 500;
+      color: var(--zpl-muted);
+      font-size: 12px;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field input,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field select,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field textarea {
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 14px;
+      border: 1px solid rgba(42, 26, 18, 0.2);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--zpl-text);
+      font: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field input:focus,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field select:focus,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-field textarea:focus {
+      border-color: var(--zpl-gold);
+      box-shadow: 0 0 0 3px rgba(181,138,69,.14);
+    }
+
+    /* Ranges */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-fieldset { margin: 0; padding: 0; border: 0; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-legend {
+      padding: 0;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--zpl-text);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-ranges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-range {
+      position: relative;
+      display: inline-flex;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-range input {
+      position: absolute;
+      width: 1px; height: 1px;
+      opacity: 0;
+      margin: 0;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-range span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 8px 16px;
+      border: 1px solid var(--zpl-border);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease, color .15s ease;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-range input:checked + span {
+      border-color: var(--zpl-gold);
+      background: var(--zpl-gold);
+      color: #fff;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-range input:focus-visible + span {
+      outline: 2px solid var(--zpl-gold);
+      outline-offset: 2px;
+    }
+
+    /* Advanced disclosure */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: 100%;
+      padding: 18px 20px;
+      margin-top: 8px;
+      border: 1px dashed var(--zpl-gold);
+      border-radius: 14px;
+      background: #fffaf2;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background .18s ease;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle:hover { background: #fff5e0; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-text { min-width: 0; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-text strong {
+      display: block;
+      color: var(--zpl-brown);
+      font-size: 15px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-text small {
+      display: block;
+      color: var(--zpl-muted);
+      font-size: 12.5px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-icon {
+      position: relative;
+      flex: 0 0 24px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--zpl-gold);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-icon::before,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-icon::after {
+      content: "";
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      background: #fff;
+      border-radius: 2px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-icon::before { width: 11px; height: 2px; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle-icon::after { width: 2px; height: 11px; transition: transform .2s ease; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-toggle[aria-expanded="true"] .zpl-advanced-toggle-icon::after {
+      transform: translate(-50%,-50%) scaleY(0);
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-advanced-body { margin-top: 16px; }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-details {
+      margin-bottom: 10px;
+      border: 1px solid var(--zpl-border);
+      border-radius: 14px;
+      background: #fff;
+      overflow: hidden;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-details summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 18px;
+      cursor: pointer;
+      list-style: none;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--zpl-brown);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-details summary::-webkit-details-marker { display: none; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-details summary > span:first-child {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 26px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--zpl-gold);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-details[open] summary { border-bottom: 1px solid var(--zpl-border); }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-details-body { padding: 18px; }
+
+    /* Notices */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-success,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-error {
+      margin-bottom: 20px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-success {
+      background: #edf6ed;
+      color: #285b2a;
+      border: 1px solid #cfe5cf;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-error {
+      background: #f9eaea;
+      color: #7a2727;
+      border: 1px solid #edcaca;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-form-note {
+      margin: 0 0 18px;
+      color: var(--zpl-muted);
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      min-height: 56px;
+      padding: 15px 26px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--zpl-brown);
+      color: #fff;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .18s ease, transform .18s ease;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-submit:hover { background: var(--zpl-gold); transform: translateY(-2px); }
+
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-submit-note {
+      margin: 12px 0 0;
+      color: var(--zpl-muted);
+      font-size: 12.5px;
+      text-align: center;
+    }
+
+    /* FINAL CTA */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-final-cta {
+      padding: 90px 0;
+      background: #1e120d;
+      color: #fff;
+      text-align: center;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-final-cta .zpl-heading {
+      color: #fff;
+      font-size: clamp(30px, 3.8vw, 50px);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-final-cta .zpl-body {
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      color: rgba(255,255,255,.75);
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-final-cta .zpl-button { margin-top: 26px; }
+
+    /* MOBILE STICKY BAR */
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 30;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(42,26,18,.18);
+      transform: translateY(140%);
+      transition: transform .25s ease;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar.is-visible { transform: translateY(0); }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar-wa,
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar-wa { flex: 0 0 auto; background: #25D366; color: #fff; }
+    #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar-cta { flex: 1 1 auto; background: var(--zpl-brown); color: #fff; }
+
+    /* TABLET */
+    @media screen and (max-width: 989px) {
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-grid { grid-template-columns: repeat(2, 1fr); }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-steps { grid-template-columns: repeat(2, 1fr); }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-form-wrap { grid-template-columns: 1fr; gap: 32px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-form-intro { position: static; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-mobilebar { display: flex; }
+      #ZynggiPrivateLabel-{{ section.id }} { padding-bottom: 100px; }
+    }
+
+    /* MOBILE */
+    @media screen and (max-width: 749px) {
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-container { width: min(100% - 28px, 1200px); }
+
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero { min-height: {{ section.settings.hero_mobile_height }}px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-placeholder { min-height: {{ section.settings.hero_mobile_height }}px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content { padding: 55px 0; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content .zpl-heading { font-size: 34px; letter-spacing: -1px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-content .zpl-body { font-size: 15px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-cta { flex-direction: column; align-items: stretch; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-hero-cta .zpl-button { width: 100%; }
+
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-intro { padding: 60px 0 30px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-section { padding: 60px 0; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-form-section { padding: 60px 0; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-final-cta { padding: 65px 0; }
+
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-cap-grid,
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-steps { grid-template-columns: 1fr; }
+
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-form { padding: 20px 16px; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-fields { grid-template-columns: 1fr; }
+      #ZynggiPrivateLabel-{{ section.id }} .zpl-field--full { grid-column: auto; }
+    }
+  </style>
+
+  <!-- HERO -->
+  <section class="zpl-hero">
+    <div class="zpl-hero-media">
+      {% if section.settings.hero_image != blank %}
+        {{
+          section.settings.hero_image
+          | image_url: width: 2400
+          | image_tag:
+            loading: 'eager',
+            widths: '800, 1200, 1600, 2000, 2400',
+            sizes: '100vw',
+            alt: section.settings.hero_image.alt
+        }}
+      {% else %}
+        <div class="zpl-hero-placeholder"></div>
+      {% endif %}
+    </div>
+
+    <div class="zpl-hero-overlay"></div>
+
+    <div class="zpl-container">
+      <div class="zpl-hero-content">
+        {% if section.settings.hero_eyebrow != blank %}
+          <p class="zpl-eyebrow">{{ section.settings.hero_eyebrow }}</p>
+        {% endif %}
+
+        {% if section.settings.hero_heading != blank %}
+          <h1 class="zpl-heading">{{ section.settings.hero_heading }}</h1>
+        {% endif %}
+
+        {% if section.settings.hero_text != blank %}
+          <div class="zpl-body">{{ section.settings.hero_text }}</div>
+        {% endif %}
+
+        <div class="zpl-hero-cta">
+          {% if section.settings.hero_button_label != blank %}
+            <a
+              class="zpl-button"
+              href="{{ section.settings.hero_button_link | default: '#private-label-enquiry' }}"
+              data-zpl-scroll
+            >
+              {{ section.settings.hero_button_label }}
+              <span aria-hidden="true">→</span>
+            </a>
+          {% endif %}
+
+          {% if section.settings.whatsapp_number != blank %}
+            <a
+              class="zpl-button zpl-button--ghost"
+              href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in private label spice production.' | url_encode }}"
+              target="_blank" rel="noopener"
+            >Talk to Zynggi</a>
+          {% endif %}
+        </div>
+
+        <ul class="zpl-hero-points">
+          <li>No payment to enquire</li>
+          <li>Not sure? We'll guide you</li>
+          <li>Reply within 1 working day</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="zpl-intro">
+    <div class="zpl-container">
+      {% if section.settings.process_eyebrow != blank %}
+        <p class="zpl-eyebrow">{{ section.settings.process_eyebrow }}</p>
+      {% endif %}
+
+      <h2 class="zpl-heading">{{ section.settings.process_heading }}</h2>
+
+      {% if section.settings.process_text != blank %}
+        <div class="zpl-body">{{ section.settings.process_text }}</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- WHAT WE CAN DO -->
+  <section class="zpl-section">
+    <div class="zpl-container">
+      <div class="zpl-section-header">
+        {% if section.settings.services_eyebrow != blank %}
+          <p class="zpl-eyebrow">{{ section.settings.services_eyebrow }}</p>
+        {% endif %}
+
+        <h2 class="zpl-heading">{{ section.settings.services_heading }}</h2>
+
+        {% if section.settings.services_text != blank %}
+          <div class="zpl-body">{{ section.settings.services_text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="zpl-cap-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'service' %}
+            <div class="zpl-cap-card" {{ block.shopify_attributes }}>
+              <div class="zpl-cap-num">{{ block.settings.number | default: '01' }}</div>
+              <h3>{{ block.settings.title }}</h3>
+              {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="zpl-section zpl-section--white">
+    <div class="zpl-container">
+      <div class="zpl-section-header">
+        {% if section.settings.steps_eyebrow != blank %}
+          <p class="zpl-eyebrow">{{ section.settings.steps_eyebrow }}</p>
+        {% endif %}
+
+        <h2 class="zpl-heading">{{ section.settings.steps_heading }}</h2>
+
+        {% if section.settings.steps_text != blank %}
+          <div class="zpl-body">{{ section.settings.steps_text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="zpl-steps">
+        {% for block in section.blocks %}
+          {% if block.type == 'step' %}
+            <div class="zpl-step" {{ block.shopify_attributes }}>
+              <div class="zpl-step-number">{{ block.settings.number | default: '01' }}</div>
+              <h3>{{ block.settings.title }}</h3>
+              {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ENQUIRY -->
+  <section id="private-label-enquiry" class="zpl-form-section">
+    <div class="zpl-container">
+      <div class="zpl-form-wrap">
+        <div class="zpl-form-intro">
+          {% if section.settings.form_eyebrow != blank %}
+            <p class="zpl-eyebrow">{{ section.settings.form_eyebrow }}</p>
+          {% endif %}
+
+          <h2 class="zpl-heading">{{ section.settings.form_heading }}</h2>
+
+          {% if section.settings.form_text != blank %}
+            <div class="zpl-body">{{ section.settings.form_text }}</div>
+          {% endif %}
+
+          <div class="zpl-form-aside-block">
+            <strong>Not sure about the specification?</strong>
+            <p>That's okay. Tell us what you want to create and our team will guide you through formula, packaging and quantity.</p>
+          </div>
+
+          {% if section.settings.whatsapp_number != blank %}
+            <div class="zpl-form-aside-block">
+              <strong>Prefer to talk first?</strong>
+              <p>We can discuss your idea on WhatsApp before you fill anything in.</p>
+              <a
+                class="zpl-form-wa"
+                href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in private label spice production.' | url_encode }}"
+                target="_blank" rel="noopener"
+              >Chat on WhatsApp →</a>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="zpl-form">
+          {% form 'contact', id: 'ZynggiPrivateLabelForm' %}
+            {% if form.posted_successfully? %}
+              <div class="zpl-success">
+                {{ section.settings.success_message }}
+              </div>
+            {% endif %}
+
+            {% if form.errors %}
+              <div class="zpl-error">
+                Please check the required fields and try again.
+              </div>
+            {% endif %}
+
+            <input type="hidden" name="contact[Form Type]" value="Private Label Enquiry">
+
+            <!-- ============ ESSENTIALS ============ -->
+            <div class="zpl-form-group">
+              <h3>Start your project</h3>
+              <p class="zpl-group-help">Just the basics — you can add technical details after if you like.</p>
+
+              <div class="zpl-fields">
+                <div class="zpl-field">
+                  <label for="ZPLFullName-{{ section.id }}">Full name *</label>
+                  <input id="ZPLFullName-{{ section.id }}" type="text" name="contact[Full Name]" autocomplete="name" required>
+                </div>
+
+                <div class="zpl-field">
+                  <label for="ZPLPhone-{{ section.id }}">Phone / WhatsApp *</label>
+                  <input id="ZPLPhone-{{ section.id }}" type="tel" name="contact[Phone / WhatsApp]" autocomplete="tel" inputmode="tel" required>
+                </div>
+
+                <div class="zpl-field">
+                  <label for="ZPLBusinessName-{{ section.id }}">Business name <span class="zpl-optional">(optional)</span></label>
+                  <input id="ZPLBusinessName-{{ section.id }}" type="text" name="contact[Business Name]" autocomplete="organization">
+                </div>
+
+                <div class="zpl-field">
+                  <label for="ZPLCity-{{ section.id }}">City / State <span class="zpl-optional">(optional)</span></label>
+                  <input id="ZPLCity-{{ section.id }}" type="text" name="contact[City / State]" autocomplete="address-level2">
+                </div>
+
+                <div class="zpl-field">
+                  <label for="ZPLBusinessType-{{ section.id }}">Business type</label>
+                  <select id="ZPLBusinessType-{{ section.id }}" name="contact[Business Type]">
+                    <option value="">Select</option>
+                    <option value="New Spice Brand">New Spice Brand</option>
+                    <option value="Existing FMCG Brand">Existing FMCG Brand</option>
+                    <option value="Restaurant / Hotel">Restaurant / Hotel</option>
+                    <option value="Cloud Kitchen">Cloud Kitchen</option>
+                    <option value="Grocery / Retail">Grocery / Retail</option>
+                    <option value="Distributor / Trader">Distributor / Trader</option>
+                    <option value="Export / Trading">Export / Trading</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="zpl-field">
+                  <label for="ZPLProductType-{{ section.id }}">What do you want to make? *</label>
+                  <select id="ZPLProductType-{{ section.id }}" name="contact[Private Label Product Type]" required>
+                    <option value="">Select</option>
+                    <option value="Pure Spice Powder">Pure Spice Powder</option>
+                    <option value="Whole Spice">Whole Spice</option>
+                    <option value="Crushed / Coarse Spice">Crushed / Coarse Spice</option>
+                    <option value="Blended Masala">Blended Masala</option>
+                    <option value="Herb">Herb</option>
+                    <option value="Seasoning / Spice Mix">Seasoning / Spice Mix</option>
+                    <option value="Custom Blend">Custom Blend</option>
+                    <option value="Not Sure - Need Guidance">Not Sure — Need Guidance</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="zpl-field zpl-field--full">
+                  <label for="ZPLProductNames-{{ section.id }}">Product name(s) <span class="zpl-optional">(optional)</span></label>
+                  <input
+                    id="ZPLProductNames-{{ section.id }}"
+                    type="text"
+                    name="contact[Product Name(s)]"
+                    placeholder="Example: Haldi, Garam Masala, Chicken Masala"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- ============ QUANTITY ============ -->
+            <div class="zpl-form-group">
+              <fieldset class="zpl-fieldset">
+                <legend class="zpl-legend">Roughly how much do you need?</legend>
+                <div class="zpl-ranges">
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="Under 500 packs"><span>Under 500 packs</span></label>
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="500-2000 packs"><span>500–2,000 packs</span></label>
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="2000-5000 packs"><span>2,000–5,000 packs</span></label>
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="5000-10000 packs"><span>5,000–10,000 packs</span></label>
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="10000+ packs"><span>10,000+ packs</span></label>
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="By kg"><span>By kg</span></label>
+                  <label class="zpl-range"><input type="radio" name="contact[Expected Quantity]" value="Not sure yet"><span>Not sure yet</span></label>
+                </div>
+              </fieldset>
+
+              <div class="zpl-field zpl-field--full" style="margin-top:14px;">
+                <label for="ZPLQuantityDetails-{{ section.id }}">Or enter an exact quantity <span class="zpl-optional">(optional)</span></label>
+                <input
+                  id="ZPLQuantityDetails-{{ section.id }}"
+                  type="text"
+                  name="contact[Quantity Details]"
+                  placeholder="Example: 5,000 packs / 500 kg"
+                >
+              </div>
+            </div>
+
+            <!-- ============ FORMULA ============ -->
+            <div class="zpl-form-group">
+              <div class="zpl-fields">
+                <div class="zpl-field">
+                  <label for="ZPLFormula-{{ section.id }}">Do you already have a recipe / formula?</label>
+                  <select id="ZPLFormula-{{ section.id }}" name="contact[Formula / Recipe]">
+                    <option value="">Select</option>
+                    <option value="I Have My Own Recipe">Yes — I have my own</option>
+                    <option value="Use Zynggi Recipe">No — use a Zynggi recipe</option>
+                    <option value="Need Custom Formulation">I need a custom formula</option>
+                    <option value="Need Sample Development">Need sample development</option>
+                    <option value="Not Sure">Not sure</option>
+                  </select>
+                </div>
+
+                <div class="zpl-field">
+                  <label for="ZPLPackagingType-{{ section.id }}">Do you need packaging?</label>
+                  <select id="ZPLPackagingType-{{ section.id }}" name="contact[Packaging Type]">
+                    <option value="">Select</option>
+                    <option value="Printed Pouch">Yes — printed pouch</option>
+                    <option value="Plain Pouch + Sticker / Label">Yes — plain pouch + label</option>
+                    <option value="Jar + Label">Yes — jar + label</option>
+                    <option value="Printed Jar / Custom Pack">Yes — printed jar / custom pack</option>
+                    <option value="Bulk Packaging">Bulk packaging</option>
+                    <option value="Not Sure - Need Guidance">Not sure — need guidance</option>
+                  </select>
+                </div>
+
+                <div class="zpl-field zpl-field--full">
+                  <label for="ZPLPackSize-{{ section.id }}">Preferred pack size(s) <span class="zpl-optional">(optional)</span></label>
+                  <input
+                    id="ZPLPackSize-{{ section.id }}"
+                    type="text"
+                    name="contact[Pack Size(s)]"
+                    placeholder="Example: 50g, 100g, 200g"
+                  >
+                </div>
+
+                <div class="zpl-field zpl-field--full">
+                  <label for="ZPLAdditional-{{ section.id }}">Anything else we should know? <span class="zpl-optional">(optional)</span></label>
+                  <textarea
+                    id="ZPLAdditional-{{ section.id }}"
+                    name="contact[Additional Requirements]"
+                    rows="3"
+                    placeholder="Target market, launch timeline, special requirements or anything else."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <p class="zpl-form-note">
+              {{ section.settings.form_note }}
+            </p>
+
+            <button type="submit" class="zpl-submit">
+              <span>{{ section.settings.form_button_label }}</span>
+              <span aria-hidden="true">→</span>
+            </button>
+
+            <p class="zpl-submit-note">
+              No payment required. Our team will contact you with the next steps.
+            </p>
+
+            <!-- ============ OPTIONAL TECHNICAL DETAILS ============ -->
+            <div class="zpl-advanced-wrap" style="margin-top:22px;">
+              <button
+                type="button"
+                class="zpl-advanced-toggle"
+                aria-expanded="false"
+                aria-controls="ZPLAdvanced-{{ section.id }}"
+                data-zpl-advanced-toggle
+              >
+                <span class="zpl-advanced-toggle-text">
+                  <strong>Want to add technical details?</strong>
+                  <small>Optional — formula, processing, printing, filling, dispatch and more.</small>
+                </span>
+                <span class="zpl-advanced-toggle-icon" aria-hidden="true"></span>
+              </button>
+
+              <div id="ZPLAdvanced-{{ section.id }}" class="zpl-advanced-body" hidden>
+
+                {%- comment -%} --- Brand details --- {%- endcomment -%}
+                <details class="zpl-details">
+                  <summary><span aria-hidden="true">01</span><span>Brand details</span></summary>
+                  <div class="zpl-details-body">
+                    <div class="zpl-fields">
+                      <div class="zpl-field">
+                        <label for="ZPLEmail-{{ section.id }}">Email <span class="zpl-optional">(optional)</span></label>
+                        <input id="ZPLEmail-{{ section.id }}" type="email" name="contact[email]" autocomplete="email">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLGST-{{ section.id }}">GST number <span class="zpl-optional">(optional)</span></label>
+                        <input id="ZPLGST-{{ section.id }}" type="text" name="contact[GST Number]">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLBrandStatus-{{ section.id }}">Brand status</label>
+                        <select id="ZPLBrandStatus-{{ section.id }}" name="contact[Brand Status]">
+                          <option value="">Select</option>
+                          <option value="New Brand">New Brand</option>
+                          <option value="Existing Brand">Existing Brand</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLBrandName-{{ section.id }}">Brand name</label>
+                        <input id="ZPLBrandName-{{ section.id }}" type="text" name="contact[Brand Name]">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLLogo-{{ section.id }}">Logo / artwork</label>
+                        <select id="ZPLLogo-{{ section.id }}" name="contact[Logo / Artwork]">
+                          <option value="">Select</option>
+                          <option value="Logo Ready">Logo Ready</option>
+                          <option value="Logo Not Ready">Logo Not Ready</option>
+                          <option value="Packaging Artwork Ready">Packaging Artwork Ready</option>
+                          <option value="Need Design Support">Need Design Support</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLWebsite-{{ section.id }}">Website / Instagram <span class="zpl-optional">(optional)</span></label>
+                        <input id="ZPLWebsite-{{ section.id }}" type="text" name="contact[Website / Instagram]">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLTargetMarket-{{ section.id }}">Target market</label>
+                        <input id="ZPLTargetMarket-{{ section.id }}" type="text" name="contact[Target Market]" placeholder="Retail, online, restaurant, export…">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLBrandColours-{{ section.id }}">Brand colours / style</label>
+                        <input id="ZPLBrandColours-{{ section.id }}" type="text" name="contact[Brand Colours / Style]" placeholder="Example: Black & Gold, Minimal, Traditional">
+                      </div>
+                    </div>
+                  </div>
+                </details>
+
+                {%- comment -%} --- Product & processing --- {%- endcomment -%}
+                <details class="zpl-details">
+                  <summary><span aria-hidden="true">02</span><span>Product &amp; processing</span></summary>
+                  <div class="zpl-details-body">
+                    <div class="zpl-fields">
+                      <div class="zpl-field">
+                        <label for="ZPLProcessing-{{ section.id }}">Processing required</label>
+                        <select id="ZPLProcessing-{{ section.id }}" name="contact[Processing Required]">
+                          <option value="">Select</option>
+                          <option value="Whole / Sabut">Whole / Sabut</option>
+                          <option value="Crushed / Coarse Grind">Crushed / Coarse Grind</option>
+                          <option value="Fine Powder">Fine Powder</option>
+                          <option value="Blending">Blending</option>
+                          <option value="Grinding + Blending">Grinding + Blending</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLTaste-{{ section.id }}">Taste / flavour profile</label>
+                        <input id="ZPLTaste-{{ section.id }}" type="text" name="contact[Taste / Flavour Profile]" placeholder="Example: Punjabi, mild, aromatic, extra spicy">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLSpiceLevel-{{ section.id }}">Spice level</label>
+                        <select id="ZPLSpiceLevel-{{ section.id }}" name="contact[Spice Level]">
+                          <option value="">Select</option>
+                          <option value="Mild">Mild</option>
+                          <option value="Medium">Medium</option>
+                          <option value="Hot">Hot</option>
+                          <option value="Extra Hot">Extra Hot</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field zpl-field--full">
+                        <label for="ZPLIngredients-{{ section.id }}">Ingredients / recipe / product details</label>
+                        <textarea
+                          id="ZPLIngredients-{{ section.id }}"
+                          name="contact[Ingredients / Recipe / Product Details]"
+                          rows="4"
+                          placeholder="Ingredients, recipe, sample details or any product specification you already have."
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+
+                {%- comment -%} --- Packaging & printing --- {%- endcomment -%}
+                <details class="zpl-details">
+                  <summary><span aria-hidden="true">03</span><span>Packaging &amp; printing</span></summary>
+                  <div class="zpl-details-body">
+                    <div class="zpl-fields">
+                      <div class="zpl-field">
+                        <label for="ZPLPouchStyle-{{ section.id }}">Pouch style</label>
+                        <select id="ZPLPouchStyle-{{ section.id }}" name="contact[Pouch Style]">
+                          <option value="">Select</option>
+                          <option value="3 Side Seal">3 Side Seal</option>
+                          <option value="Stand Up Pouch">Stand Up Pouch</option>
+                          <option value="Zipper Pouch">Zipper Pouch</option>
+                          <option value="Not Sure">Not Sure</option>
+                          <option value="Not Applicable">Not Applicable</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLPackMaterial-{{ section.id }}">Packaging material / specification</label>
+                        <input id="ZPLPackMaterial-{{ section.id }}" type="text" name="contact[Packaging Material / Specification]">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLJarSize-{{ section.id }}">Jar / container size</label>
+                        <input id="ZPLJarSize-{{ section.id }}" type="text" name="contact[Jar / Container Size]" placeholder="If applicable">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLPackagingFinish-{{ section.id }}">Packaging finish</label>
+                        <select id="ZPLPackagingFinish-{{ section.id }}" name="contact[Packaging Finish / Look]">
+                          <option value="">Select</option>
+                          <option value="Matte">Matte</option>
+                          <option value="Glossy">Glossy</option>
+                          <option value="Premium / Luxury">Premium / Luxury</option>
+                          <option value="Simple / Economy">Simple / Economy</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLDesign-{{ section.id }}">Packaging design</label>
+                        <select id="ZPLDesign-{{ section.id }}" name="contact[Packaging Design]">
+                          <option value="">Select</option>
+                          <option value="I Have Final Artwork">I Have Final Artwork</option>
+                          <option value="Design Required">Design Required</option>
+                          <option value="Need Design Guidance">Need Design Guidance</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLPrinting-{{ section.id }}">Printing requirement</label>
+                        <select id="ZPLPrinting-{{ section.id }}" name="contact[Printing Requirement]">
+                          <option value="">Select</option>
+                          <option value="Printed Pouch">Printed Pouch</option>
+                          <option value="Sticker / Label Printing">Sticker / Label Printing</option>
+                          <option value="Printed Jar / Custom Pack">Printed Jar / Custom Pack</option>
+                          <option value="Already Have Printed Packaging">Already Have Printed Packaging</option>
+                          <option value="Need Guidance">Need Guidance</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLLabelInfo-{{ section.id }}">Label / product info status</label>
+                        <select id="ZPLLabelInfo-{{ section.id }}" name="contact[Label / Product Information Status]">
+                          <option value="">Select</option>
+                          <option value="Ready">Ready</option>
+                          <option value="Partially Ready">Partially Ready</option>
+                          <option value="Need Guidance">Need Guidance</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+
+                {%- comment -%} --- Filling & dispatch --- {%- endcomment -%}
+                <details class="zpl-details">
+                  <summary><span aria-hidden="true">04</span><span>Filling, coding &amp; dispatch</span></summary>
+                  <div class="zpl-details-body">
+                    <div class="zpl-fields">
+                      <div class="zpl-field">
+                        <label for="ZPLFilling-{{ section.id }}">Filling required?</label>
+                        <select id="ZPLFilling-{{ section.id }}" name="contact[Filling Required]">
+                          <option value="">Select</option>
+                          <option value="Yes - Pouch Filling">Yes — Pouch Filling</option>
+                          <option value="Yes - Jar Filling">Yes — Jar Filling</option>
+                          <option value="Yes - Both">Yes — Both</option>
+                          <option value="No">No</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLBatchCoding-{{ section.id }}">Batch coding / coding requirement</label>
+                        <select id="ZPLBatchCoding-{{ section.id }}" name="contact[Batch Coding Requirement]">
+                          <option value="">Select</option>
+                          <option value="Required">Required</option>
+                          <option value="Already Arranged">Already Arranged</option>
+                          <option value="Need Guidance">Need Guidance</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLDispatch-{{ section.id }}">Dispatch requirement</label>
+                        <select id="ZPLDispatch-{{ section.id }}" name="contact[Dispatch Requirement]">
+                          <option value="">Select</option>
+                          <option value="Ready Product Dispatch">Ready Product Dispatch</option>
+                          <option value="Bulk Product Dispatch">Bulk Product Dispatch</option>
+                          <option value="Packaging Only">Packaging Only</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLDeliveryLocation-{{ section.id }}">Delivery location</label>
+                        <input id="ZPLDeliveryLocation-{{ section.id }}" type="text" name="contact[Delivery Location]" placeholder="City / State">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLLaunchDate-{{ section.id }}">Target launch / requirement date</label>
+                        <input id="ZPLLaunchDate-{{ section.id }}" type="text" name="contact[Target Launch / Requirement Date]" placeholder="Example: November 2026">
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLOrderFrequency-{{ section.id }}">Order frequency</label>
+                        <select id="ZPLOrderFrequency-{{ section.id }}" name="contact[Order Frequency]">
+                          <option value="">Select</option>
+                          <option value="One Time">One Time</option>
+                          <option value="Monthly">Monthly</option>
+                          <option value="Quarterly">Quarterly</option>
+                          <option value="Regular / Repeat">Regular / Repeat</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                      <div class="zpl-field">
+                        <label for="ZPLQuantityBasis-{{ section.id }}">Quantity basis</label>
+                        <select id="ZPLQuantityBasis-{{ section.id }}" name="contact[Quantity Basis]">
+                          <option value="">Select</option>
+                          <option value="Number of Packs">Number of Packs</option>
+                          <option value="Kilograms">Kilograms</option>
+                          <option value="Both Packs and Kg">Both Packs and Kg</option>
+                          <option value="Not Sure">Not Sure</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <button type="submit" class="zpl-submit" style="margin-top:18px;">
+                      <span>Submit Full Project Details</span>
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  </div>
+                </details>
+              </div>
+            </div>
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="zpl-final-cta">
+    <div class="zpl-container">
+      {% if section.settings.final_eyebrow != blank %}
+        <p class="zpl-eyebrow">{{ section.settings.final_eyebrow }}</p>
+      {% endif %}
+
+      <h2 class="zpl-heading">{{ section.settings.final_heading }}</h2>
+
+      {% if section.settings.final_text != blank %}
+        <div class="zpl-body">{{ section.settings.final_text }}</div>
+      {% endif %}
+
+      {% if section.settings.final_button_label != blank %}
+        <a
+          class="zpl-button"
+          href="{{ section.settings.final_button_link | default: '#private-label-enquiry' }}"
+          data-zpl-scroll
+        >
+          {{ section.settings.final_button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- MOBILE STICKY BAR -->
+  <div class="zpl-mobilebar" data-zpl-mobilebar>
+    {% if section.settings.whatsapp_number != blank %}
+      <a
+        class="zpl-mobilebar-wa"
+        href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}?text={{ section.settings.whatsapp_message | default: 'Hi Zynggi, I am interested in private label spice production.' | url_encode }}"
+        target="_blank" rel="noopener"
+        aria-label="Chat on WhatsApp"
+      >WhatsApp</a>
+    {% endif %}
+    <a class="zpl-mobilebar-cta" href="#private-label-enquiry" data-zpl-scroll>
+      Start Private Label →
+    </a>
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.getElementById('ZynggiPrivateLabel-{{ section.id }}');
+  if (!root) return;
+
+  /* Advanced toggle */
+  var advToggle = root.querySelector('[data-zpl-advanced-toggle]');
+  var advBody = document.getElementById('ZPLAdvanced-{{ section.id }}');
+  if (advToggle && advBody) {
+    advToggle.addEventListener('click', function () {
+      var open = advToggle.getAttribute('aria-expanded') === 'true';
+      advToggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+      advBody.hidden = open;
+      if (!open) {
+        setTimeout(function () {
+          advBody.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    });
+  }
+
+  /* Smooth scroll */
+  root.querySelectorAll('[data-zpl-scroll]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* Mobile sticky bar visibility */
+  var bar = root.querySelector('[data-zpl-mobilebar]');
+  var form = root.querySelector('.zpl-form-section');
+  if (bar && form && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        bar.classList.toggle('is-visible', !entry.isIntersecting);
+      });
+    }, { rootMargin: '-80px 0px 0px 0px', threshold: 0.05 });
+    io.observe(form);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Zynggi Private Label",
+  "tag": "section",
+  "class": "section-zynggi-private-label",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "range", "id": "hero_overlay", "label": "Hero overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 35 },
+    {
+      "type": "select",
+      "id": "hero_image_position",
+      "label": "Hero image position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    { "type": "range", "id": "hero_min_height", "label": "Hero desktop height", "min": 450, "max": 850, "step": 10, "unit": "px", "default": 620 },
+    { "type": "range", "id": "hero_mobile_height", "label": "Hero mobile height", "min": 450, "max": 750, "step": 10, "unit": "px", "default": 560 },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow", "default": "PRIVATE LABEL BY ZYNGGI" },
+    { "type": "text", "id": "hero_heading", "label": "Heading", "default": "Launch Your Own Spice Brand With Zynggi" },
+    {
+      "type": "richtext",
+      "id": "hero_text",
+      "label": "Description",
+      "default": "<p>From spices and custom blends to packaging and finished products, Zynggi helps you turn your idea into your own branded spice product.</p>"
+    },
+    { "type": "text", "id": "hero_button_label", "label": "Primary button label", "default": "Start Your Private Label" },
+    { "type": "url", "id": "hero_button_link", "label": "Primary button link" },
+
+    { "type": "header", "content": "Intro" },
+    { "type": "text", "id": "process_eyebrow", "label": "Eyebrow", "default": "ONE PARTNER" },
+    { "type": "text", "id": "process_heading", "label": "Heading", "default": "You bring the idea. We help build the product." },
+    {
+      "type": "richtext",
+      "id": "process_text",
+      "label": "Description",
+      "default": "<p>From spice sourcing and custom blends to packaging, printing and finished products — one partner for your entire private-label project.</p>"
+    },
+
+    { "type": "header", "content": "What we can do" },
+    { "type": "text", "id": "services_eyebrow", "label": "Eyebrow", "default": "WHAT WE CAN DO" },
+    { "type": "text", "id": "services_heading", "label": "Heading", "default": "What We Can Handle For Your Brand" },
+    {
+      "type": "richtext",
+      "id": "services_text",
+      "label": "Description",
+      "default": "<p>From sourcing to finished product — choose the support your project needs.</p>"
+    },
+
+    { "type": "header", "content": "How It Works" },
+    { "type": "text", "id": "steps_eyebrow", "label": "Eyebrow", "default": "THE PROCESS" },
+    { "type": "text", "id": "steps_heading", "label": "Heading", "default": "How It Works" },
+    {
+      "type": "richtext",
+      "id": "steps_text",
+      "label": "Description",
+      "default": "<p>A simple process to take your idea from product discussion to a finished spice product.</p>"
+    },
+
+    { "type": "header", "content": "Enquiry Form" },
+    { "type": "text", "id": "form_eyebrow", "label": "Eyebrow", "default": "START A PROJECT" },
+    { "type": "text", "id": "form_heading", "label": "Heading", "default": "Tell Us Your Idea" },
+    {
+      "type": "richtext",
+      "id": "form_text",
+      "label": "Description",
+      "default": "<p>Just the basics to get started. You can add technical details afterwards if you like — or our team will guide you.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "form_note",
+      "label": "Form note",
+      "default": "Requirements, pricing, packaging and production details are discussed according to the specific product and project."
+    },
+    { "type": "text", "id": "form_button_label", "label": "Submit button label", "default": "Start My Private Label" },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you. Your private label enquiry has been received. Our team will get in touch with you."
+    },
+
+    { "type": "header", "content": "WhatsApp" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "info": "Include country code, e.g. 919728326350", "default": "919728326350" },
+    { "type": "text", "id": "whatsapp_message", "label": "WhatsApp pre-filled message", "default": "Hi Zynggi, I am interested in private label spice production." },
+
+    { "type": "header", "content": "Final CTA" },
+    { "type": "text", "id": "final_eyebrow", "label": "Eyebrow", "default": "READY TO BUILD?" },
+    { "type": "text", "id": "final_heading", "label": "Heading", "default": "Ready to Build Your Own Spice Brand?" },
+    {
+      "type": "richtext",
+      "id": "final_text",
+      "label": "Description",
+      "default": "<p>Tell us what you want to create. Zynggi can help you take the idea from spice selection to finished product.</p>"
+    },
+    { "type": "text", "id": "final_button_label", "label": "Button label", "default": "Start Your Private Label" },
+    { "type": "url", "id": "final_button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Capability card",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Spice Sourcing" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Source the spices and ingredients your product needs." }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "Process step",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Tell Us Your Idea" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Share your product, quantity and packaging needs." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Zynggi Private Label",
+      "blocks": [
+        { "type": "service", "settings": { "number": "01", "title": "Spice Sourcing & Blending", "text": "Whole spices, powders, herbs and custom blends developed around your product requirement." } },
+        { "type": "service", "settings": { "number": "02", "title": "Grinding & Processing", "text": "Whole, crushed, coarse, fine powder and blended spice processing." } },
+        { "type": "service", "settings": { "number": "03", "title": "Packaging & Printing", "text": "Pouches, jars and custom packs — with printing and branding coordination." } },
+        { "type": "service", "settings": { "number": "04", "title": "Filling & Finished Product", "text": "Filling, sealing, batch coding and dispatch — a market-ready product." } },
+
+        { "type": "step", "settings": { "number": "01", "title": "Tell us your idea", "text": "Share what you want to create — product, quantity and packaging." } },
+        { "type": "step", "settings": { "number": "02", "title": "We discuss the product", "text": "Our team understands your recipe, taste and market." } },
+        { "type": "step", "settings": { "number": "03", "title": "Sample & development", "text": "Product development or sample discussion where required." } },
+        { "type": "step", "settings": { "number": "04", "title": "Production & dispatch", "text": "Once requirements are confirmed, production proceeds." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

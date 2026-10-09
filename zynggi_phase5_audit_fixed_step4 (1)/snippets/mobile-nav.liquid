@@ -1,0 +1,13 @@
+<nav class="mnav{% unless shop.customer_accounts_enabled %} mnav--no-account{% endunless %}" aria-label="Quick navigation">
+  <a href="{{ routes.root_url }}">{% render 'icon', name: 'home' %}<span>Home</span></a>
+  <a href="{{ routes.all_products_collection_url }}">{% render 'icon', name: 'grid' %}<span>Shop</span></a>
+  <button type="button" data-search-open>{% render 'icon', name: 'search' %}<span>Search</span></button>
+  {%- if shop.customer_accounts_enabled -%}
+    <a href="{{ routes.account_url }}">{% render 'icon', name: 'user' %}<span>Account</span></a>
+  {%- endif -%}
+  {%- if settings.cart_type == 'drawer' -%}
+    <button type="button" data-drawer-open="cart-drawer" aria-label="Open cart">{% render 'icon', name: 'cart' %}<span>Cart</span><b class="cart-count" data-cart-count>{{ cart.item_count }}</b></button>
+  {%- else -%}
+    <a href="{{ routes.cart_url }}">{% render 'icon', name: 'cart' %}<span>Cart</span><b class="cart-count" data-cart-count>{{ cart.item_count }}</b></a>
+  {%- endif -%}
+</nav>

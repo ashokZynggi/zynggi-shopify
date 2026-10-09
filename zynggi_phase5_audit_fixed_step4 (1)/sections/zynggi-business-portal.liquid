@@ -1,0 +1,621 @@
+<section class="zynggi-business-portal">
+  <div class="zynggi-business-portal__container">
+
+    <div class="zynggi-business-portal__eyebrow">
+      ZYNGGI BUSINESS
+    </div>
+
+    <h1>Zynggi Business Portal</h1>
+
+    <p class="zynggi-business-portal__intro">
+      Secure access for Zynggi administrators and salesmen.
+    </p>
+
+    <div class="zynggi-business-portal__card">
+
+      <div class="zynggi-business-portal__heading">
+        <h2>Business Login</h2>
+
+        <p>
+          Login to access your Zynggi business dashboard.
+        </p>
+      </div>
+
+      <form id="zynggi-business-login">
+
+        <div class="zynggi-login-field">
+          <label for="zynggi-email">Email</label>
+
+          <input
+            type="email"
+            id="zynggi-email"
+            placeholder="Enter your business email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="zynggi-login-field">
+          <label for="zynggi-password">Password</label>
+
+          <input
+            type="password"
+            id="zynggi-password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          type="submit"
+          id="zynggi-login-button"
+        >
+          Login
+        </button>
+
+        <div
+          id="zynggi-login-message"
+          class="zynggi-login-message"
+        ></div>
+
+      </form>
+
+    </div>
+
+  </div>
+</section>
+
+
+<style>
+  .zynggi-business-portal {
+    padding: 90px 20px;
+    background: #f7f2eb;
+    min-height: 600px;
+  }
+
+  .zynggi-business-portal__container {
+    width: min(900px, 100%);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .zynggi-business-portal__eyebrow {
+    margin-bottom: 15px;
+    color: #a86b2a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+  }
+
+  .zynggi-business-portal h1 {
+    margin: 0 0 18px;
+    color: #291b13;
+    font-family: Georgia, serif;
+    font-size: clamp(40px, 6vw, 68px);
+    line-height: 1.05;
+  }
+
+  .zynggi-business-portal__intro {
+    margin: 0 auto 40px;
+    color: #75685e;
+    font-size: 17px;
+  }
+
+  .zynggi-business-portal__card {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid #e4d8cc;
+    border-radius: 18px;
+    background: #fffdf9;
+    box-shadow: 0 18px 50px rgba(54, 34, 20, 0.08);
+    text-align: left;
+  }
+
+  .zynggi-business-portal__heading {
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .zynggi-business-portal__heading h2 {
+    margin: 0 0 10px;
+    color: #291b13;
+    font-family: Georgia, serif;
+    font-size: 30px;
+  }
+
+  .zynggi-business-portal__heading p {
+    margin: 0;
+    color: #82766d;
+  }
+
+  .zynggi-login-field {
+    margin-bottom: 18px;
+  }
+
+  .zynggi-login-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #291b13;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .zynggi-login-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 15px;
+    border: 1px solid #d9cfc5;
+    border-radius: 9px;
+    background: #fff;
+    color: #291b13;
+    font-size: 15px;
+    outline: none;
+  }
+
+  .zynggi-login-field input:focus {
+    border-color: #a86b2a;
+    box-shadow: 0 0 0 3px rgba(168, 107, 42, 0.10);
+  }
+
+  #zynggi-login-button {
+    width: 100%;
+    margin-top: 5px;
+    padding: 15px 20px;
+    border: 0;
+    border-radius: 9px;
+    background: #291b13;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #zynggi-login-button:hover {
+    opacity: 0.9;
+  }
+
+  #zynggi-login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .zynggi-login-message {
+    min-height: 22px;
+    margin-top: 16px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .zynggi-login-message.error {
+    color: #a11d1d;
+  }
+
+  .zynggi-login-message.success {
+    color: #27723a;
+  }
+
+  @media screen and (max-width: 749px) {
+    .zynggi-business-portal {
+      padding: 60px 16px;
+    }
+
+    .zynggi-business-portal__card {
+      padding: 28px 20px;
+    }
+
+    .zynggi-business-portal h1 {
+      font-size: 42px;
+    }
+  }
+</style>
+
+
+<script>
+(function () {
+
+  const SUPABASE_URL =
+    "https://txiwtrmlbgticffnickx.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_GICrvn3syGJ6eOcOqeVbzg_p8cx5Jmq";
+
+
+  let sessionExpiryTimer = null;
+
+  function clearBusinessSession() {
+    try {
+      sessionStorage.removeItem("zynggi_salesman_access_token"); localStorage.removeItem("zynggi_salesman_access_token");
+      localStorage.removeItem("zynggi_salesman_refresh_token");
+      localStorage.removeItem("zynggi_salesman");
+      localStorage.removeItem("zynggi_salesman_user_id");
+    } catch (error) {
+      console.warn("Unable to clear Zynggi session storage.", error);
+    }
+  }
+
+  function getJwtExpiry(token) {
+    try {
+      const payload = JSON.parse(
+        atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+      );
+      return Number(payload.exp || 0) * 1000;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  function scheduleSessionExpiry(token) {
+    const expiresAt = getJwtExpiry(token);
+    if (!expiresAt) return true;
+    const remaining = expiresAt - Date.now();
+    if (remaining <= 0) return false;
+
+    sessionExpiryTimer = window.setTimeout(function () {
+      clearBusinessSession();
+      window.location.replace("/pages/zynggi-business");
+    }, remaining + 500);
+
+    return true;
+  }
+
+  const loginForm =
+    document.getElementById(
+      "zynggi-business-login"
+    );
+
+  const emailInput =
+    document.getElementById(
+      "zynggi-email"
+    );
+
+  const passwordInput =
+    document.getElementById(
+      "zynggi-password"
+    );
+
+  const loginButton =
+    document.getElementById(
+      "zynggi-login-button"
+    );
+
+  const message =
+    document.getElementById(
+      "zynggi-login-message"
+    );
+
+
+  function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+      "zynggi-login-message " +
+      (type || "");
+
+  }
+
+
+  loginForm.addEventListener(
+    "submit",
+    async function (event) {
+
+      event.preventDefault();
+
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+
+      if (!email || !password) {
+
+        showMessage(
+          "Please enter email and password.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      loginButton.disabled = true;
+
+      loginButton.textContent =
+        "Logging in...";
+
+      showMessage("", "");
+
+
+      try {
+
+        /*
+         * Clear old dashboard session
+         */
+
+        sessionStorage.removeItem(
+          "zynggi_salesman_access_token"
+        );
+        localStorage.removeItem(
+          "zynggi_salesman_access_token"
+        );
+
+        localStorage.removeItem(
+          "zynggi_salesman_refresh_token"
+        );
+
+        localStorage.removeItem(
+          "zynggi_salesman"
+        );
+
+        localStorage.removeItem(
+          "zynggi_salesman_user_id"
+        );
+
+
+        /*
+         * LOGIN
+         */
+
+        const loginResponse =
+          await fetch(
+            SUPABASE_URL +
+            "/auth/v1/token?grant_type=password",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                "apikey":
+                  SUPABASE_KEY
+              },
+
+              body: JSON.stringify({
+                email: email,
+                password: password
+              })
+            }
+          );
+
+
+        const loginData =
+          await loginResponse.json();
+
+        if (loginResponse.status === 401) {
+          clearBusinessSession();
+        }
+
+
+        if (!loginResponse.ok) {
+
+          throw new Error(
+            loginData.error_description ||
+            loginData.msg ||
+            "Invalid email or password."
+          );
+
+        }
+
+
+        if (
+          !loginData.user ||
+          !loginData.access_token
+        ) {
+
+          throw new Error(
+            "Login failed. User information was not returned."
+          );
+
+        }
+
+
+        const userId =
+          loginData.user.id;
+
+        const accessToken =
+          loginData.access_token;
+
+        /*
+         * GET ZYNGGI BUSINESS PROFILE
+         */
+
+        const profileResponse =
+          await fetch(
+            SUPABASE_URL +
+            "/rest/v1/salesmen" +
+            "?select=id,name,salesman_code,role,status,user_id" +
+            "&user_id=eq." +
+            encodeURIComponent(userId) +
+            "&limit=1",
+            {
+              method: "GET",
+
+              headers: {
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  accessToken
+              }
+            }
+          );
+
+
+        const profileData =
+          await profileResponse.json();
+
+        if (profileResponse.status === 401) {
+          clearBusinessSession();
+          throw new Error("Your session has expired. Please sign in again.");
+        }
+
+
+        if (!profileResponse.ok) {
+
+          throw new Error(
+            "Unable to load your Zynggi business profile."
+          );
+
+        }
+
+
+        if (
+          !profileData ||
+          profileData.length === 0
+        ) {
+
+          throw new Error(
+            "Your account is not connected to a Zynggi business profile."
+          );
+
+        }
+
+
+        const profile =
+          profileData[0];
+
+
+        const role =
+          String(
+            profile.role || ""
+          )
+            .trim()
+            .toLowerCase();
+
+
+        const status =
+          String(
+            profile.status || ""
+          )
+            .trim()
+            .toLowerCase();
+
+
+        /*
+         * ACCOUNT STATUS
+         */
+
+        if (status !== "active") {
+
+          throw new Error(
+            "Your Zynggi business account is inactive."
+          );
+
+        }
+
+
+        if (!scheduleSessionExpiry(accessToken)) {
+          clearBusinessSession();
+          throw new Error("Your session has expired. Please sign in again.");
+        }
+
+        /*
+         * SAVE LOGIN SESSION
+         */
+
+        sessionStorage.setItem(
+          "zynggi_salesman_access_token",
+          accessToken
+        );
+
+        localStorage.setItem(
+          "zynggi_salesman",
+          JSON.stringify(profile)
+        );
+
+        localStorage.setItem(
+          "zynggi_salesman_user_id",
+          userId
+        );
+
+
+        showMessage(
+          "Login successful. Opening dashboard...",
+          "success"
+        );
+
+
+        /*
+         * ADMIN
+         */
+
+        if (role === "admin") {
+
+          window.location.href =
+            "/pages/pages-zynggi-admin";
+
+          return;
+
+        }
+
+
+        /*
+         * SALESMAN
+         */
+
+        if (role === "salesman") {
+
+          window.location.href =
+            "/pages/salesman-dashboard";
+
+          return;
+
+        }
+
+
+        /*
+         * INVALID ROLE
+         */
+
+        throw new Error(
+          "Your account does not have a valid Zynggi role."
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Zynggi Business Login Error:",
+          error
+        );
+
+
+        showMessage(
+          error.message ||
+          "Login failed. Please try again.",
+          "error"
+        );
+
+
+        loginButton.disabled = false;
+
+        loginButton.textContent =
+          "Login";
+
+      }
+
+    }
+  );
+
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "Zynggi Business Portal",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Zynggi Business Portal"
+    }
+  ]
+}
+{% endschema %}

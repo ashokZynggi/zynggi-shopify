@@ -1,0 +1,36 @@
+{%- assign partner = false -%}{%- if section.settings.mode == 'partner' -%}{%- assign partner = true -%}{%- endif -%}
+<section class="section bg-{{ section.settings.bg }}"><div class="container split" style="align-items:start">
+  <div>
+    <h2>{{ section.settings.heading }}</h2><p>{{ section.settings.text }}</p>
+    <ul style="list-style:none;padding:0;display:grid;gap:12px">
+      {%- if section.settings.phone != blank -%}<li><strong>Phone</strong><br>{{ section.settings.phone }}</li>{%- endif -%}
+      {%- if section.settings.email != blank -%}<li><strong>Email</strong><br><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></li>{%- endif -%}
+      {%- if settings.whatsapp_number != blank -%}<li><strong>WhatsApp</strong><br><a href="https://wa.me/{{ settings.whatsapp_number }}">Chat with us</a></li>{%- endif -%}
+      {%- if section.settings.address != blank -%}<li><strong>Address</strong><br>{{ section.settings.address }}</li>{%- endif -%}
+      {%- if section.settings.hours != blank -%}<li><strong>Business hours</strong><br>{{ section.settings.hours }}</li>{%- endif -%}
+    </ul>
+    {%- if section.settings.map_embed != blank -%}<div style="border-radius:16px;overflow:hidden">{{ section.settings.map_embed }}</div>{%- endif -%}
+  </div>
+  <div>
+    {%- form 'contact', id: 'contact-form' -%}
+      {%- if form.posted_successfully? -%}<p class="form-msg form-msg--ok" role="status">Thanks. We will get back to you soon.</p>{%- endif -%}
+      {%- if form.errors -%}<p class="form-msg form-msg--err" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+      <div class="form-grid">
+        <div class="field"><label for="cf-name">Name</label><input class="input" id="cf-name" name="contact[name]" required autocomplete="name"></div>
+        <div class="field"><label for="cf-email">Email</label><input class="input" id="cf-email" type="email" name="contact[email]" required autocomplete="email"></div>
+        <div class="field"><label for="cf-phone">Phone</label><input class="input" id="cf-phone" type="tel" name="contact[phone]" autocomplete="tel"></div>
+        {%- if partner -%}
+          <div class="field"><label for="cf-co">Company</label><input class="input" id="cf-co" name="contact[Company]"></div>
+          <div class="field"><label for="cf-city">City</label><input class="input" id="cf-city" name="contact[City]"></div>
+          <div class="field"><label for="cf-state">State</label><input class="input" id="cf-state" name="contact[State]"></div>
+          <div class="field full"><label for="cf-type">Business type</label><select class="select" id="cf-type" name="contact[Business type]"><option>Retailer</option><option>Distributor</option><option>Wholesaler</option><option>Restaurant / caterer</option><option>Other</option></select></div>
+        {%- endif -%}
+        <div class="field full"><label for="cf-msg">Message</label><textarea class="textarea" id="cf-msg" name="contact[body]" rows="5"></textarea></div>
+        <div class="full"><button class="btn btn--primary" type="submit">{{ section.settings.button }}</button></div>
+      </div>
+    {%- endform -%}
+  </div>
+</div></section>
+{% schema %}
+{"name":"Contact / partner form","settings":[{"type":"select","id":"mode","label":"Form type","options":[{"value":"contact","label":"Contact"},{"value":"partner","label":"Partner / B2B inquiry"}],"default":"contact"},{"type":"text","id":"heading","label":"Heading","default":"Get in touch"},{"type":"textarea","id":"text","label":"Text"},{"type":"text","id":"phone","label":"Phone","default":"[PHONE]"},{"type":"text","id":"email","label":"Email","default":"[EMAIL]"},{"type":"textarea","id":"address","label":"Address","default":"[FACTORY ADDRESS]"},{"type":"text","id":"hours","label":"Business hours","default":"[BUSINESS HOURS]"},{"type":"html","id":"map_embed","label":"Google Maps embed (iframe)"},{"type":"text","id":"button","label":"Button text","default":"Send message"},{"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],"presets":[{"name":"Contact / partner form"}]}
+{% endschema %}

@@ -1,0 +1,18 @@
+{%- assign b = section.settings.blog -%}
+<section class="section bg-{{ section.settings.bg }}">
+  <div class="container">
+    <div class="section__head"><div><h2>{{ section.settings.heading }}</h2></div>{%- if b != blank -%}<a class="link" href="{{ b.url }}">All articles</a>{%- endif -%}</div>
+    <div class="grid grid--4">
+      {%- for a in b.articles limit: section.settings.limit -%}
+        <a class="rcard" href="{{ a.url }}">
+          {%- if a.image -%}{{ a.image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240, 360, 480', sizes: '(min-width: 990px) 22vw, 48vw', alt: a.title }}{%- endif -%}
+          <div class="rcard__body">{%- if a.tags.size > 0 -%}<span class="badge badge--gold">{{ a.tags.first }}</span>{%- endif -%}<h3 style="margin-top:8px">{{ a.title }}</h3><p style="font-size:.95rem">{{ a.excerpt_or_content | strip_html | truncate: 90 }}</p><span class="muted" style="font-size:.85rem">{{ a.published_at | date: '%d %b %Y' }}</span></div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Blog posts","settings":[{"type":"text","id":"heading","label":"Heading","default":"From our kitchen"},{"type":"blog","id":"blog","label":"Blog"},{"type":"range","id":"limit","label":"Articles","min":2,"max":4,"default":4},{"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],
+"presets":[{"name":"Blog posts"}]}
+{% endschema %}

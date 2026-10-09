@@ -1,0 +1,8 @@
+{%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
+{%- if threshold > 0 -%}
+  {%- assign left = threshold | minus: cart.total_price -%}
+  <div class="ship">
+    {%- if left > 0 -%}You're {{ left | money }} away from free shipping.{%- else -%}You've unlocked free shipping.{%- endif -%}
+    <div class="ship__bar"><i style="width:{% if left <= 0 %}100{% else %}{{ cart.total_price | times: 100.0 | divided_by: threshold | round }}{% endif %}%"></i></div>
+  </div>
+{%- endif -%}

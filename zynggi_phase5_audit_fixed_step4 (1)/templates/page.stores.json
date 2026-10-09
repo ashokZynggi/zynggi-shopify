@@ -1,0 +1,32 @@
+{
+ "sections": {
+  "hero": {
+   "type": "page-hero",
+   "settings": {
+    "heading": "Store locator"
+   }
+  },
+  "locator": {
+   "type": "store-locator",
+   "blocks": {
+    "s1": {
+     "type": "store",
+     "settings": {
+      "name": "[STORE NAME]",
+      "address": "[ADDRESS]"
+     }
+    }
+   },
+   "block_order": [
+    "s1"
+   ],
+   "settings": {
+    "bg": "white"
+   }
+  }
+ },
+ "order": [
+  "hero",
+  "locator"
+ ]
+}

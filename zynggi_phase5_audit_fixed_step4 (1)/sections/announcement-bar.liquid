@@ -1,0 +1,593 @@
+{% if section.blocks.size > 0 %}
+
+  <div
+    class="zynggi-announcement"
+    role="region"
+    aria-label="Announcements"
+    data-announcement-bar
+  >
+
+    <div
+      class="zynggi-announcement__track"
+      data-announcement-track
+    >
+
+      {% for block in section.blocks %}
+
+        <div
+          class="zynggi-announcement__item"
+          data-announcement-item
+          {{ block.shopify_attributes }}
+        >
+
+          {% if block.settings.link != blank %}
+
+            <a
+              href="{{ block.settings.link }}"
+              class="zynggi-announcement__link"
+            >
+              {{ block.settings.text }}
+            </a>
+
+          {% else %}
+
+            <span class="zynggi-announcement__text">
+              {{ block.settings.text }}
+            </span>
+
+          {% endif %}
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+{% endif %}
+
+
+<style>
+
+  /* =========================================================
+     ZYNGGI ANNOUNCEMENT BAR
+  ========================================================= */
+
+  .zynggi-announcement {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 36px;
+
+    background: #9d1b1b;
+
+    color: #ffffff;
+
+    overflow: hidden;
+
+    z-index: 50;
+  }
+
+
+  /* =========================================================
+     DESKTOP TRACK
+  ========================================================= */
+
+  .zynggi-announcement__track {
+
+    width: 100%;
+
+    min-height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 70px;
+
+    padding:
+      7px
+      20px;
+
+    box-sizing: border-box;
+  }
+
+
+  /* =========================================================
+     DESKTOP ITEM
+  ========================================================= */
+
+  .zynggi-announcement__item {
+
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 0;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    line-height: 1.2;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+  }
+
+
+  .zynggi-announcement__link,
+  .zynggi-announcement__text {
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font: inherit;
+
+    line-height: inherit;
+  }
+
+
+  .zynggi-announcement__link:hover {
+
+    color: #ffffff;
+
+    text-decoration: underline;
+
+    text-underline-offset: 3px;
+  }
+
+
+  /* =========================================================
+     TABLET
+  ========================================================= */
+
+  @media screen and (max-width: 989px) {
+
+    .zynggi-announcement__track {
+
+      gap: 30px;
+
+      padding-left: 15px;
+
+      padding-right: 15px;
+    }
+
+
+    .zynggi-announcement__item {
+
+      font-size: 12px;
+    }
+
+  }
+
+
+  /* =========================================================
+     MOBILE
+  ========================================================= */
+
+  @media screen and (max-width: 749px) {
+
+    .zynggi-announcement {
+
+      min-height: 38px;
+
+      height: 38px;
+
+      overflow: hidden;
+    }
+
+
+    .zynggi-announcement__track {
+
+      position: relative;
+
+      width: 100%;
+
+      height: 38px;
+
+      min-height: 38px;
+
+      display: block;
+
+      padding: 0;
+
+      overflow: hidden;
+    }
+
+
+    .zynggi-announcement__item {
+
+      position: absolute;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100%;
+
+      height: 38px;
+
+      min-height: 38px;
+
+      padding:
+        0
+        14px;
+
+      box-sizing: border-box;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      white-space: nowrap;
+
+      opacity: 0;
+
+      visibility: hidden;
+
+      transform: translateY(5px);
+
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        visibility 0s linear 0.35s;
+    }
+
+
+    .zynggi-announcement__item.is-active {
+
+      opacity: 1;
+
+      visibility: visible;
+
+      transform: translateY(0);
+
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        visibility 0s linear 0s;
+    }
+
+
+    .zynggi-announcement__link,
+    .zynggi-announcement__text {
+
+      display: block;
+
+      max-width: 100%;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+      white-space: nowrap;
+
+      font-size: 12px;
+
+      line-height: 1.2;
+    }
+
+  }
+
+
+  /* =========================================================
+     VERY SMALL PHONES
+  ========================================================= */
+
+  @media screen and (max-width: 390px) {
+
+    .zynggi-announcement,
+    .zynggi-announcement__track,
+    .zynggi-announcement__item {
+
+      height: 36px;
+
+      min-height: 36px;
+    }
+
+
+    .zynggi-announcement__link,
+    .zynggi-announcement__text {
+
+      font-size: 11px;
+    }
+
+  }
+
+
+  /* =========================================================
+     REDUCED MOTION
+  ========================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .zynggi-announcement__item {
+
+      transition: none;
+    }
+
+  }
+
+</style>
+
+
+<script>
+
+  (function () {
+
+    function initAnnouncementBar() {
+
+      const bars =
+        document.querySelectorAll(
+          '[data-announcement-bar]'
+        );
+
+
+      bars.forEach(function (bar) {
+
+        if (
+          bar.dataset.initialized === 'true'
+        ) {
+          return;
+        }
+
+
+        bar.dataset.initialized = 'true';
+
+
+        const items =
+          bar.querySelectorAll(
+            '[data-announcement-item]'
+          );
+
+
+        if (!items.length) {
+          return;
+        }
+
+
+        /*
+         * Desktop:
+         * All messages remain visible.
+         *
+         * Mobile:
+         * Only one message is visible at a time.
+         */
+
+
+        let currentIndex = 0;
+
+        let timer = null;
+
+
+        function isMobile() {
+
+          return window.matchMedia(
+            '(max-width: 749px)'
+          ).matches;
+
+        }
+
+
+        function showItem(index) {
+
+          items.forEach(
+            function (item, itemIndex) {
+
+              item.classList.toggle(
+                'is-active',
+                itemIndex === index
+              );
+
+            }
+          );
+
+        }
+
+
+        function startRotation() {
+
+          if (!isMobile()) {
+
+            if (timer) {
+
+              clearInterval(timer);
+
+              timer = null;
+
+            }
+
+            items.forEach(
+              function (item) {
+
+                item.classList.remove(
+                  'is-active'
+                );
+
+              }
+            );
+
+            return;
+          }
+
+
+          if (items.length <= 1) {
+
+            showItem(0);
+
+            return;
+
+          }
+
+
+          showItem(currentIndex);
+
+
+          if (timer) {
+
+            clearInterval(timer);
+
+          }
+
+
+          timer = setInterval(
+            function () {
+
+              currentIndex =
+                (
+                  currentIndex + 1
+                ) % items.length;
+
+
+              showItem(currentIndex);
+
+            },
+            3500
+          );
+
+        }
+
+
+        startRotation();
+
+
+        let resizeTimer = null;
+
+
+        window.addEventListener(
+          'resize',
+          function () {
+
+            clearTimeout(
+              resizeTimer
+            );
+
+
+            resizeTimer =
+              setTimeout(
+                function () {
+
+                  startRotation();
+
+                },
+                150
+              );
+
+          },
+          {
+            passive: true
+          }
+        );
+
+
+        /*
+         * Pause rotation when the browser tab
+         * is not visible.
+         */
+
+        document.addEventListener(
+          'visibilitychange',
+          function () {
+
+            if (
+              document.hidden
+            ) {
+
+              if (timer) {
+
+                clearInterval(timer);
+
+                timer = null;
+
+              }
+
+            } else {
+
+              startRotation();
+
+            }
+
+          }
+        );
+
+      });
+
+    }
+
+
+    if (
+      document.readyState ===
+      'loading'
+    ) {
+
+      document.addEventListener(
+        'DOMContentLoaded',
+        initAnnouncementBar
+      );
+
+    } else {
+
+      initAnnouncementBar();
+
+    }
+
+  })();
+
+</script>
+
+
+{% schema %}
+
+{
+  "name": "Announcement bar",
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free shipping above [SHIPPING_THRESHOLD]"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        {
+          "type": "message",
+          "settings": {
+            "text": "COD available"
+          }
+        }
+      ]
+    }
+  ]
+}
+
+{% endschema %}

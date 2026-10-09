@@ -1,0 +1,61 @@
+{
+ "sections": {
+  "hero": {
+   "type": "page-hero",
+   "settings": {
+    "heading": "Frequently asked questions"
+   }
+  },
+  "faq": {
+   "type": "faq",
+   "blocks": {
+    "o": {
+     "type": "qa",
+     "settings": {
+      "category": "Orders",
+      "question": "How do I track my order?",
+      "answer": ""
+     }
+    },
+    "s": {
+     "type": "qa",
+     "settings": {
+      "category": "Shipping",
+      "question": "How long does delivery take?",
+      "answer": ""
+     }
+    },
+    "p": {
+     "type": "qa",
+     "settings": {
+      "category": "Payments",
+      "question": "Which payment methods do you accept?",
+      "answer": ""
+     }
+    },
+    "q": {
+     "type": "qa",
+     "settings": {
+      "category": "Quality",
+      "question": "How do you ensure quality?",
+      "answer": ""
+     }
+    }
+   },
+   "block_order": [
+    "o",
+    "s",
+    "p",
+    "q"
+   ],
+   "settings": {
+    "heading": "Find an answer",
+    "show_search": true
+   }
+  }
+ },
+ "order": [
+  "hero",
+  "faq"
+ ]
+}

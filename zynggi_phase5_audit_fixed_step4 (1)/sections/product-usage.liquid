@@ -1,0 +1,15 @@
+{%- assign bf = product.metafields.custom.best_for.value -%}
+<section class="section">
+  <div class="container">
+    <h2>{{ section.settings.heading }}</h2>
+    {%- if bf != blank -%}<p>{{ bf | metafield_tag }}</p>{%- endif -%}
+    <div class="scroller" style="grid-auto-columns:minmax(140px,1fr)">
+      {%- for b in section.blocks -%}<div class="dish" {{ b.shopify_attributes }}>{%- if b.settings.image != blank -%}{{ b.settings.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: b.settings.title }}{%- endif -%}<span>{{ b.settings.title }}</span><small>{{ b.settings.text }}</small></div>{%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"How to use / perfect for","settings":[{"type":"text","id":"heading","label":"Heading","default":"Perfect for"}],
+"blocks":[{"type":"dish","name":"Dish","settings":[{"type":"text","id":"title","label":"Dish","default":"Dal"},{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"text","label":"Usage tip"}]}],
+"presets":[{"name":"How to use / perfect for"}]}
+{% endschema %}

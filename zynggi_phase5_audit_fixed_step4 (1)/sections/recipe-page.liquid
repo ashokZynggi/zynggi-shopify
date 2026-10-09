@@ -1,0 +1,1719 @@
+{% assign recipe = metaobject %}
+
+{% comment %}
+  ============================================
+  DYNAMIC FIELD DETECTION
+  Finds Short Description and Preparation Time
+  without depending on their exact Shopify keys.
+  ============================================
+{% endcomment %}
+
+{% assign recipe_description = blank %}
+{% assign recipe_preparation = blank %}
+
+{% for field in recipe.fields %}
+  {% assign field_key = field[0] | downcase %}
+  {% assign field_value = field[1].value %}
+
+  {% if field_key contains 'description' %}
+    {% if field_value != blank %}
+      {% assign recipe_description = field_value %}
+    {% endif %}
+  {% endif %}
+
+  {% if field_key contains 'preparation' %}
+    {% if field_value != blank %}
+      {% assign recipe_preparation = field_value %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+
+<section class="zynggi-recipe-page">
+
+  <!-- ==========================================
+       HERO
+  =========================================== -->
+
+  <div class="zynggi-recipe-hero">
+
+    <div class="zynggi-recipe-image">
+
+      {% if recipe.recipe_image.value != blank %}
+
+        <img
+          src="{{ recipe.recipe_image.value | image_url: width: 1400 }}"
+          alt="{{ recipe.recipi_name.value | escape }}"
+          loading="eager"
+        >
+
+      {% endif %}
+
+    </div>
+
+
+    <div class="zynggi-recipe-intro">
+
+      <div class="zynggi-eyebrow">
+        COOK WITH ZYNGGI
+      </div>
+
+      <h1>
+        {{ recipe.recipi_name.value }}
+      </h1>
+
+
+      <!-- SHORT DESCRIPTION -->
+
+      {% if recipe_description != blank %}
+
+        <div class="zynggi-description">
+          {{ recipe_description }}
+        </div>
+
+      {% endif %}
+
+
+      <!-- RECIPE DETAILS -->
+
+      <div class="zynggi-recipe-meta">
+
+        {% if recipe.serving.value != blank %}
+
+          <div class="zynggi-meta-item">
+            <span>🍽</span>
+            <strong>
+              {{ recipe.serving.value }}
+            </strong>
+          </div>
+
+        {% endif %}
+
+
+        {% if recipe_preparation != blank %}
+
+          <div class="zynggi-meta-item">
+            <span>⏱</span>
+            <strong>
+              Prep: {{ recipe_preparation }}
+            </strong>
+          </div>
+
+        {% endif %}
+
+
+        {% if recipe.cooking_time.value != blank %}
+
+          <div class="zynggi-meta-item">
+            <span>🔥</span>
+            <strong>
+              Cook: {{ recipe.cooking_time.value }}
+            </strong>
+          </div>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       INGREDIENTS + COOKING METHOD
+  =========================================== -->
+
+  <div class="zynggi-recipe-content">
+
+    <!-- INGREDIENTS -->
+
+    <div class="zynggi-recipe-column">
+
+      <div class="zynggi-section-label">
+        RECIPE
+      </div>
+
+      <h2>
+        Ingredients
+      </h2>
+
+      <div class="zynggi-richtext">
+
+        {% if recipe.ingredients.value != blank %}
+          {{ recipe.ingredients | metafield_tag }}
+        {% endif %}
+
+      </div>
+
+    </div>
+
+
+    <!-- COOKING METHOD -->
+
+    <div class="zynggi-recipe-column">
+
+      <div class="zynggi-section-label">
+        STEP BY STEP
+      </div>
+
+      <h2>
+        Cooking Method
+      </h2>
+
+      <div class="zynggi-richtext">
+
+        {% if recipe.cooking_method.value != blank %}
+          {{ recipe.cooking_method | metafield_tag }}
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       ZYNGGI MASALAS
+       BESTSELLER-STYLE PRODUCT SECTION
+  =========================================== -->
+
+  {% assign masalas = recipe.zynggi_masalas.value %}
+
+  {% if masalas != blank %}
+
+    <section class="zynggi-masala-section">
+
+      <!-- ======================================
+           SECTION HEADER
+      ======================================= -->
+
+      <div class="zynggi-masala-heading">
+
+        <div class="zynggi-masala-heading-main">
+
+          <div class="zynggi-section-label">
+            SHOP THE FLAVOUR
+          </div>
+
+          <h2>
+            Zynggi Masalas
+          </h2>
+
+          <p>
+            The Zynggi spices used in this recipe.
+          </p>
+
+        </div>
+
+
+        <!-- ====================================
+             CONTROLS
+        ===================================== -->
+
+        <div class="zynggi-masala-controls">
+
+          <button
+            type="button"
+            id="zynggi-add-all-masalas"
+            class="zynggi-add-all-btn"
+          >
+            Add all to cart
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================
+           PRODUCT SLIDER
+      ======================================= -->
+
+      <div
+        class="zynggi-masala-grid"
+        data-masala-slider
+      >
+
+        {% for masala in masalas %}
+
+          {% assign variant = masala.selected_or_first_available_variant %}
+
+          <div class="zynggi-masala-card">
+
+            <!-- PRODUCT IMAGE -->
+
+            <a
+              href="{{ masala.url }}"
+              class="zynggi-masala-image-link"
+            >
+
+              <div class="zynggi-masala-image">
+
+                {% if masala.featured_image != blank %}
+
+                  <img
+                    src="{{ masala.featured_image | image_url: width: 700 }}"
+                    alt="{{ masala.title | escape }}"
+                    loading="lazy"
+                  >
+
+                {% else %}
+
+                  <div class="zynggi-no-image">
+                    No Image
+                  </div>
+
+                {% endif %}
+
+              </div>
+
+            </a>
+
+
+            <!-- PRODUCT INFO -->
+
+            <div class="zynggi-masala-info">
+
+              <h3>
+                <a href="{{ masala.url }}">
+                  {{ masala.title }}
+                </a>
+              </h3>
+
+
+              <div class="zynggi-masala-price">
+                {{ masala.price | money }}
+              </div>
+
+
+              {% if masala.available and variant != blank %}
+
+                <button
+                  type="button"
+                  class="zynggi-add-btn"
+                  data-product-variant="{{ variant.id }}"
+                >
+                  Add to cart
+                </button>
+
+              {% else %}
+
+                <button
+                  type="button"
+                  class="zynggi-add-btn zynggi-soldout"
+                  disabled
+                >
+                  Sold Out
+                </button>
+
+              {% endif %}
+
+            </div>
+
+          </div>
+
+        {% endfor %}
+
+      </div>
+
+      <div class="zynggi-masala-swipe-hint" aria-hidden="true">
+        Swipe to see more products <span aria-hidden="true">→</span>
+      </div>
+
+
+      <!-- CART MESSAGE -->
+
+      <div
+        id="zynggi-cart-message"
+        class="zynggi-cart-message"
+        aria-live="polite"
+      ></div>
+
+    </section>
+
+  {% endif %}
+
+</section>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+=========================================== -->
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* =========================================================
+     CART DRAWER
+  ========================================================= */
+
+  async function refreshRecipeCartDrawer() {
+
+    try {
+
+      const root =
+        window.routes &&
+        window.routes.root
+          ? window.routes.root
+          : '/';
+
+
+      const response = await fetch(
+        `${root}?sections=cart-drawer`,
+        {
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+
+      if (!response.ok) {
+        throw new Error(
+          'Unable to refresh cart drawer'
+        );
+      }
+
+
+      const sections =
+        await response.json();
+
+
+      const html =
+        sections['cart-drawer'];
+
+
+      if (!html) {
+        return;
+      }
+
+
+      const doc =
+        new DOMParser().parseFromString(
+          html,
+          'text/html'
+        );
+
+
+      const freshPanel =
+        doc.querySelector(
+          '[data-cart-section="cart-drawer"]'
+        );
+
+
+      const livePanel =
+        document.querySelector(
+          '#cart-drawer [data-cart-section="cart-drawer"]'
+        );
+
+
+      if (
+        freshPanel &&
+        livePanel
+      ) {
+
+        livePanel.innerHTML =
+          freshPanel.innerHTML;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Recipe cart drawer refresh error:',
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =========================================================
+     CART COUNT
+  ========================================================= */
+
+  async function updateRecipeCartCount() {
+
+    try {
+
+      const response =
+        await fetch(
+          '/cart.js',
+          {
+            headers: {
+              'Accept':
+                'application/json'
+            }
+          }
+        );
+
+
+      if (!response.ok) {
+        return;
+      }
+
+
+      const cart =
+        await response.json();
+
+
+      document
+        .querySelectorAll(
+          '[data-cart-count]'
+        )
+        .forEach(
+          function (element) {
+
+            element.textContent =
+              cart.item_count;
+
+            element.dataset.count =
+              cart.item_count;
+
+          }
+        );
+
+
+    } catch (error) {
+
+      console.error(
+        'Recipe cart count error:',
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =========================================================
+     OPEN CART DRAWER
+  ========================================================= */
+
+  function openRecipeCartDrawer() {
+
+    const drawer =
+      document.getElementById(
+        'cart-drawer'
+      );
+
+
+    if (!drawer) {
+
+      console.warn(
+        'Cart drawer #cart-drawer not found.'
+      );
+
+      return;
+
+    }
+
+
+    document
+      .querySelectorAll(
+        '.drawer.is-open'
+      )
+      .forEach(
+        function (otherDrawer) {
+
+          if (
+            otherDrawer !== drawer
+          ) {
+
+            otherDrawer.classList.remove(
+              'is-open'
+            );
+
+          }
+
+        }
+      );
+
+
+    drawer.classList.add(
+      'is-open'
+    );
+
+
+    document.body.classList.add(
+      'no-scroll'
+    );
+
+
+    const closeButton =
+      drawer.querySelector(
+        '[data-drawer-close]'
+      );
+
+
+    if (closeButton) {
+
+      setTimeout(
+        function () {
+
+          closeButton.focus();
+
+        },
+        50
+      );
+
+    }
+
+  }
+
+
+  /* =========================================================
+     COMPLETE CART UPDATE
+  ========================================================= */
+
+  async function updateAndOpenRecipeCart() {
+
+    await refreshRecipeCartDrawer();
+
+    await updateRecipeCartCount();
+
+    openRecipeCartDrawer();
+
+  }
+
+
+  /* =========================================================
+     INDIVIDUAL ADD TO CART
+  ========================================================= */
+
+  const addButtons =
+    document.querySelectorAll(
+      '.zynggi-add-btn[data-product-variant]'
+    );
+
+
+  addButtons.forEach(
+    function (button) {
+
+      button.addEventListener(
+        'click',
+        async function () {
+
+          const variantId =
+            this.dataset.productVariant;
+
+
+          if (!variantId) {
+            return;
+          }
+
+
+          const originalText =
+            this.textContent;
+
+
+          this.disabled = true;
+
+          this.textContent =
+            'Adding...';
+
+
+          try {
+
+            const response =
+              await fetch(
+                '/cart/add.js',
+                {
+                  method: 'POST',
+
+                  headers: {
+                    'Content-Type':
+                      'application/json',
+
+                    'Accept':
+                      'application/json'
+                  },
+
+                  body:
+                    JSON.stringify({
+                      items: [
+                        {
+                          id:
+                            Number(
+                              variantId
+                            ),
+
+                          quantity: 1
+                        }
+                      ]
+                    })
+                }
+              );
+
+
+            if (!response.ok) {
+
+              const errorData =
+                await response
+                  .json()
+                  .catch(
+                    function () {
+                      return {};
+                    }
+                  );
+
+
+              throw new Error(
+                errorData.description ||
+                'Unable to add product'
+              );
+
+            }
+
+
+            await response.json();
+
+
+            await updateAndOpenRecipeCart();
+
+
+            this.textContent =
+              'Added ✓';
+
+
+            setTimeout(
+              function () {
+
+                button.textContent =
+                  originalText;
+
+                button.disabled =
+                  false;
+
+              },
+              1500
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              'Recipe add to cart error:',
+              error
+            );
+
+
+            this.textContent =
+              'Try Again';
+
+
+            setTimeout(
+              function () {
+
+                button.textContent =
+                  originalText;
+
+                button.disabled =
+                  false;
+
+              },
+              1500
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  /* =========================================================
+     ADD ALL MASALAS
+  ========================================================= */
+
+  const addAllButton =
+    document.getElementById(
+      'zynggi-add-all-masalas'
+    );
+
+
+  const cartMessage =
+    document.getElementById(
+      'zynggi-cart-message'
+    );
+
+
+  if (addAllButton) {
+
+    addAllButton.addEventListener(
+      'click',
+      async function () {
+
+        const variantElements =
+          document.querySelectorAll(
+            '.zynggi-add-btn[data-product-variant]'
+          );
+
+
+        const items = [];
+
+
+        variantElements.forEach(
+          function (element) {
+
+            const variantId =
+              element.dataset.productVariant;
+
+
+            if (variantId) {
+
+              items.push(
+                {
+                  id:
+                    Number(
+                      variantId
+                    ),
+
+                  quantity: 1
+                }
+              );
+
+            }
+
+          }
+        );
+
+
+        if (!items.length) {
+
+          if (cartMessage) {
+
+            cartMessage.textContent =
+              'No available masalas found.';
+
+          }
+
+          return;
+
+        }
+
+
+        const originalText =
+          this.textContent;
+
+
+        this.disabled = true;
+
+        this.textContent =
+          'Adding All...';
+
+
+        try {
+
+          const response =
+            await fetch(
+              '/cart/add.js',
+              {
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json',
+
+                  'Accept':
+                    'application/json'
+                },
+
+                body:
+                  JSON.stringify({
+                    items: items
+                  })
+              }
+            );
+
+
+          if (!response.ok) {
+
+            const errorData =
+              await response
+                .json()
+                .catch(
+                  function () {
+                    return {};
+                  }
+                );
+
+
+            throw new Error(
+              errorData.description ||
+              'Unable to add products'
+            );
+
+          }
+
+
+          await response.json();
+
+
+          await updateAndOpenRecipeCart();
+
+
+          this.textContent =
+            'All Added ✓';
+
+
+          if (cartMessage) {
+
+            cartMessage.textContent =
+              'All available Zynggi masalas have been added to your cart.';
+
+          }
+
+
+          setTimeout(
+            function () {
+
+              addAllButton.textContent =
+                originalText;
+
+              addAllButton.disabled =
+                false;
+
+            },
+            2000
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            'Recipe add-all cart error:',
+            error
+          );
+
+
+          this.textContent =
+            'Try Again';
+
+
+          if (cartMessage) {
+
+            cartMessage.textContent =
+              'Something went wrong. Please try again.';
+
+          }
+
+
+          setTimeout(
+            function () {
+
+              addAllButton.textContent =
+                originalText;
+
+              addAllButton.disabled =
+                false;
+
+            },
+            2000
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+});
+
+</script>
+
+
+<!-- ==========================================
+     CSS
+=========================================== -->
+
+<style>
+
+.zynggi-recipe-page {
+  background: #faf7f1;
+  color: #2b1b14;
+  padding-bottom: 80px;
+}
+
+
+/* ==========================================
+   HERO
+=========================================== */
+
+.zynggi-recipe-hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 70px 5%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+
+.zynggi-recipe-image {
+  overflow: hidden;
+  border-radius: 28px;
+}
+
+
+.zynggi-recipe-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+
+.zynggi-recipe-intro {
+  max-width: 650px;
+}
+
+
+.zynggi-eyebrow,
+.zynggi-section-label {
+  color: #b97818;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+
+.zynggi-recipe-intro h1 {
+  margin: 0 0 24px;
+  font-size: clamp(42px, 5vw, 76px);
+  line-height: 0.98;
+}
+
+
+/* ==========================================
+   DESCRIPTION
+=========================================== */
+
+.zynggi-description {
+  font-size: 18px;
+  line-height: 1.65;
+  color: #6d625b;
+  margin: 0 0 28px;
+  max-width: 620px;
+}
+
+
+/* ==========================================
+   META
+=========================================== */
+
+.zynggi-recipe-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+
+.zynggi-meta-item {
+  border: 1px solid #e4d9cc;
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   RECIPE CONTENT
+=========================================== */
+
+.zynggi-recipe-content {
+  max-width: 1300px;
+  margin: 20px auto 0;
+  padding: 70px 5%;
+  border-top: 1px solid #e6ddd4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+}
+
+
+.zynggi-recipe-column h2 {
+  margin: 0 0 30px;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1;
+}
+
+
+.zynggi-richtext {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #4e4540;
+}
+
+
+.zynggi-richtext p {
+  margin: 0 0 20px;
+}
+
+
+.zynggi-richtext ul,
+.zynggi-richtext ol {
+  padding-left: 25px;
+}
+
+
+.zynggi-richtext li {
+  margin-bottom: 14px;
+}
+
+
+/* ==========================================
+   ZYNGGI MASALA SECTION
+   BESTSELLER STYLE
+=========================================== */
+
+.zynggi-masala-section {
+  width: 100%;
+  margin: 20px 0 0;
+  padding: 56px max(5%, calc((100vw - 1300px) / 2));
+  background: #8f1d16;
+  color: #ffffff;
+  border-top: 1px solid #e6ddd4;
+  overflow: hidden;
+}
+
+
+.zynggi-masala-heading {
+  max-width: 1300px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+
+.zynggi-masala-heading-main {
+  min-width: 0;
+}
+
+
+.zynggi-masala-heading .zynggi-section-label {
+  color: #e3a82b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+
+.zynggi-masala-heading h2 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1;
+}
+
+
+.zynggi-masala-heading p {
+  margin: 0;
+  color: rgba(255,255,255,0.78);
+  font-size: 16px;
+}
+
+
+.zynggi-masala-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+
+.zynggi-masala-view-all {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-right: 4px;
+}
+
+
+.zynggi-masala-arrow {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 50%;
+  background: transparent;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 27px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.zynggi-masala-arrow:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: #ffffff;
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================
+   ADD ALL BUTTON
+=========================================== */
+
+.zynggi-add-all-btn {
+  width: auto;
+  min-width: 150px;
+  border: 0;
+  border-radius: 999px;
+  background: #e3a82b;
+  color: #2b1b14;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 12px 18px;
+  min-height: 42px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.zynggi-add-all-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.94;
+}
+
+
+.zynggi-add-all-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+
+/* ==========================================
+   PRODUCT GRID
+=========================================== */
+
+.zynggi-masala-grid {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+
+/* ==========================================
+   PRODUCT CARD
+=========================================== */
+
+.zynggi-masala-card {
+  min-width: 0;
+  background: #ffffff;
+  color: #2b1b14;
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 18px;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.zynggi-masala-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 28px rgba(35,10,5,0.2);
+}
+
+
+/* ==========================================
+   PRODUCT IMAGE
+=========================================== */
+
+.zynggi-masala-image-link {
+  display: block;
+}
+
+
+.zynggi-masala-image {
+  background: #090706;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+
+.zynggi-masala-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+.zynggi-no-image {
+  color: #8c8178;
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   PRODUCT INFORMATION
+=========================================== */
+
+.zynggi-masala-info {
+  padding: 13px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+
+.zynggi-masala-info h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.25;
+  min-height: 40px;
+}
+
+
+.zynggi-masala-info h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+.zynggi-masala-price {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0;
+}
+
+
+/* ==========================================
+   INDIVIDUAL ADD BUTTON
+=========================================== */
+
+.zynggi-add-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  background: #bd271b;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 11px 14px;
+  min-height: 42px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.zynggi-add-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+
+.zynggi-add-btn:disabled,
+.zynggi-add-btn.zynggi-soldout {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+
+/* ==========================================
+   MOBILE SWIPE HINT
+=========================================== */
+
+.zynggi-masala-swipe-hint {
+  display: none;
+  margin: 12px auto 0;
+  color: rgba(255,255,255,0.78);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   CART MESSAGE
+=========================================== */
+
+.zynggi-cart-message {
+  max-width: 1300px;
+  margin: 14px auto 0;
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  text-align: right;
+  min-height: 18px;
+}
+
+
+/* ==========================================
+   TABLET
+=========================================== */
+
+@media screen and (max-width: 989px) and (min-width: 750px) {
+
+  .zynggi-masala-section {
+    padding: 48px 24px;
+  }
+
+
+  .zynggi-masala-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==========================================
+   MOBILE
+=========================================== */
+
+@media screen and (max-width: 749px) {
+
+  .zynggi-recipe-page {
+    padding-bottom: 50px;
+  }
+
+
+  /* HERO */
+
+  .zynggi-recipe-hero {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 40px 20px;
+  }
+
+
+  .zynggi-recipe-intro h1 {
+    font-size: 42px;
+  }
+
+
+  .zynggi-description {
+    font-size: 17px;
+  }
+
+
+  /* RECIPE CONTENT */
+
+  .zynggi-recipe-content {
+    grid-template-columns: 1fr;
+    gap: 55px;
+    padding: 50px 20px;
+  }
+
+
+  .zynggi-meta-item {
+    font-size: 13px;
+  }
+
+
+  /* MASALA SECTION */
+
+  .zynggi-masala-section {
+    margin-top: 0;
+    padding: 38px 16px 42px;
+  }
+
+
+  .zynggi-masala-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+
+  .zynggi-masala-heading .zynggi-section-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    margin-bottom: 8px;
+  }
+
+
+  .zynggi-masala-heading h2 {
+    font-size: 31px;
+  }
+
+
+  .zynggi-masala-heading p {
+    font-size: 14px;
+  }
+
+
+  /* CONTROLS */
+
+  .zynggi-masala-controls {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+
+  .zynggi-masala-view-all {
+    margin-right: auto;
+  }
+
+
+  .zynggi-masala-arrow {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 24px;
+  }
+
+
+  .zynggi-add-all-btn {
+    min-width: 132px;
+    padding: 10px 14px;
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+
+  /* ======================================
+     MOBILE PRODUCT SLIDER
+
+     Two products are visible at once.
+     Additional products can be swiped.
+  ====================================== */
+
+  .zynggi-masala-grid {
+    display: flex;
+    gap: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+
+    overscroll-behavior-x: contain;
+
+    -webkit-overflow-scrolling: touch;
+
+    padding:
+      2px
+      2px
+      10px;
+
+    margin-right: -2px;
+
+    scrollbar-width: thin;
+  }
+
+
+  .zynggi-masala-grid::-webkit-scrollbar {
+    height: 4px;
+  }
+
+
+  .zynggi-masala-grid::-webkit-scrollbar-track {
+    background:
+      rgba(255,255,255,0.18);
+
+    border-radius: 10px;
+  }
+
+
+  .zynggi-masala-grid::-webkit-scrollbar-thumb {
+    background:
+      rgba(255,255,255,0.65);
+
+    border-radius: 10px;
+  }
+
+
+  /* TWO CARDS PER PHONE SCREEN */
+
+  .zynggi-masala-card {
+    flex:
+      0 0
+      calc(42% - 5px);
+
+    scroll-snap-align: start;
+
+    border-radius: 16px;
+  }
+
+
+  .zynggi-masala-image {
+    aspect-ratio: 1 / 1;
+  }
+
+
+  .zynggi-masala-info {
+    padding:
+      10px
+      9px
+      10px;
+
+    gap: 5px;
+  }
+
+
+  .zynggi-masala-info h3 {
+    font-size: 13px;
+    line-height: 1.25;
+    min-height: 33px;
+  }
+
+
+  .zynggi-masala-price {
+    font-size: 13px;
+  }
+
+
+  .zynggi-add-btn {
+    font-size: 12px;
+    padding: 9px 8px;
+    min-height: 38px;
+  }
+
+
+  .zynggi-masala-swipe-hint {
+    display: block;
+  }
+
+  .zynggi-cart-message {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+}
+
+
+/* ==========================================
+   SMALL PHONES
+=========================================== */
+
+@media screen and (max-width: 390px) {
+
+  .zynggi-masala-section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+
+  .zynggi-masala-heading h2 {
+    font-size: 28px;
+  }
+
+
+  .zynggi-masala-heading p {
+    font-size: 13px;
+  }
+
+
+  .zynggi-masala-controls {
+    gap: 6px;
+  }
+
+
+  .zynggi-masala-arrow {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+
+  .zynggi-add-all-btn {
+    min-width: 120px;
+    font-size: 12px;
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+
+  .zynggi-masala-grid {
+    gap: 10px;
+  }
+
+
+  .zynggi-masala-card {
+    flex-basis:
+      calc(42% - 4px);
+  }
+
+
+  .zynggi-masala-info {
+    padding:
+      9px
+      8px
+      9px;
+  }
+
+
+  .zynggi-masala-info h3 {
+    font-size: 12px;
+  }
+
+
+  .zynggi-masala-price {
+    font-size: 12px;
+  }
+
+
+  .zynggi-add-btn {
+    font-size: 11px;
+    min-height: 36px;
+    padding:
+      8px
+      6px;
+  }
+
+}
+
+</style>
+
+
+{% schema %}
+
+{
+  "name": "Recipe Page",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Recipe Page"
+    }
+  ]
+}
+
+{% endschema %}

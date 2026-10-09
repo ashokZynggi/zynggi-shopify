@@ -1,0 +1,18 @@
+{%- if predictive_search.performed -%}
+<div class="psearch">
+  {%- if predictive_search.resources.queries.size > 0 -%}
+    <div class="chips" style="margin-top:16px">{%- for q in predictive_search.resources.queries -%}<a class="chip" href="{{ q.url }}">{{ q.styled_text }}</a>{%- endfor -%}</div>
+  {%- endif -%}
+  {%- if predictive_search.resources.products.size > 0 -%}
+    <div class="psearch__group"><h3>Products</h3>
+    {%- for p in predictive_search.resources.products -%}<a class="psearch__item" href="{{ p.url }}">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 112, height: 112 | image_tag: loading: 'lazy', alt: p.title }}{%- endif -%}<span><strong>{{ p.title }}</strong><br>{{ p.price | money }}</span></a>{%- endfor -%}</div>
+  {%- endif -%}
+  {%- if predictive_search.resources.collections.size > 0 -%}
+    <div class="psearch__group"><h3>Collections</h3>{%- for c in predictive_search.resources.collections -%}<a class="psearch__item" href="{{ c.url }}"><strong>{{ c.title }}</strong></a>{%- endfor -%}</div>
+  {%- endif -%}
+  {%- if predictive_search.resources.articles.size > 0 -%}
+    <div class="psearch__group"><h3>Recipes and articles</h3>{%- for a in predictive_search.resources.articles -%}<a class="psearch__item" href="{{ a.url }}">{%- if a.image -%}{{ a.image | image_url: width: 112, height: 112 | image_tag: loading: 'lazy', alt: a.title }}{%- endif -%}<strong>{{ a.title }}</strong></a>{%- endfor -%}</div>
+  {%- endif -%}
+  <p style="margin-top:24px"><a class="btn btn--outline btn--sm" href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}">See all results</a></p>
+</div>
+{%- endif -%}

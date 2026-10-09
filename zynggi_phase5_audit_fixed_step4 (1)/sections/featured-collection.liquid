@@ -1,0 +1,766 @@
+{% assign layout = section.settings.layout %}
+{% assign c = section.settings.collection %}
+{% assign img = section.settings.image | default: c.featured_image %}
+
+<section class="section bg-{{ section.settings.bg }} zynggi-featured-section">
+
+  {% if layout == 'full' %}
+
+    <!-- =========================================
+         LAYOUT 4 — FULL WIDTH SHOPPING
+         ========================================= -->
+
+    <div class="zynggi-featured-full">
+
+      {% if img != blank %}
+        <div class="zynggi-featured-full-image">
+          {{ img
+            | image_url: width: 2000
+            | image_tag:
+              loading: 'lazy',
+              widths: '900, 1400, 1800, 2000',
+              sizes: '100vw',
+              alt: section.settings.heading
+          }}
+
+          <div class="zynggi-featured-full-overlay">
+            <h2>{{ section.settings.heading }}</h2>
+
+            {% if section.settings.text != blank %}
+              <p>{{ section.settings.text }}</p>
+            {% endif %}
+
+            {% if section.settings.cta_link != blank %}
+              <a
+                class="btn btn-primary"
+                href="{{ section.settings.cta_link }}"
+              >
+                {{ section.settings.cta }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="zynggi-featured-full-products">
+
+        {% for product in c.products limit: section.settings.limit %}
+          {% render 'product-card',
+            product: product,
+            style: 'minimal'
+          %}
+        {% endfor %}
+
+      </div>
+
+      <div class="zynggi-mobile-swipe-hint" aria-hidden="true">Swipe to see more products <span>→</span></div>
+
+      {% if section.settings.cta_link != blank %}
+        <div class="zynggi-featured-full-button">
+          <a
+            class="btn btn-primary"
+            href="{{ section.settings.cta_link }}"
+          >
+            {{ section.settings.cta }}
+          </a>
+        </div>
+      {% endif %}
+
+    </div>
+
+
+  {% else %}
+
+    <!-- =========================================
+         LAYOUTS 1, 2 & 3
+         ========================================= -->
+
+    <div class="
+      zynggi-featured
+      zynggi-featured-{{ layout }}
+    ">
+
+      <!-- IMAGE -->
+      <div class="zynggi-featured-image">
+
+        {% if img != blank %}
+          {{ img
+            | image_url: width: 1800
+            | image_tag:
+              loading: 'lazy',
+              widths: '450, 700, 900, 1400, 1800',
+              sizes: '(min-width: 990px) 50vw, 100vw',
+              alt: section.settings.heading
+          }}
+        {% endif %}
+
+      </div>
+
+
+      <!-- CONTENT -->
+      <div class="zynggi-featured-content">
+
+        <h2>
+          {{ section.settings.heading }}
+        </h2>
+
+        {% if section.settings.text != blank %}
+          <p class="zynggi-featured-text">
+            {{ section.settings.text }}
+          </p>
+        {% endif %}
+
+
+        <!-- PRODUCTS -->
+        <div class="zynggi-product-grid">
+
+          {% for product in c.products limit: section.settings.limit %}
+
+            {% render 'product-card',
+              product: product,
+              style: 'minimal'
+            %}
+
+          {% endfor %}
+
+        </div>
+
+
+        <!-- BUTTON -->
+        {% if section.settings.cta_link != blank %}
+
+          <div class="zynggi-featured-button">
+
+            <a
+              class="btn btn-primary"
+              href="{{ section.settings.cta_link }}"
+            >
+              {{ section.settings.cta }}
+            </a>
+
+          </div>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  {% endif %}
+
+</section>
+
+
+<!-- =========================================
+     ZYNGGI FEATURED COLLECTION STYLES
+     ========================================= -->
+
+<style>
+
+  /* =========================================
+     MAIN SECTION
+     ========================================= */
+
+  .zynggi-featured-section {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .zynggi-featured {
+    width: min(1200px, calc(100% - 40px));
+    margin: 0 auto;
+
+    display: grid;
+
+    align-items: center;
+
+    gap: 48px;
+  }
+
+
+  /* =========================================
+     IMAGE
+     ========================================= */
+
+  .zynggi-featured-image {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  .zynggi-featured-image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+  }
+
+
+  /* =========================================
+     CONTENT
+     ========================================= */
+
+  .zynggi-featured-content {
+    width: 100%;
+  }
+
+  .zynggi-featured-content h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+
+  .zynggi-featured-text {
+    margin-top: -10px;
+    margin-bottom: 24px;
+  }
+
+
+  /* =========================================
+     PRODUCT GRID
+     ========================================= */
+
+  .zynggi-product-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+
+
+  /* =========================================
+     LAYOUT 1
+     IMAGE LEFT / PRODUCTS RIGHT
+     ========================================= */
+
+  .zynggi-featured-left {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+
+  .zynggi-featured-left
+  .zynggi-featured-image {
+    order: 1;
+  }
+
+  .zynggi-featured-left
+  .zynggi-featured-content {
+    order: 2;
+  }
+
+  .zynggi-featured-left
+  .zynggi-featured-image {
+    aspect-ratio: 4 / 5;
+  }
+
+  .zynggi-featured-left
+  .zynggi-featured-image img {
+    min-height: 0;
+    height: 100%;
+  }
+
+
+  /* =========================================
+     LAYOUT 2
+     IMAGE RIGHT / PRODUCTS LEFT
+     ========================================= */
+
+  .zynggi-featured-right {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+
+  .zynggi-featured-right
+  .zynggi-featured-content {
+    order: 1;
+  }
+
+  .zynggi-featured-right
+  .zynggi-featured-image {
+    order: 2;
+  }
+
+  .zynggi-featured-right
+  .zynggi-featured-image {
+    aspect-ratio: 4 / 5;
+  }
+
+  .zynggi-featured-right
+  .zynggi-featured-image img {
+    min-height: 0;
+    height: 100%;
+  }
+
+
+  /* =========================================
+     LAYOUT 3
+     IMAGE TOP / PRODUCTS BELOW
+     ========================================= */
+
+  .zynggi-featured-top {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 36px;
+
+    align-items: stretch;
+  }
+
+  .zynggi-featured-top
+  .zynggi-featured-image {
+
+    width: 100%;
+
+    order: 1;
+  }
+
+  .zynggi-featured-top
+  .zynggi-featured-image img {
+
+    width: 100%;
+
+    height: 420px;
+
+    object-fit: cover;
+  }
+
+  .zynggi-featured-top
+  .zynggi-featured-content {
+
+    order: 2;
+
+    width: 100%;
+  }
+
+  .zynggi-featured-top
+  .zynggi-product-grid {
+
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    gap: 20px;
+  }
+
+
+  /* =========================================
+     FULL WIDTH SHOPPING LAYOUT
+     ========================================= */
+
+  .zynggi-featured-full {
+
+    width: 100%;
+
+    margin: 0 auto;
+  }
+
+  .zynggi-featured-full-image {
+
+    position: relative;
+
+    width: 100%;
+
+    overflow: hidden;
+  }
+
+  .zynggi-featured-full-image img {
+
+    display: block;
+
+    width: 100%;
+
+    height: 360px;
+
+    object-fit: cover;
+  }
+
+  .zynggi-featured-full-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.05),
+        rgba(0,0,0,0.45)
+      );
+  }
+
+  .zynggi-featured-full-overlay h2 {
+
+    color: white;
+
+    margin: 0 0 18px;
+
+    font-size: clamp(32px, 4vw, 56px);
+  }
+
+  .zynggi-featured-full-overlay p {
+
+    color: white;
+
+    max-width: 600px;
+
+    margin: 0 0 24px;
+  }
+
+  .zynggi-featured-full-products {
+
+    width: min(1050px, calc(100% - 40px));
+
+    margin: 42px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 28px;
+ }
+
+  .zynggi-featured-full-button {
+
+    text-align: center;
+
+    margin-top: 32px;
+
+    margin-bottom: 10px;
+  }
+
+
+  /* =========================================
+     BUTTON
+     ========================================= */
+
+  .zynggi-featured-button {
+
+    margin-top: 28px;
+  }
+
+
+  /* =========================================
+     TABLET
+     ========================================= */
+
+  @media screen and (max-width: 989px) {
+
+    .zynggi-featured {
+
+      width: min(100% - 30px, 800px);
+
+      gap: 30px;
+    }
+
+    .zynggi-featured-left,
+    .zynggi-featured-right {
+
+      grid-template-columns:
+        1fr;
+    }
+
+    .zynggi-featured-left
+    .zynggi-featured-image,
+    .zynggi-featured-right
+    .zynggi-featured-image {
+
+      order: 1;
+    }
+
+    .zynggi-featured-left
+    .zynggi-featured-content,
+    .zynggi-featured-right
+    .zynggi-featured-content {
+
+      order: 2;
+    }
+
+    .zynggi-featured-left
+    .zynggi-featured-image img,
+    .zynggi-featured-right
+    .zynggi-featured-image img {
+
+      min-height: 360px;
+    }
+
+    .zynggi-featured-top
+    .zynggi-product-grid {
+
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    }
+
+    .zynggi-featured-full-products {
+
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    }
+  }
+
+
+  /* =========================================
+     MOBILE
+     ========================================= */
+
+  .zynggi-mobile-swipe-hint { display: none; }
+
+  @media screen and (max-width: 749px) {
+
+    .zynggi-featured {
+
+      width: calc(100% - 24px);
+
+      gap: 24px;
+    }
+
+    .zynggi-product-grid {
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 12px;
+    }
+
+    .zynggi-featured-left
+    .zynggi-featured-image img,
+    .zynggi-featured-right
+    .zynggi-featured-image img {
+
+      min-height: 280px;
+
+      max-height: 360px;
+    }
+
+    .zynggi-featured-top {
+
+      gap: 24px;
+    }
+
+    .zynggi-featured-top
+    .zynggi-featured-image img {
+
+      height: 260px;
+    }
+
+    .zynggi-featured-top
+    .zynggi-product-grid {
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+
+    .zynggi-featured-full-image img {
+
+      height: 360px;
+    }
+
+    .zynggi-featured-full-products {
+
+      width: calc(100% - 24px);
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 12px;
+
+      margin-top: 24px;
+    }
+
+    .zynggi-featured-full-overlay h2 {
+
+      font-size: 32px;
+    }
+
+  }
+
+
+  /* =========================================
+     v2 COMPACT SIZING (all devices)
+     ========================================= */
+  .zynggi-featured-section.section { padding: calc(var(--space-unit) * .75) 0; }
+  .zynggi-featured-left .zynggi-featured-image,
+  .zynggi-featured-right .zynggi-featured-image { aspect-ratio: 4 / 5; }
+  .zynggi-featured-left .zynggi-featured-image img,
+  .zynggi-featured-right .zynggi-featured-image img { min-height: 0; max-height: none; height: 100%; }
+  .zynggi-featured-top .zynggi-featured-image img { height: 320px; }
+  .zynggi-featured-full-image img { height: 300px; }
+  .zynggi-featured-full-products { margin-top: 32px; }
+
+  @media screen and (max-width: 749px) {
+    .zynggi-featured-section.section { padding: 22px 0; }
+    .zynggi-featured { gap: 14px; }
+    .zynggi-featured-left .zynggi-featured-image,
+    .zynggi-featured-right .zynggi-featured-image { aspect-ratio: 16 / 11; }
+    .zynggi-featured-left .zynggi-featured-image img,
+    .zynggi-featured-right .zynggi-featured-image img { min-height: 0 !important; max-height: none !important; height: 100% !important; }
+    .zynggi-featured-top .zynggi-featured-image img { min-height: 0 !important; max-height: none !important; height: 170px !important; }
+    .zynggi-featured-image, .zynggi-featured-image img { border-radius: 14px; }
+    .zynggi-featured-content h2 { font-size: 1.35rem; margin-bottom: 6px; }
+    .zynggi-featured-text { margin: 0 0 12px; font-size: .92rem; }
+
+    /* products: one swipeable row, 2+ visible */
+    .zynggi-featured-section .zynggi-product-grid,
+    .zynggi-featured-section .zynggi-featured-top .zynggi-product-grid,
+    .zynggi-featured-section .zynggi-featured-full-products {
+      display: grid; grid-auto-flow: column; grid-template-columns: none;
+      grid-auto-columns: calc((100% - 12px) / 2.15); gap: 12px;
+      overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch; padding-bottom: 8px;
+    }
+    .zynggi-featured-section .zynggi-product-grid::-webkit-scrollbar,
+    .zynggi-featured-section .zynggi-featured-full-products::-webkit-scrollbar { display: none; }
+    .zynggi-featured-section .zynggi-product-grid > *,
+    .zynggi-featured-section .zynggi-featured-full-products > * { scroll-snap-align: start; min-width: 0; }
+    .zynggi-featured-section .zynggi-featured-full-products { width: calc(100% - 24px); margin-top: 14px; }
+    .zynggi-featured-section .zynggi-featured-full-products::-webkit-scrollbar { height: 4px; }
+    .zynggi-featured-section .zynggi-featured-full-products::-webkit-scrollbar-track { background: rgba(0,0,0,.08); border-radius: 99px; }
+    .zynggi-featured-section .zynggi-featured-full-products::-webkit-scrollbar-thumb { background: rgba(80,45,25,.35); border-radius: 99px; }
+    .zynggi-mobile-swipe-hint { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 7px 0 0; font-size: .72rem; color: rgba(42,26,18,.62); }
+    .zynggi-mobile-swipe-hint span { font-size: 1rem; }
+
+    .zynggi-featured-button, .zynggi-featured-full-button { margin-top: 14px; margin-bottom: 0; }
+    .zynggi-featured-full-image img { height: 170px; }
+    .zynggi-featured-full-overlay { padding: 14px; }
+    .zynggi-featured-full-overlay h2 { font-size: 1.4rem; margin: 0; }
+    .zynggi-featured-full-overlay p,
+    .zynggi-featured-full-overlay .btn { display: none; }
+  }
+</style>
+
+
+{% schema %}
+
+{
+  "name": "Featured collection",
+
+  "settings": [
+
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+
+      "options": [
+        {
+          "value": "left",
+          "label": "Image left, products right"
+        },
+        {
+          "value": "right",
+          "label": "Image right, products left"
+        },
+        {
+          "value": "top",
+          "label": "Image top, products below"
+        },
+        {
+          "value": "full",
+          "label": "Full-width shopping layout"
+        }
+      ],
+
+      "default": "left"
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Everyday Indian essentials"
+    },
+
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Lifestyle image"
+    },
+
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Products",
+      "min": 2,
+      "max": 8,
+      "default": 4
+    },
+
+    {
+      "type": "text",
+      "id": "cta",
+      "label": "Button text",
+      "default": "Shop the collection"
+    },
+
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Background",
+
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "warm",
+          "label": "Warm cream"
+        },
+        {
+          "value": "green",
+          "label": "Deep green"
+        }
+      ],
+
+      "default": "white"
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+
+}
+
+{% endschema %}

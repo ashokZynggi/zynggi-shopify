@@ -1,0 +1,15 @@
+<section class="section bg-{{ section.settings.bg }}" style="padding:48px 0">
+  <div class="container" style="text-align:center">
+    <h2 style="font-size:1.4rem">{{ section.settings.heading }}</h2>
+    <div class="logos">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.logo != blank -%}{%- capture im -%}{{ block.settings.logo | image_url: width: 240 | image_tag: loading: 'lazy', alt: block.settings.name }}{%- endcapture -%}{%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" rel="noopener" {{ block.shopify_attributes }}>{{ im }}</a>{%- else -%}<span {{ block.shopify_attributes }}>{{ im }}</span>{%- endif -%}{%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Press and recognition","settings":[{"type":"text","id":"heading","label":"Heading","default":"Trusted and recognised"},{"type":"select","id":"bg","label":"Background","options":[{"value":"white","label":"White"},{"value":"warm","label":"Warm cream"},{"value":"green","label":"Deep green"}],"default":"white"}],
+"blocks":[{"type":"logo","name":"Logo","settings":[{"type":"image_picker","id":"logo","label":"Logo (real logos only)"},{"type":"text","id":"name","label":"Name"},{"type":"url","id":"link","label":"Link"}]}],
+"presets":[{"name":"Press and recognition"}]}
+{% endschema %}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  {%- assign private_template_suffixes = 'zynggi-admin,salesman-dashboard,salesman-login,zynggi-business' | split: ',' -%}
+  {%- if template.suffix != blank and private_template_suffixes contains template.suffix -%}
+    <meta name="robots" content="noindex, nofollow">
+  {%- endif -%}
+  {%- if template.name == 'search' or template.name == 'cart' -%}<meta name="robots" content="noindex, follow">{%- endif -%}
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  {%- if template.name == 'collection' -%}<link rel="canonical" href="{{ collection.url | absolute_url }}">{%- else -%}<link rel="canonical" href="{{ canonical_url }}">{%- endif -%}
+  {%- if settings.favicon != blank -%}<link rel="icon" href="{{ settings.favicon | image_url: width: 48, height: 48 }}">{%- endif -%}
+  <title>{{ page_title }}{% if current_page != 1 %} – Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
+  {%- assign head_description = page_description -%}
+  {%- if head_description == blank and template.name == 'index' -%}{%- assign head_description = settings.home_meta_description | default: shop.description -%}{%- endif -%}
+  {%- if head_description != blank -%}<meta name="description" content="{{ head_description | escape }}">{%- endif -%}
+  {% render 'meta-tags' %}
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  {{ content_for_header }}
+  {%- style -%}
+    {{ settings.heading_font | font_face: font_display: 'swap' }}
+    {{ settings.body_font | font_face: font_display: 'swap' }}
+    :root{
+      --c-primary:{{ settings.color_primary }};
+      --c-accent:{{ settings.color_accent }};
+      --c-green:{{ settings.color_green }};
+      --c-text:{{ settings.color_text }};
+      --c-bg:{{ settings.color_bg }};
+      --c-warm:{{ settings.color_warm }};
+      --c-line:{{ settings.color_line }};
+      --font-head:{{ settings.heading_font.family }},{{ settings.heading_font.fallback_families }};
+      --font-body:{{ settings.body_font.family }},{{ settings.body_font.fallback_families }};
+      --radius:{{ settings.radius }}px;
+      --radius-btn:{{ settings.button_radius }}px;
+      --page-width:{{ settings.page_width }}px;
+      --space-unit:{{ settings.section_spacing }}px;
+    }
+  {%- endstyle -%}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {%- unless template.name == 'index' -%}{{ 'responsive-pages.css' | asset_url | stylesheet_tag }}{%- endunless -%}
+  <script>
+    window.routes = { root: {{ routes.root_url | json }}, cart: {{ routes.cart_url | json }}, cart_add: {{ routes.cart_add_url | json }}, cart_change: {{ routes.cart_change_url | json }}, search: {{ routes.search_url | json }}, predictive: {{ routes.predictive_search_url | json }} };
+    window.themeSettings = { freeShipping: {{ settings.free_shipping_threshold | times: 100 }}, cartType: {{ settings.cart_type | json }} };
+  </script>
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+</head>
+<body class="template-{{ template.name }}{% if settings.mobile_bottom_nav %} has-mnav{% endif %}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% sections 'header-group' %}
+  <main id="main" tabindex="-1">{{ content_for_layout }}</main>
+  {% sections 'footer-group' %}
+  {% if settings.mobile_bottom_nav %}{% render 'mobile-nav' %}{% endif %}
+  {% if settings.cart_type == 'drawer' and template.name != 'cart' %}{% section 'cart-drawer' %}{% endif %}
+  <dialog id="quick-view" class="qv" aria-label="Quick view"><button class="qv__close" data-qv-close aria-label="Close">{% render 'icon', name: 'close' %}</button><div class="qv__body" data-qv-body></div></dialog>
+</body>
+</html>

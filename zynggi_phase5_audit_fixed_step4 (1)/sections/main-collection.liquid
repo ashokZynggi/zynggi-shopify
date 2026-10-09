@@ -1,0 +1,68 @@
+{%- paginate collection.products by section.settings.per_page -%}
+{%- assign has_img = collection.image -%}
+<div data-collection-section="{{ section.id }}" class="chead{% if has_img and section.settings.show_banner %} chead--img{% endif %}">
+  {%- if has_img and section.settings.show_banner -%}{{ collection.image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '900, 1400, 1800', sizes: '100vw', alt: collection.title }}{%- endif -%}
+  <div class="container">
+    <nav class="crumbs" style="color:inherit;padding-top:0" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span><span aria-current="page">{{ collection.title }}</span></nav>
+    <h1 style="margin-bottom:8px">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}<div style="max-width:70ch">{{ collection.description }}</div>{%- endif -%}
+  </div>
+</div>
+<div class="container">
+  <div class="ctools">
+    <div style="display:flex;gap:12px;align-items:center">
+      <button type="button" class="btn btn--outline btn--sm filter-btn" data-toggle-filters>Filters</button>
+      <span class="muted">{{ collection.products_count }} product{% if collection.products_count != 1 %}s{% endif %}</span>
+    </div>
+    <div><label class="visually-hidden" for="sort">Sort by</label>
+      <select id="sort" class="select select--sm" data-sort>
+        {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+        {%- for o in collection.sort_options -%}<option value="{{ o.value }}" {% if o.value == sort_by %}selected{% endif %}>{{ o.name }}</option>{%- endfor -%}
+      </select></div>
+  </div>
+  <div class="clayout">
+    <aside class="filters" aria-label="Filters">
+      <div style="display:flex;justify-content:space-between" class="filter-btn"><strong>Filters</strong><button class="icon-btn" data-toggle-filters aria-label="Close filters">{% render 'icon', name: 'close' %}</button></div>
+      <form action="{{ collection.url }}" method="get">
+        {%- if collection.current_type or collection.current_vendor -%}{%- endif -%}
+        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+        {%- for f in collection.filters -%}
+          <details {% if f.active_values.size > 0 or f.type == 'price_range' %}open{% endif %}><summary>{{ f.label }}</summary>
+            {%- case f.type -%}
+              {%- when 'price_range' -%}
+                <div style="display:flex;gap:8px;margin-top:8px"><div><label for="p1">From</label><input id="p1" class="input" type="number" name="{{ f.min_value.param_name }}" value="{% if f.min_value.value %}{{ f.min_value.value | money_without_currency | remove: ',' }}{% endif %}" min="0" placeholder="0"></div><div><label for="p2">To</label><input id="p2" class="input" type="number" name="{{ f.max_value.param_name }}" value="{% if f.max_value.value %}{{ f.max_value.value | money_without_currency | remove: ',' }}{% endif %}" min="0" placeholder="{{ f.range_max | money_without_currency }}"></div></div>
+              {%- else -%}
+                {%- for v in f.values -%}<label class="{% if v.count == 0 and v.active == false %}is-disabled{% endif %}"><input type="checkbox" name="{{ v.param_name }}" value="{{ v.value }}" {% if v.active %}checked{% endif %} {% if v.count == 0 and v.active == false %}disabled{% endif %}> {{ v.label }} ({{ v.count }})</label>{%- endfor -%}
+            {%- endcase -%}
+          </details>
+        {%- endfor -%}
+        <noscript><button class="btn btn--primary btn--sm" type="submit">Apply</button></noscript>
+      </form>
+      {%- if collection.filters.size > 0 -%}<p style="margin-top:16px"><a class="link" href="{{ collection.url }}?sort_by={{ sort_by }}">Clear all</a></p>{%- endif -%}
+      <button class="btn btn--primary btn--block filter-btn" style="margin-top:16px" data-toggle-filters>Show {{ collection.products_count }} results</button>
+    </aside>
+    <div>
+      {%- if collection.products.size == 0 -%}<p>No products match these filters. <a class="link" href="{{ collection.url }}">Clear filters</a></p>
+      {%- else -%}
+        <div class="pgrid">
+          {%- for product in collection.products -%}{% render 'product-card', product: product, style: section.settings.card_style, show_qty: section.settings.show_qty %}{%- endfor -%}
+        </div>
+      {%- endif -%}
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="Pagination">
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+          {%- for part in paginate.parts -%}{%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- else -%}<span class="current">{{ part.title }}</span>{%- endif -%}{%- endfor -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{%- endpaginate -%}
+{% schema %}
+{"name":"Collection","settings":[
+ {"type":"range","id":"per_page","label":"Products per page","min":8,"max":48,"step":4,"default":24},
+ {"type":"select","id":"card_style","label":"Card style","options":[{"value":"minimal","label":"Minimal"},{"value":"premium","label":"Premium"}],"default":"premium"},
+ {"type":"checkbox","id":"show_qty","label":"Show quantity selector on cards","default":false},
+ {"type":"checkbox","id":"show_banner","label":"Use collection image as banner","default":true}]}
+{% endschema %}
